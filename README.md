@@ -2,10 +2,10 @@
 ### Game of Set
 
 ### Roles
-* Overall Project Manager: Sharon
-* Coding Manager: Sri
-* Testing Manager: Leah
-* Documentation: David
+* Overall Project Manager: Sharon Qiu
+* Coding Manager: Sri Ramya Dandu
+* Testing Manager: Leah Gillespie
+* Documentation: David Wing 
 
 ### Contributions
 Please list who did what for each part of the project.

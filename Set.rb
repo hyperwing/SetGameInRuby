@@ -1,29 +1,65 @@
 
-#File created 09/04/2019 by Sri Ramya Dandu
+# File created 09/04/2019 by Sri Ramya Dandu
 # Edited 09/05/2019 by Leah Gillespie
-
-#Created 09/05/2019 by Leah Gillespie
+# Edited 09/06/2019 by Neel Mansukhani
+# Added id and set_id to Card
+# Created 09/05/2019 by Leah Gillespie
 class Card
 
-    attr_reader :symbol, :color, :shape, :shade
+    attr_reader :id, :symbol, :color, :shape, :shade
 
     def initialize(symbol, color, shape, shade)
-        @symbol = symbol
-        @color = color
-        @shape = shape
-        @shade = shade
+      @id = nil
+      @symbol = symbol
+      @color = color
+      @shape = shape
+      @shade = shade
+    end
+    # Edited 09/06/2019 by Neel Mansukhani
+    # Cleaned up display
+    #
+    # Displays a card
+    def display
+      print("Card: #{@id} ")
+      print("Symbol: #{@symbol} ")
+      print("Color: #{@color} ")
+      print("Shape: #{@shape} ")
+      puts("Shade: #{@shade}")
     end
 
-    def display
-        print @symbol
-        print @color
-        print @shape
-        print @shade
+    def set_id(num)
+      @id = num
     end
 end
 
 $score = 0
-
+# Created 09/06/2019 by Neel Mansukhani
+# Removes 12 cards from deck and displays them.
+def dealCards(deck)
+  cardsShowing = Array.new
+  for count in 0...12
+    card = deck.delete_at(rand(deck.length))
+    card.set_id(count)
+    cardsShowing.push(card)
+    card.display()
+  end
+end
+# Created 09/05/2019 by Leah Gillespie
+# Edited 09/06/2019 by Neel Mansukhani
+# Creates an array to be the deck and initializes 81 unique cards into it
+def createDeck()
+  deck = Array.new
+  for symbol in 0..2
+    for color in 0..2
+      for shape in 0..2
+        for shade in 0..2
+          deck.push(Card.new(symbol,color,shape,shade))
+        end
+      end
+    end
+  end
+  return deck
+end
 # Created 09/04/2019 by Sri Ramya Dandu
 =begin
     Checks if the 3 cards are a valid set or not. To be a valid set, all 3 cards must either have the same
@@ -46,24 +82,16 @@ def isASet?(card1, card2, card3)
     isSet
 end
 
-#Created 09/05/2019 by Leah Gillespie
-# creates an array to be the deck and initializes 81 unique cards into it
 # Acts as the beginning of what would be the main method in Java
-deck = Array.new
-for symbol in 0..2
-  for color in 0..2
-    for shape in 0..2
-      for shade in 0..2
-          deck.push(Card.new(symbol,color,shape,shade))
-      end
-    end
-  end
-end
+deck = createDeck()
+
+cardsShowing = dealCards(deck)
+
 
 #Created 09/05/2019 by Leah Gillespie
 # proves the deck has 81 unique cards and that they're all unique; will be changed into formal testing later
-deck.each { |card| puts card.display }
-puts deck.length
+# deck.each { |card| puts card.display }
+# puts deck.length
 # preliminary evidence that implementation and use of the deck array works with isASet? method
 puts isASet?(deck.at(0), deck.at(1), deck.at(2))
 puts isASet?(deck.at(1), deck.at(2), deck.at(3))

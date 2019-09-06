@@ -1,9 +1,10 @@
 
 # File created 09/04/2019 by Sri Ramya Dandu
 # Edited 09/05/2019 by Leah Gillespie
+
+# Created 09/05/2019 by Leah Gillespie
 # Edited 09/06/2019 by Neel Mansukhani
 # Added id and set_id to Card
-# Created 09/05/2019 by Leah Gillespie
 class Card
 
     attr_reader :id, :symbol, :color, :shape, :shade
@@ -17,8 +18,6 @@ class Card
     end
     # Edited 09/06/2019 by Neel Mansukhani
     # Cleaned up display
-    #
-    # Displays a card
     def display
       print("Card: #{@id} ")
       print("Symbol: #{@symbol} ")
@@ -33,21 +32,32 @@ class Card
 end
 
 $score = 0
+$cardCount = 0
 # Created 09/06/2019 by Neel Mansukhani
-# Removes 12 cards from deck and displays them.
-def dealCards(deck)
-  cardsShowing = Array.new
-  for count in 0...12
+# Removes 12 cards from deck.
+def dealCards(deck,num)
+  newCards = Array.new
+  for count in 0...num
     card = deck.delete_at(rand(deck.length))
-    card.set_id(count)
-    cardsShowing.push(card)
-    card.display()
+    cardCount += 1
+    card.set_id(cardCount)
+    newCards.push(card)
+  end
+  return newCards
+end
+# Created by Neel Mansukhani
+# Displays cards showing
+def displayCards(cardsShowing)
+  for count in 0...cardsShowing.length
+    cardsShowing[count].display
   end
 end
 # Created 09/05/2019 by Leah Gillespie
 # Edited 09/06/2019 by Neel Mansukhani
+# Moved code to function
+#
 # Creates an array to be the deck and initializes 81 unique cards into it
-def createDeck()
+def createDeck
   deck = Array.new
   for symbol in 0..2
     for color in 0..2
@@ -68,30 +78,49 @@ end
     @returns true if cards form a valid set, false otherwise
     @updates $score
 =end
-def isASet?(card1, card2, card3)
+def isASet?(cards)
     isSet = true
 
     # The sum when adding one number 3 times or adding 3 consecutive numbers is divisible by 3.
     # This represents having all the same attribute or all different attributes.
     # Adding any other 3 number combo of 1,2,3 will result in a value not divisible by 3, failing to be a set.
-    isSet = false if (card1.symbol + card2.symbol + card3.symbol) % 3 != 0
-    isSet = false if (card1.color + card2.color + card3.color) % 3 != 0
-    isSet = false if (card1.shape + card2.shape + card3.shape) % 3 != 0
-    isSet = false if (card1.shade + card2.shade + card3.shade) % 3 != 0
+    isSet = false if (cards[0].symbol + cards[1].symbol + cards[2].symbol) % 3 != 0
+    isSet = false if (cards[0].color + cards[1].color + cards[2].color) % 3 != 0
+    isSet = false if (cards[0].shape + cards[1].shape + cards[2].shape) % 3 != 0
+    isSet = false if (cards[0].shade + cards[1].shade + cards[2].shade) % 3 != 0
     $score += 1 if isSet
-    isSet
+    return isSet
 end
 
 # Acts as the beginning of what would be the main method in Java
-deck = createDeck()
-
-cardsShowing = dealCards(deck)
-
+deck = createDeck
+cardsShowing = Array.new
+cardsShowing.push(dealCards(deck,12))
+displayCards(cardsShowing)
+sets = Array.new
+while true # TODO: check if there are any sets left
+  # TODO: check if there are enough cards in the deck to deal.
+  print("Enter your first card number: ")
+  card1 = gets.to_i
+  print("Enter your second card number: ")
+  card2 = gets.to_i
+  print("Enter your third card number: ")
+  card3 = gets.to_i
+  set = [cardsShowing[card1],cardsShowing[card2],cardsShowing[card3]]
+  if(isASet?(set))
+    puts("That is a set!")
+    #TODO: set up hash or something to clean sets up.
+    sets.push(set)
+    cardsShowing.delete(cardsShowing[card1])
+    cardsShowing.delete(cardsShowing[card2])
+    cardsShowing.delete(cardsShowing[card3])
+    cardsShowing.push(dealCards(deck,3))
+  else
+    puts("That is not a set.")
+  end
+end
 
 #Created 09/05/2019 by Leah Gillespie
 # proves the deck has 81 unique cards and that they're all unique; will be changed into formal testing later
 # deck.each { |card| puts card.display }
 # puts deck.length
-# preliminary evidence that implementation and use of the deck array works with isASet? method
-puts isASet?(deck.at(0), deck.at(1), deck.at(2))
-puts isASet?(deck.at(1), deck.at(2), deck.at(3))

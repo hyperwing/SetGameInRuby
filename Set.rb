@@ -39,8 +39,8 @@ def dealCards(deck,num)
   newCards = Array.new
   for count in 0...num
     card = deck.delete_at(rand(deck.length))
-    cardCount += 1
-    card.set_id(cardCount)
+    $cardCount += 1
+    card.set_id($cardCount)
     newCards.push(card)
   end
   return newCards
@@ -95,7 +95,7 @@ end
 # Acts as the beginning of what would be the main method in Java
 deck = createDeck
 cardsShowing = Array.new
-cardsShowing.push(dealCards(deck,12))
+cardsShowing += dealCards(deck,12)
 displayCards(cardsShowing)
 sets = Array.new
 while true # TODO: check if there are any sets left
@@ -114,7 +114,7 @@ while true # TODO: check if there are any sets left
     cardsShowing.delete(cardsShowing[card1])
     cardsShowing.delete(cardsShowing[card2])
     cardsShowing.delete(cardsShowing[card3])
-    cardsShowing.push(dealCards(deck,3))
+    cardsShowing += dealCards(deck,3)
   else
     puts("That is not a set.")
   end

@@ -95,5 +95,4 @@ def valid_table? (row1, row2, row3) #brute force check, but since there are only
     end
   end
   return false
-  
-
+end

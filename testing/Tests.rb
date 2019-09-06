@@ -112,4 +112,26 @@ describe Card do
       end
     end
   end
+
+
+  #9/06 David Wing
+  # Tests for Board setting
+  # context  "Board is set to proper number"
+
+  #   it "Returns true when there are 12 cards on the table" do
+
+  #   end
+  # end
+
+  #9/06 David Wing
+  #Tests for valid sets
+  context "Check table for valid set" do
+    it "returns false when there are no valid sets" do
+      row1 = []
+      row2 = []
+      row3 = []
+
+      expect(valid_table?(row1, row2, row3)).to eq(false)
+    end
+  end
 end

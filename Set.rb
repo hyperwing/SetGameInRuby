@@ -1,6 +1,7 @@
 
 #File created 09/04/2019 by Sri Ramya Dandu
 # Edited 09/05/2019 by Leah Gillespie
+#Edited 9/06/19 David Wing
 
 #Created 09/05/2019 by Leah Gillespie
 class Card
@@ -67,3 +68,32 @@ puts deck.length
 # preliminary evidence that implementation and use of the deck array works with isASet? method
 puts isASet?(deck.at(0), deck.at(1), deck.at(2))
 puts isASet?(deck.at(1), deck.at(2), deck.at(3))
+
+
+#Created 9/06/19 David Wing
+# Create the DS for the table and set the table
+row1 = []
+row2 = []
+row3 = []
+
+# [][][][] + [additional cards]
+# [][][][] + []
+# [][][][] + []
+
+
+
+#Created 9/06 David Wing
+#Check if table is valid
+def valid_table? (row1, row2, row3) #brute force check, but since there are only 12 cards to check its good enough
+  for column_one in 0..row1.length
+    for column_two in 0..row2.length
+      for column_three in 0..row3.length
+        if isASet(row1[column_one], row2[column_two], row3[column_three])
+          return true
+        end
+      end
+    end
+  end
+  return false
+  
+

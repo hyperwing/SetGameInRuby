@@ -1,10 +1,10 @@
 
 # File created 09/04/2019 by Sri Ramya Dandu
 # Edited 09/05/2019 by Leah Gillespie
-#Edited 9/06/19 David Wing
-# Edited 9/05 Neel
+# Edited 9/06/2019 David Wing
+# Edited 9/06/2019 by Neel Mansukhani
 # Edited 09/07/2019 by Sharon Qiu
-
+# Edited 9/07/2019 by Neel Mansukhani
 
 # Created 09/05/2019 by Leah Gillespie
 # Edited 09/06/2019 by Neel Mansukhani
@@ -30,7 +30,6 @@ class Card
       print("number: #{@number} ")
       print("Color: #{@color} ")
       print("Shape: #{@shape} ")
-      
       puts("Shade: #{@shade}")
     end
 
@@ -101,9 +100,6 @@ def isASet?(cards)
     isSet = true
 
     #TODO optimize checks
-
-    puts("HERE #{cards[0].number}")
-
     # The sum when adding one number 3 times or adding 3 consecutive numbers is divisible by 3.
     # This represents having all the same attribute or all different attributes.
     # Adding any other 3 number combo of 1,2,3 will result in a value not divisible by 3, failing to be a set.
@@ -116,7 +112,10 @@ def isASet?(cards)
 end
 
 # Acts as the beginning of what would be the main method in Java
+# Edited 09/07/2019 by Neel Mansukhani
+# Testing fix
 #=========================== MAIN ==================================================
+if __FILE__ == $0
 deck = createDeck
 cardsShowing = Array.new
 dealCards?(deck,cardsShowing,12)
@@ -126,13 +125,13 @@ cardsShowing.each { |card| card.display }
 sets = Array.new
 while true # TODO: check if there are any sets left
 
-  setExists = valid_table?(r1,r2,r3) #TODO: parameters need to be fixed
+  setExists = true#valid_table?(r1,r2,r3) TODO: parameters need to be fixed
   noCardsLeft = (deck.length == 0)
 
   # Adds cards while no set exists and if there is cards left.
   while !setExists && !noCardsLeft
     noCardsLeft = dealCards?(deck,cardsShowing,3)
-    setExists = valid_table?(r1,r2,r3) #TODO: parameters need to be fixed
+    setExists = true#valid_table?(r1,r2,r3) TODO: parameters need to be fixed
   end
 
   break if (!setExists && noCardsLeft) || (cardsShowing.length == 0)
@@ -181,7 +180,7 @@ row3 = []
 # [][][][] + []
 
 
-
+end
 #Created 9/06 David Wing
 #updated 9/07 David Wing
 #Check if table is valid

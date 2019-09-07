@@ -5,6 +5,7 @@
 # Edited 9/06/2019 by Neel Mansukhani
 # Edited 09/07/2019 by Sharon Qiu
 # Edited 9/07/2019 by Neel Mansukhani
+# Edited 09/07/2019 by Sri Ramya Dandu
 
 # Created 09/05/2019 by Leah Gillespie
 # Edited 09/06/2019 by Neel Mansukhani
@@ -27,7 +28,7 @@ class Card
     # Cleaned up display
     def display
       print("Card: #{@id} ")
-      print("number: #{@number} ")
+      print("Number: #{@number} ")
       print("Color: #{@color} ")
       print("Shape: #{@shape} ")
       puts("Shade: #{@shade}")
@@ -89,6 +90,7 @@ end
 
 
 # Created 09/04/2019 by Sri Ramya Dandu
+# Edited 09/07/2019 by Sri Ramya Dandu: Optimized the checking method - made function concise
 =begin
     Checks if the 3 cards are a valid set or not. To be a valid set, all 3 cards must either have the same
     attribute or all different attributes for each of the following attributes: number, color,shape,shade.
@@ -97,23 +99,19 @@ end
     @updates $score
 =end
 def isASet?(cards)
-    isSet = true
-
-    #TODO optimize checks
     # The sum when adding one number 3 times or adding 3 consecutive numbers is divisible by 3.
     # This represents having all the same attribute or all different attributes.
     # Adding any other 3 number combo of 1,2,3 will result in a value not divisible by 3, failing to be a set.
-    isSet = false if (cards[0].number + cards[1].number + cards[2].number) % 3 != 0
-    isSet = false if (cards[0].color + cards[1].color + cards[2].color) % 3 != 0
-    isSet = false if (cards[0].shape + cards[1].shape + cards[2].shape) % 3 != 0
-    isSet = false if (cards[0].shade + cards[1].shade + cards[2].shade) % 3 != 0
-    $score += 1 if isSet
-    return isSet
+    isSet = (cards[0].number + cards[1].number + cards[2].number) % 3 == 0 &&
+        (cards[0].color + cards[1].color + cards[2].color) % 3 == 0 &&
+        (cards[0].shape + cards[1].shape + cards[2].shape) % 3 == 0 &&
+        (cards[0].shade + cards[1].shade + cards[2].shade) % 3 == 0
 end
 
 # Acts as the beginning of what would be the main method in Java
 # Edited 09/07/2019 by Neel Mansukhani
 # Testing fix
+
 #=========================== MAIN ==================================================
 if __FILE__ == $0
 deck = createDeck
@@ -146,7 +144,7 @@ while true # TODO: check if there are any sets left
   if(isASet?(set))
     puts("That is a set!")
     #TODO: Score should increment/decrement here
-
+    score += 1
     #TODO: set up hash or something to clean sets up.
     sets.push(set)
     cardsShowing -= set
@@ -156,6 +154,7 @@ while true # TODO: check if there are any sets left
     cardsShowing.each { |card| card.display }
   else
     puts("That is not a set.")
+    score -= 1
   end
 end
 

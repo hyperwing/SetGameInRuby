@@ -2,6 +2,7 @@
 # File created 09/04/2019 by Sri Ramya Dandu
 # Edited 09/05/2019 by Leah Gillespie
 #Edited 9/06/19 David Wing
+# Edited 09/07/2019 by Sharon Qiu
 
 # Created 09/05/2019 by Leah Gillespie
 # Edited 09/06/2019 by Neel Mansukhani
@@ -42,17 +43,24 @@ def getCardById(deck,id)
   end
   return nil
 end
+
 # Created 09/06/2019 by Neel Mansukhani
 # Removes 12 cards from deck.
-def dealCards(deck,num)
-  newCards = Array.new
+# Edited 09/07/19 by Sharon Qiu:
+# Added parameter, playingCards, and replaced newCards return with a boolean signifying empty deck.
+def dealCards?(deck,playingCards,num)
+
+  emptyDeck = true
+  return false if deck.length == 0 #to signify that the deck is empty.
+
   for count in 0...num
     card = deck.delete_at(rand(deck.length))
     card.set_id($cardCount)
     $cardCount += 1
-    newCards.push(card)
+    playingCards.push(card)
   end
-  return newCards
+
+  return emptyDeck
 end
 
 # Created 09/05/2019 by Leah Gillespie
@@ -96,15 +104,26 @@ def isASet?(cards)
 end
 
 # Acts as the beginning of what would be the main method in Java
+# Edited 09/07/2019
 deck = createDeck
 cardsShowing = Array.new
-cardsShowing += dealCards(deck,12)
+dealCards(deck,cardsShowing,12)
 #Displays cards
 cardsShowing.each { |card| card.display }
 
 sets = Array.new
-while true # TODO: check if there are any sets left
-  # TODO: check if there are enough cards in the deck to deal.
+while true
+
+  setExists = valid_table?(cardsShowing[0..3],cardsShowingg[4..7],cardsShowing[8..11]) #TODO: Fix parameters to valid_table? function
+  noCardsLeft = (deck.length == 0)
+
+  while !setExists && !noCardsLeft
+    noCardsLeft = dealCards(deck,cardsShowing,3)
+    setExists = valid_table?(cardsShowing[0..3],cardsShowingg[4..7],cardsShowing[8..11]) #TODO: Fix parameters to valid_table? function
+  end
+
+  break if noCardsLeft || (!setExists && noCardsLeft) # Exits when there are no more cards and sets left
+
   print("Enter your first card number: ")
   card1 = gets.to_i
   print("Enter your second card number: ")
@@ -117,11 +136,16 @@ while true # TODO: check if there are any sets left
     #TODO: set up hash or something to clean sets up.
     sets.push(set)
     cardsShowing -= set
-    cardsShowing += dealCards(deck,3)
+
+    if cardsShowing.length < 12
+      dealCards(deck,cardsShowing,3)
+    end
+
     cardsShowing.each { |card| card.display }
   else
     puts("That is not a set.")
   end
+
 end
 
 # Created 09/05/2019 by Leah Gillespie
@@ -129,8 +153,8 @@ end
 deck.each { |card| puts card.display }
 puts deck.length
 # preliminary evidence that implementation and use of the deck array works with isASet? method
-puts isASet?(deck.at(0), deck.at(1), deck.at(2))
-puts isASet?(deck.at(1), deck.at(2), deck.at(3))
+#puts isASet?(deck.at(0), deck.at(1), deck.at(2))
+#puts isASet?(deck.at(1), deck.at(2), deck.at(3))
 
 
 #Created 9/06/19 David Wing

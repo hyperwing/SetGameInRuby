@@ -96,6 +96,7 @@ def isASet?(cards)
 end
 
 # Acts as the beginning of what would be the main method in Java
+#=========================== MAIN ==================================================
 deck = createDeck
 cardsShowing = Array.new
 cardsShowing += dealCards(deck,12)
@@ -126,15 +127,16 @@ end
 
 # Created 09/05/2019 by Leah Gillespie
 # proves the deck has 81 unique cards and that they're all unique; will be changed into formal testing later
-deck.each { |card| puts card.display }
-puts deck.length
+# deck.each { |card| puts card.display }
+# puts deck.length
 # preliminary evidence that implementation and use of the deck array works with isASet? method
-puts isASet?(deck.at(0), deck.at(1), deck.at(2))
-puts isASet?(deck.at(1), deck.at(2), deck.at(3))
+# puts isASet?(deck.at(0), deck.at(1), deck.at(2))
+# puts isASet?(deck.at(1), deck.at(2), deck.at(3))
 
 
 #Created 9/06/19 David Wing
 # Create the DS for the table and set the table
+
 row1 = []
 row2 = []
 row3 = []
@@ -146,15 +148,48 @@ row3 = []
 
 
 #Created 9/06 David Wing
+#updated 9/07 David Wing
 #Check if table is valid
 def valid_table? (row1, row2, row3) #brute force check, but since there are only 12 cards to check its good enough
+
+  types = Hash.new(row3)
+
   for column_one in 0..row1.length
     for column_two in 0..row2.length
-      for column_three in 0..row3.length
-        if isASet(row1[column_one], row2[column_two], row3[column_three])
-          return true
-        end
-      end
+
+      card1 = row1[column_one]
+      card2 = row2[column_two]
+
+      cardToFind = Card.new
+
+      attrToFind = [6,6,6,6]
+      # any two types are equal, the third must be equal
+      # any two types are different, the third must be different
+
+      #TODO add count
+
+      #TODO explain magic
+
+      #magic number = 6
+      attrToFind[0] = 6 - card1.shape - card2.shape
+      attrToFind[1] = 6 - card1.shade - card2.shade
+      attrToFind[2] = 6- card1.symbol - card2.symbol
+      attrToFind[3] = 6 - card1.color - card2.color
+
+      until i > 4
+        if attrToFind[i] ==4
+          attrToFind[i] = 1
+          
+      cardToFind.shape = attrToFind[0]
+      cardToFind.shade = attrToFind[1]
+      cardToFind.symbol = attrToFind[2]
+      cardToFind.color = attrToFind[3]
+
+
+      #TODO add hash
+      #if cardToFind
+
+
     end
   end
   return false

@@ -3,6 +3,8 @@
 # Edited 09/05/2019 by Leah Gillespie
 #Edited 9/06/19 David Wing
 # Edited 9/05 Neel
+# Edited 09/07/2019 by Sharon Qiu
+
 
 # Created 09/05/2019 by Leah Gillespie
 # Edited 09/06/2019 by Neel Mansukhani
@@ -28,6 +30,7 @@ class Card
       print("number: #{@number} ")
       print("Color: #{@color} ")
       print("Shape: #{@shape} ")
+      
       puts("Shade: #{@shade}")
     end
 
@@ -50,15 +53,19 @@ end
 
 # Created 09/06/2019 by Neel Mansukhani
 # Removes 12 cards from deck.
-def dealCards(deck,num)
-  newCards = Array.new
+# Edited 09/07/2019 by Sharon Qiu:
+# Added in playingCards parameter. Method now updates the showing cards.
+# Added in boolean value signifying an empty deck.
+def dealCards?(deck,playingCards,num)
+  emptyDeck = false
+  return true if deck.length == 0
   for count in 0...num
     card = deck.delete_at(rand(deck.length))
     card.set_id($cardCount)
     $cardCount += 1
-    newCards.push(card)
+    playingCards.push(card)
   end
-  return newCards
+  return emptyDeck
 end
 
 # Created 09/05/2019 by Leah Gillespie
@@ -112,13 +119,24 @@ end
 #=========================== MAIN ==================================================
 deck = createDeck
 cardsShowing = Array.new
-cardsShowing += dealCards(deck,12)
+dealCards?(deck,cardsShowing,12)
 #Displays cards
 cardsShowing.each { |card| card.display }
 
 sets = Array.new
 while true # TODO: check if there are any sets left
-  # TODO: check if there are enough cards in the deck to deal.
+
+  setExists = valid_table?(r1,r2,r3) #TODO: parameters need to be fixed
+  noCardsLeft = (deck.length == 0)
+
+  # Adds cards while no set exists and if there is cards left.
+  while !setExists && !noCardsLeft
+    noCardsLeft = dealCards?(deck,cardsShowing,3)
+    setExists = valid_table?(r1,r2,r3) #TODO: parameters need to be fixed
+  end
+
+  break if (!setExists && noCardsLeft) || (cardsShowing.length == 0)
+
   print("Enter your first card number: ")
   card1 = gets.to_i
   print("Enter your second card number: ")
@@ -133,7 +151,9 @@ while true # TODO: check if there are any sets left
     #TODO: set up hash or something to clean sets up.
     sets.push(set)
     cardsShowing -= set
-    cardsShowing += dealCards(deck,3)
+    if cardsShowing.length < 12
+      dealCards?(deck,cardsShowing,3)
+    end
     cardsShowing.each { |card| card.display }
   else
     puts("That is not a set.")
@@ -176,7 +196,7 @@ def valid_table? (row1, row2, row3)
       card1 = row1[column_one]
       card2 = row2[column_two]
 
-      cardToFind = Card.new
+      #cardToFind = Card.new
 
       attrToFind = [6,6,6,6]
       # any two types are equal, the third must be equal

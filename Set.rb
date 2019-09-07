@@ -34,24 +34,26 @@ end
 $score = 0
 $cardCount = 0
 # Created 09/06/2019 by Neel Mansukhani
+# Returns card from an array with the given id
+def getCardById(deck,id)
+  deck.each do |card|
+    return card if card.id == id
+  end
+  return nil
+end
+# Created 09/06/2019 by Neel Mansukhani
 # Removes 12 cards from deck.
 def dealCards(deck,num)
   newCards = Array.new
   for count in 0...num
     card = deck.delete_at(rand(deck.length))
-    $cardCount += 1
     card.set_id($cardCount)
+    $cardCount += 1
     newCards.push(card)
   end
   return newCards
 end
-# Created by Neel Mansukhani
-# Displays cards showing
-def displayCards(cardsShowing)
-  for count in 0...cardsShowing.length
-    cardsShowing[count].display
-  end
-end
+
 # Created 09/05/2019 by Leah Gillespie
 # Edited 09/06/2019 by Neel Mansukhani
 # Moved code to function
@@ -96,7 +98,9 @@ end
 deck = createDeck
 cardsShowing = Array.new
 cardsShowing += dealCards(deck,12)
-displayCards(cardsShowing)
+#Displays cards
+cardsShowing.each { |card| card.display }
+
 sets = Array.new
 while true # TODO: check if there are any sets left
   # TODO: check if there are enough cards in the deck to deal.
@@ -106,21 +110,20 @@ while true # TODO: check if there are any sets left
   card2 = gets.to_i
   print("Enter your third card number: ")
   card3 = gets.to_i
-  set = [cardsShowing[card1],cardsShowing[card2],cardsShowing[card3]]
+  set = [getCardById(cardsShowing,card1),getCardById(cardsShowing,card2),getCardById(cardsShowing,card3)]
   if(isASet?(set))
     puts("That is a set!")
     #TODO: set up hash or something to clean sets up.
     sets.push(set)
-    cardsShowing.delete(cardsShowing[card1])
-    cardsShowing.delete(cardsShowing[card2])
-    cardsShowing.delete(cardsShowing[card3])
+    cardsShowing -= set
     cardsShowing += dealCards(deck,3)
+    cardsShowing.each { |card| card.display }
   else
     puts("That is not a set.")
   end
 end
 
-#Created 09/05/2019 by Leah Gillespie
+# Created 09/05/2019 by Leah Gillespie
 # proves the deck has 81 unique cards and that they're all unique; will be changed into formal testing later
 # deck.each { |card| puts card.display }
 # puts deck.length

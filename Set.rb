@@ -25,6 +25,7 @@ class Card
       print("Symbol: #{@symbol} ")
       print("Color: #{@color} ")
       print("Shape: #{@shape} ")
+      
       puts("Shade: #{@shade}")
     end
 

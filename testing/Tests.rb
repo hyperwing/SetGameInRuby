@@ -1,14 +1,9 @@
 #File created 09/05/2019 by Neel Mansukhani
-
+#
 require_relative("../Set")
 
-describe Card do
-  it "returns 0" do
-    x = Card.new(1,1,1,1)
 
-    expect(x.symbol).to eq(1)
-  end
-
+  # Created 09/05/2019 by Sri Ramya Dandu
   # Tests for isASet? function
   context "All 3 cards have the same attributes for all categories " do
 

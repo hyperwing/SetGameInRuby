@@ -1,6 +1,8 @@
 #File created 09/05/2019 by Neel Mansukhani
 #Edited 09/05/2019 by Sri Ramya Dandu
 # Edited 09/07/2019 by Sri Ramya Dandu
+# Edited 09/08/2019 by Sharon Qiu
+
 require_relative("../Set")
 
 # Created 09/05/2019 by Sri Ramya Dandu
@@ -139,3 +141,143 @@ end
     end
   end
 =end
+
+# Created 09/08/2019 by Sharon Qiu
+# Tests for dealCards method
+context "No more unplayed cards in the deck left." do
+
+  it "Does not add cards when cards showing is empty and deck of unplayed cards is empty." do
+    playingSet = []
+    unplayedDeck = []
+    dealCards(unplayedDeck,playingSet)
+
+    expect(playingSet.eql?([].to_a))
+  end
+
+  it "Does not add cards when there is a set and no more unplayed cards left." do
+    card1 = Card.new(1,0,1,2)
+    card2 = Card.new(1,2,0,2)
+    card3 = Card.new(1,1,2,2)
+    playingSet = [card1, card2, card3]
+    unplayedDeck = []
+    dealCards(unplayedDeck,playingSet)
+
+    expect(playingSet.eql?([card1, card2, card3].to_a))
+  end
+
+  it "Does not add cards when there is not a set and no more unplayed cards left." do
+    card1 = Card.new(1,0,0,2)
+    card2 = Card.new(1,2,0,2)
+    card3 = Card.new(1,1,2,2)
+    playingSet = [card1, card2, card3]
+    unplayedDeck = []
+    dealCards(unplayedDeck,playingSet)
+
+    expect(playingSet.eql?([card1, card2, card3].to_a))
+  end
+end
+
+context "There is not a set in the current cards and there are cards unplayed left." do
+
+  it "Adds cards when there are less than 12 playing cards and until there is a set in the set." do
+    card1 = Card.new(1,0,0,2)
+    card2 = Card.new(1,2,0,2)
+    card3 = Card.new(1,0,2,2)
+    card4 = Card.new(2,1,2,1)
+    card5 = Card.new(0,0,0,0)
+    card6 = Card.new(0,2,1,2)
+
+    #all cards below are cards that can be added to form a set in the 6 cards above.
+    card7 = Card.new(1,1,0,2)
+    card8 = Card.new(0,2,1,0)
+    card9 = Card.new(2,0,1,1)
+    card10 = Card.new(0,0,1,0)
+    card11 = Card.new(1,1,1,2)
+    card12 = Card.new(0,1,2,1)
+    playingSet = [card1, card2, card3, card4, card5, card6]
+    unplayedDeck = [card7, card8, card9,card10,card11,card12]
+    dealCards(unplayedDeck,playingSet)
+
+    expect(playingSet.length == 9)
+  end
+
+  it "Adds cards when there is no set but more than 12 cards played." do
+
+    card1 = Card.new(0,0,0,0)
+    card2 = Card.new(1,0,1,0)
+    card3 = Card.new(1,0,0,0)
+    card4 = Card.new(0,0,1,0)
+    card5 = Card.new(0,1,0,0)
+    card6 = Card.new(1,1,1,0)
+    card7 = Card.new(1,1,0,0)
+    card8 = Card.new(0,1,1,0)
+    card9 = Card.new(0,2,0,1)
+    card10 = Card.new(2,2,1,1)
+    card11 = Card.new(2,2,0,2)
+    card12 = Card.new(0,2,1,2)
+
+    card13 = Card.new(2,0,2,0)
+    card14 = Card.new(0,2,2,0)
+    card15 = Card.new(2,2,2,0)
+    playingSet = [card1, card2, card3, card4, card5, card6, card7, card8, card9, card10,card11,card12]
+    unplayedDeck = [card13,card14,card15]
+    dealCards(unplayedDeck,playingSet)
+
+    expect(playingSet.eql?([card1, card2, card3, card4, card5, card6, card7, card8, card9, card10, card11, card12,card13,card14,card15].to_a))
+  end
+
+end
+
+context "There is a set, but less than 12 cards. There are also cards unplayed left." do
+
+  it "Adds cards when there are less than 12 playing cards even when there is a set." do
+    card1 = Card.new(1,0,0,2)
+    card2 = Card.new(1,2,0,2)
+    card3 = Card.new(1,0,2,2)
+    card4 = Card.new(2,1,2,1)
+    card5 = Card.new(0,0,0,0)
+    card6 = Card.new(0,2,1,2)
+    card7 = Card.new(1,1,0,2)
+    card8 = Card.new(0,2,1,0)
+    card9 = Card.new(2,0,1,1)
+
+    #all cards below are cards that can be added to form a set in the 6 cards above.
+    card10 = Card.new(0,0,1,0)
+    card11 = Card.new(1,1,1,2)
+    card12 = Card.new(0,1,2,1)
+    playingSet = [card1, card2, card3, card4, card5, card6, card7, card8, card9]
+    unplayedDeck = [card10,card11,card12]
+    dealCards(unplayedDeck,playingSet)
+
+    expect(playingSet.eql?([card1, card2, card3, card4, card5, card6, card7, card8, card9,card10,card11,card12].to_a))
+  end
+
+end
+
+context "There is a set and more than or equal to 12 cards. There are also cards unplayed left." do
+
+  it "Does not add cards when there is a set and there are at least 12 cards." do
+    card1 = Card.new(1,0,0,2)
+    card2 = Card.new(1,2,0,2)
+    card3 = Card.new(1,0,2,2)
+    card4 = Card.new(2,1,2,1)
+    card5 = Card.new(0,0,0,0)
+    card6 = Card.new(0,2,1,2)
+    card7 = Card.new(1,1,0,2)
+    card8 = Card.new(0,2,1,0)
+    card9 = Card.new(2,0,1,1)
+    card10 = Card.new(0,0,1,0)
+    card11 = Card.new(1,1,1,2)
+    card12 = Card.new(0,1,2,1)
+
+    card13 = Card.new(0,1,2,0)
+    card14 = Card.new(1,2,1,2)
+    card15 = Card.new(0,1,1,1)
+    playingSet = [card1, card2, card3, card4, card5, card6, card7, card8, card9, card10,card11,card12]
+    unplayedDeck = [card13,card14,card15]
+    dealCards(unplayedDeck,playingSet)
+
+    expect(playingSet.eql?([card1, card2, card3, card4, card5, card6, card7, card8, card9, card10, card11, card12].to_a))
+  end
+
+end

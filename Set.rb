@@ -6,6 +6,7 @@
 # Edited 09/07/2019 by Sharon Qiu
 # Edited 9/07/2019 by Neel Mansukhani
 # Edited 09/07/2019 by Sri Ramya Dandu
+# Edited 09/08/2019 by Sharon Qiu
 
 # Created 09/05/2019 by Leah Gillespie
 # Edited 09/06/2019 by Neel Mansukhani
@@ -56,16 +57,51 @@ end
 # Edited 09/07/2019 by Sharon Qiu:
 # Added in playingCards parameter. Method now updates the showing cards.
 # Added in boolean value signifying an empty deck.
-def dealCards?(deck,playingCards,num)
-  emptyDeck = false
-  return true if deck.length == 0
-  for count in 0...num
-    card = deck.delete_at(rand(deck.length))
-    card.set_id($cardCount)
-    $cardCount += 1
-    playingCards.push(card)
+# Edited 09/08/2019 by Sharon Qiu:
+# Added in checks for situations to deal cards.
+# Removed boolean value.
+# Wrote description for method.
+#
+# Updates the passed in array of playingCards to a playable status for the player.
+# Does nothing if deck of unplayed cards is empty.
+#
+# @param deck, playingCards
+# @updates playingCards
+#
+def dealCards(deck,playingCards)
+  return if deck.length == 0
+
+  #initializing deck.
+  if playingCards.length == 0
+    for count in 0...12
+      card = deck.delete_at(rand(deck.length))
+      card.set_id($cardCount)
+      $cardCount += 1
+      playingCards.push(card)
+    end
+    return
   end
-  return emptyDeck
+
+  if (valid_table(playingCards)).length == 0
+    #continually adds cards until there is a set or there are no more cards.
+    while ((valid_table(playingCards)).length == 0) && deck.length > 0
+      for count in 0...3
+        card = deck.delete_at(rand(deck.length))
+        card.set_id($cardCount)
+        $cardCount += 1
+        playingCards.push(card)
+      end
+    end
+  elsif playingCards.length < 12
+    # Adds cards if there is a set but less than 12 playing cards.
+    for count in 0...3
+      card = deck.delete_at(rand(deck.length))
+      card.set_id($cardCount)
+      $cardCount += 1
+      playingCards.push(card)
+    end
+  end
+
 end
 
 # Created 09/05/2019 by Leah Gillespie
@@ -86,8 +122,6 @@ def createDeck
   end
   return deck
 end
-#TODO write tests for create deck
-
 
 # Created 09/04/2019 by Sri Ramya Dandu
 # Edited 09/07/2019 by Sri Ramya Dandu: Optimized the checking method - made function concise
@@ -111,28 +145,22 @@ end
 # Acts as the beginning of what would be the main method in Java
 # Edited 09/07/2019 by Neel Mansukhani
 # Testing fix
+# Edited 09/08
 
 #=========================== MAIN ==================================================
 if __FILE__ == $0
 deck = createDeck
 cardsShowing = Array.new
-dealCards?(deck,cardsShowing,12)
+dealCards(deck,cardsShowing)
 #Displays cards
 cardsShowing.each { |card| card.display }
 
 sets = Array.new
 while true # TODO: check if there are any sets left
 
-  setExists = true#valid_table?(r1,r2,r3) TODO: parameters need to be fixed
-  noCardsLeft = (deck.length == 0)
+  dealCards(deck,cardsShowing)
 
-  # Adds cards while no set exists and if there is cards left.
-  while !setExists && !noCardsLeft
-    noCardsLeft = dealCards?(deck,cardsShowing,3)
-    setExists = true#valid_table?(r1,r2,r3) TODO: parameters need to be fixed
-  end
-
-  break if (!setExists && noCardsLeft) || (cardsShowing.length == 0)
+  break if ((valid_table(cardsShowing)).length == 0) && deck.length == 0
 
   print("Enter your first card number: ")
   card1 = gets.to_i
@@ -148,9 +176,6 @@ while true # TODO: check if there are any sets left
     #TODO: set up hash or something to clean sets up.
     sets.push(set)
     cardsShowing -= set
-    if cardsShowing.length < 12
-      dealCards?(deck,cardsShowing,3)
-    end
     cardsShowing.each { |card| card.display }
   else
     puts("That is not a set.")
@@ -185,7 +210,7 @@ end
 #Check if table is valid
 
 #TODO magic number doesnt make sense
-def valid_table? (row1, row2, row3) 
+def valid_table(array)
   types = Hash.new(row3)
 
   for column_one in 0..row1.length

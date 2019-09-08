@@ -6,6 +6,7 @@
 # Edited 09/07/2019 by Sharon Qiu
 # Edited 9/07/2019 by Neel Mansukhani
 # Edited 09/07/2019 by Sri Ramya Dandu
+# Edited 09/08/2019 by Neel Mansukhani
 
 # Created 09/05/2019 by Leah Gillespie
 # Edited 09/06/2019 by Neel Mansukhani
@@ -39,7 +40,6 @@ class Card
   end
 end
 
-$score = 0
 $cardCount = 0
 
 # Created 09/06/2019 by Neel Mansukhani
@@ -154,6 +154,9 @@ end
 
 #=========================== MAIN ==================================================
 if __FILE__ == $0
+# Edited 09/08/2019 by Neel Mansukhani
+#  Made score local variable instead of global
+score = 0
 deck = createDeck
 cardsShowing = Array.new
 dealCards?(deck,cardsShowing,12)

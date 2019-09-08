@@ -279,7 +279,7 @@ context "Check table for valid sets" do
     card3 = Card.new(1,1,0,2)    
     tableArray = [card1, card2, card3]    
     expected = []
-    expect(valid_table?(tableArray)).to eql(expected)
+    expect(valid_table(tableArray)).to eql(expected)
   end
 
   it "returns an array of valid cards when there is only a valid set left" do 
@@ -289,7 +289,7 @@ context "Check table for valid sets" do
     tableArray = [card1, card2, card3]
 
     expected = [card1, card2, card3]
-    ret = valid_table?(tableArray)
+    ret = valid_table(tableArray)
 
     expect(ret[0]).to have_attributes(:shape => 0, :number=>0, :shade=>0, :color=>0)
     expect(ret[1]).to have_attributes(:shape => 0, :number=>0, :shade=>0, :color=>0)
@@ -314,7 +314,7 @@ context "Check table for valid sets" do
     ]
 
     expected = []
-    expect(valid_table?(tableArray)).to eql(expected)
+    expect(valid_table(tableArray)).to eql(expected)
   end
 
   it "returns an valid card array when there is a valid sets in a standard 12 card table" do 
@@ -334,7 +334,7 @@ context "Check table for valid sets" do
       Card.new(0,2,1,2)
     ]
 
-    ret = valid_table?(tableArray)
+    ret = valid_table(tableArray)
 
     expect(ret[0]).to have_attributes(:shape => 0, :number=>0, :shade=>0, :color=>2)
     expect(ret[1]).to have_attributes(:shape => 0, :number=>0, :shade=>0, :color=>1)
@@ -350,13 +350,12 @@ context "Check table for valid sets" do
     card2 = Card.new(2,2,2,1)
     card3 = Card.new(2,2,2,4)
 
-    ret = valid_table?(tableArray)
+    ret = valid_table(tableArray)
 
     expect(ret[0]).to have_attributes(:shape => 2, :number=>2, :shade=>2, :color=>2)
     expect(ret[1]).to have_attributes(:shape => 2, :number=>2, :shade=>1, :color=>2)
     expect(ret[2]).to have_attributes(:shape => 2, :number=>2, :shade=>0, :color=>2)
   end    
-
 
 end
 

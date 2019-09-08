@@ -218,7 +218,7 @@ while true # TODO: check if there are any sets left
     cardsShowing.each { |card| card.display }
   else
     puts("That is not a set.")
-    $score -= 1
+    score -= 1
   end
 end
 end

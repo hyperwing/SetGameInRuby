@@ -144,13 +144,6 @@ def isASet?(cards)
       (cards[0].shade + cards[1].shade + cards[2].shade) % 3 == 0
 end
 
-def printCard(card)
-  print("number: "+ card.number.to_s)
-  print(" shape: "+ card.shape.to_s)
-  print(" color: "+ card.color.to_s)
-  print(" shade: "+ card.shade.to_s + "\n")
-end
-
 #Created 9/06/19 David Wing
 #updated 9/07-9/08 David Wing
 

@@ -8,5 +8,11 @@
 * Documentation: David Wing 
 
 ### Contributions
-Please list who did what for each part of the project.
-Also list if people worked together (pair programmed) on a particular section.
+Checkpoint one:
+Sharon Qiu - Implemented checks for dealing cards and ending the game.
+Sri Ramya Dandu - Checking tuples chosen by the player for set validity.
+Leah Gillespie - Creating the overall deck.
+David Wing - Checking if there is a set in each set of played cards.
+Neel Mansukhani - All I/O.
+
+Any minor edits to main functionalities were implemented by whichever group member saw a need for said implementations.

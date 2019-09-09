@@ -222,11 +222,3 @@ while true # TODO: check if there are any sets left
   end
 end
 end
-
-# Created 09/05/2019 by Leah Gillespie
-# proves the deck has 81 unique cards and that they're all unique; will be changed into formal testing later
-# deck.each { |card| puts card.display }
-# puts deck.length
-# preliminary evidence that implementation and use of the deck array works with isASet? method
-# puts isASet?(deck.at(0), deck.at(1), deck.at(2))
-# puts isASet?(deck.at(1), deck.at(2), deck.at(3))

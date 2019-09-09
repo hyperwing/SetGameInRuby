@@ -2,6 +2,7 @@
 #Edited 09/05/2019 by Sri Ramya Dandu
 # Edited 09/07/2019 by Sri Ramya Dandu
 # Edited 09/08/2019 by Sharon Qiu
+# Edited 09/08/2019 by Leah Gillespie
 
 require_relative("../Set")
 
@@ -359,3 +360,69 @@ context "Check table for valid sets" do
 
 end
 
+# Created 09/08/2019 by Leah Gillespie
+context "Checks that the deck is created correctly" do
+
+  it "Creates a deck with 81 cards" do
+    deck = createDeck
+    expect deck.length == 81
+  end
+
+  it "Creates cards that have a valid value (0, 1, or 2) for the number attribute" do
+    deck = createDeck
+    isValid = true
+
+    deck.each do |card|
+      isValid = isValid && (card.number == 0 || card.number == 1 || card.number == 2)
+    end
+
+    expect isValid
+  end
+
+  it "Creates cards that have a valid value (0, 1, or 2) for the color attribute" do
+    deck = createDeck
+    isValid = true
+
+    deck.each do |card|
+      isValid = isValid && (card.color == 0 || card.color == 1 || card.color == 2)
+    end
+
+    expect isValid
+  end
+
+  it "Creates cards that have a valid value (0, 1, or 2) for the shape attribute" do
+    deck = createDeck
+    isValid = true
+
+    deck.each do |card|
+      isValid = isValid && (card.shape == 0 || card.shape == 1 || card.shape == 2)
+    end
+
+    expect isValid
+  end
+
+  it "Creates cards that have a valid value (0, 1, or 2) for the shade attribute" do
+    deck = createDeck
+    isValid = true
+
+    deck.each do |card|
+      isValid = isValid && (card.shade == 0 || card.shade == 1 || card.shade == 2)
+    end
+
+    expect isValid
+  end
+
+  it "Creates 81 unique cards" do
+    deck = createDeck
+    isUnique = true
+    for i in 0...80
+      currentCard = deck.at i
+      for n in i..80
+        checkCard = deck.at n
+        isUnique = currentCard.number != checkCard.number || currentCard.color != checkCard.color || currentCard.shape != checkCard.shape || currentCard.shade != checkCard.shade
+      end
+    end
+    expect isUnique
+  end
+
+end

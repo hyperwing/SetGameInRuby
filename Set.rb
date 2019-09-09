@@ -85,6 +85,7 @@ def dealCards(deck,playingCards)
   if (valid_table(playingCards)).length == 0
     #continually adds cards until there is a set or there are no more cards.
     while ((valid_table(playingCards)).length == 0) && deck.length > 0
+      #print("\n Empty: #{(valid_table(playingCards)).length == 0} \n")
       for count in 0...3
         card = deck.delete_at(rand(deck.length))
         card.set_id($cardCount)
@@ -100,6 +101,7 @@ def dealCards(deck,playingCards)
       $cardCount += 1
       playingCards.push(card)
     end
+
   end
 
 end
@@ -182,23 +184,23 @@ end
 # Edited 09/07/2019 by Neel Mansukhani
 # Testing fix
 # Edited 09/08/2019 by Sharon Qiu: Cleaned up main checking conditions for dealing cards.
-
-#=========================== MAIN ==================================================
-if __FILE__ == $0
 # Edited 09/08/2019 by Neel Mansukhani
 #  Made score local variable instead of global
+# Edited 09/08/2019 by Sharon Qiu: Fixed when cards should be displayed.
+#=========================== MAIN ==================================================
+if __FILE__ == $0
 score = 0
 deck = createDeck
 cardsShowing = Array.new
 dealCards(deck,cardsShowing)
-#Displays cards
-cardsShowing.each { |card| card.display }
 
 sets = Array.new
 while true # TODO: check if there are any sets left
 
   dealCards(deck,cardsShowing)
-
+  #Displays cards
+  cardsShowing.each { |card| card.display }
+  puts("\n Set is: #{valid_table(cardsShowing)}")
   break if ((valid_table(cardsShowing)).length == 0) && deck.length == 0
 
   print("Enter your first card number: ")
@@ -215,7 +217,6 @@ while true # TODO: check if there are any sets left
     #TODO: set up hash or something to clean sets up.
     sets.push(set)
     cardsShowing -= set
-    cardsShowing.each { |card| card.display }
   else
     puts("That is not a set.")
     score -= 1

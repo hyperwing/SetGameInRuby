@@ -7,7 +7,7 @@
 # Edited 09/07/2019 by Sri Ramya Dandu
 # Edited 09/08/2019 by Sharon Qiu
 # Edited 09/08/2019 by Neel Mansukhani
-
+#edited 9/9 david
 
 # Created 09/05/2019 by Leah Gillespie
 # Edited 09/06/2019 by Neel Mansukhani
@@ -144,12 +144,18 @@ def isASet?(cards)
       (cards[0].shade + cards[1].shade + cards[2].shade) % 3 == 0
 end
 
+def printCard(card)
+  print("number: "+ card.number.to_s)
+  print(" shape: "+ card.shape.to_s)
+  print(" color: "+ card.color.to_s)
+  print(" shade: "+ card.shade.to_s + "\n")
+end
 
 #Created 9/06/19 David Wing
 #updated 9/07-9/08 David Wing
 
 #Given an Array of Table, Check if table is valid
-# Returns Empty Array if not valid table, if valid table, returns Array of one Valid Set
+# Returns Empty Array if not valid table, if valid table, returns index of Valid set in table
 def valid_table(tableArray)
 
   valid_set = Array[]
@@ -167,9 +173,9 @@ def valid_table(tableArray)
 
         if isASet?([tableArray[card1], tableArray[card2], tableArray[card3]])
           #found valid set
-          valid_set[0] = tableArray[card1]
-          valid_set[1] = tableArray[card2]
-          valid_set[2] = tableArray[card3]
+          valid_set[0] = card1
+          valid_set[1] = card2
+          valid_set[2] = card3
           break
         end
 
@@ -195,13 +201,29 @@ cardsShowing = Array.new
 dealCards(deck,cardsShowing)
 
 sets = Array.new
-while true # TODO: check if there are any sets left
+while true 
 
   dealCards(deck,cardsShowing)
+
   #Displays cards
   cardsShowing.each { |card| card.display }
-  puts("\n Set is: #{valid_table(cardsShowing)}")
-  break if ((valid_table(cardsShowing)).length == 0) && deck.length == 0
+
+  valid_set = valid_table(cardsShowing);
+
+  # no valid sets
+  break if valid_set.length == 0 && deck.length == 0
+
+  #HINT logic David Wing 9/9
+  print("Need a hint? y/n: ")
+  input = gets.chomp
+  if input.eql?("y") == true
+    puts("look for a pair with these cards: ")
+    puts("card " + cardsShowing[valid_set[0]].id.to_s + " and card " + cardsShowing[valid_set[1]].id.to_s)
+    #puts("card 3:" + cardsShowing[valid_set[2]].id.to_s) #DEBUG message
+
+    #decrease score because you cheated
+    score -= 0.5
+  end
 
   print("Enter your first card number: ")
   card1 = gets.to_i

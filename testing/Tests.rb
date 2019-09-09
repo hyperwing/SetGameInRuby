@@ -1,16 +1,17 @@
-#File created 09/05/2019 by Neel Mansukhani
-#Edited 09/05/2019 by Sri Ramya Dandu
+# File created 09/05/2019 by Neel Mansukhani
+# Edited 09/05/2019 by Sri Ramya Dandu
 # Edited 09/07/2019 by Sri Ramya Dandu
 # Edited 09/08/2019 by Sharon Qiu
+# Edited 09/08/2019 by David Wing
 # Edited 09/08/2019 by Leah Gillespie
+# Edited 09/09/2019 by David Wing
 
 require_relative("../Set")
 
 # Created 09/05/2019 by Sri Ramya Dandu
-# Tests for isASet? function
 # Edited 09/07/2019 by Sri Ramya Dandu: changed the input to reflect input changes in method
 #
-
+# Tests for isASet? function
 context "All 3 cards have the same attributes for all categories " do
 
   it "Returns true when all cards have attribute 1" do
@@ -18,7 +19,6 @@ context "All 3 cards have the same attributes for all categories " do
     card2 = Card.new(1,1,1,1)
     card3 = Card.new(1,1,1,1)
     set = [card1, card2, card3]
-
 
     expect(isASet?(set)).to eq(true)
   end
@@ -270,9 +270,9 @@ context "There is a set and more than or equal to 12 cards. There are also cards
 end
 
 
-#9/06 created by David Wing
-#9/08 updated by david
-#Tests for valid sets
+# Created 09/09/2019 by David Wing
+# Edited 09/08/2019 by david
+# Tests for valid sets
 context "Check table for valid sets" do
   it "returns empty array when there are no valid sets and only 3 cards" do
     card1 = Card.new(1,0,0,1)

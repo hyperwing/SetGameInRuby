@@ -7,11 +7,11 @@
 # Edited 09/07/2019 by Sri Ramya Dandu
 # Edited 09/08/2019 by Sharon Qiu
 # Edited 09/08/2019 by Neel Mansukhani
-#edited 9/9 david
+# Edited 09/09/2019 by David Wing
+# Edited 09/09/2019 by Sri Ramya Dandu
 
 # Created 09/05/2019 by Leah Gillespie
-# Edited 09/06/2019 by Neel Mansukhani
-# Added id and set_id to Card
+# Edited 09/06/2019 by Neel Mansukhani: Added id and set_id function to Card
 class Card
 
   #TODO Attribute matching to numbers
@@ -19,6 +19,7 @@ class Card
   #TODO check attributes are correct
   attr_reader :id, :number, :color, :shape, :shade
 
+    # Created 09/05/2019 by Leah Gillespie
     def initialize(number, color, shape, shade)
       @id = nil
       @number = number
@@ -26,8 +27,9 @@ class Card
       @shape = shape
       @shade = shade
     end
-    # Edited 09/06/2019 by Neel Mansukhani
-    # Cleaned up display
+
+    # Created 09/05/2019 by Neel Mansukhani
+    # Edited 09/06/2019 by Neel Mansukhani: Cleaned up display
     def display
       print("Card: #{@id} ")
       print("Number: #{@number} ")
@@ -36,15 +38,16 @@ class Card
       puts("Shade: #{@shade}")
     end
 
-  def set_id(num)
-    @id = num
-  end
+    # Created 09/06/2019 by Neel Mansukhani
+    def set_id(num)
+     @id = num
+    end
 end
 
 $cardCount = 0
 
 # Created 09/06/2019 by Neel Mansukhani
-# Returns card from an array with the given id
+# Returns card from the total deck with the given id
 def getCardById(deck,id)
 deck.each do |card|
   return card if card.id == id
@@ -107,8 +110,7 @@ def dealCards(deck,playingCards)
 end
 
 # Created 09/05/2019 by Leah Gillespie
-# Edited 09/06/2019 by Neel Mansukhani
-# Moved code to function
+# Edited 09/06/2019 by Neel Mansukhani: Moved code to function
 #
 # Creates an array to be the deck and initializes 81 unique cards into it
 def createDeck
@@ -144,11 +146,13 @@ def isASet?(cards)
       (cards[0].shade + cards[1].shade + cards[2].shade) % 3 == 0
 end
 
-#Created 9/06/19 David Wing
-#updated 9/07-9/08 David Wing
-
-#Given an Array of Table, Check if table is valid
-# Returns Empty Array if not valid table, if valid table, returns index of Valid set in table
+#Created 9/06/2019 by David Wing
+#Edited 9/07/2019 by David Wing
+#Edited 9/08/2019 by David Wing
+#
+# Given an Array of the displayed cards, checks if there is a set
+# Returns an empty Array if there is not a set. If there is  set, it returns
+# an array holding the 3 cards that form the set
 def valid_table(tableArray)
 
   valid_set = Array[]
@@ -180,12 +184,12 @@ def valid_table(tableArray)
 end
 
 # Acts as the beginning of what would be the main method in Java
-# Edited 09/07/2019 by Neel Mansukhani
-# Testing fix
+# Edited 09/07/2019 by Neel Mansukhani: Testing fix
 # Edited 09/08/2019 by Sharon Qiu: Cleaned up main checking conditions for dealing cards.
-# Edited 09/08/2019 by Neel Mansukhani
-#  Made score local variable instead of global
+# Edited 09/08/2019 by Neel Mansukhani: Made score local variable instead of global
 # Edited 09/08/2019 by Sharon Qiu: Fixed when cards should be displayed.
+# Edited 09/08/2019 by David Wing: Added hint implementation
+# Edited 09/09/2019 by Sri Ramya Dandu: Display score changes
 #=========================== MAIN ==================================================
 if __FILE__ == $0
 score = 0
@@ -207,7 +211,7 @@ while true
   break if valid_set.length == 0 && deck.length == 0
 
   #HINT logic David Wing 9/9
-  print("Need a hint? y/n: ")
+  print("Need a hint? (Score will decrease by .5) y/n: ")
   input = gets.chomp
   if input.eql?("y") == true
     puts("look for a pair with these cards: ")
@@ -218,6 +222,7 @@ while true
     score -= 0.5
   end
 
+  #not checking for correct input because with GUI implementation it will be unnecessary
   print("Enter your first card number: ")
   card1 = gets.to_i
   print("Enter your second card number: ")
@@ -229,12 +234,14 @@ while true
     puts("That is a set!")
     #TODO: Score should increment/decrement here
     score += 1
+    puts("Your current score: #{score}")
     #TODO: set up hash or something to clean sets up.
     sets.push(set)
     cardsShowing -= set
   else
     puts("That is not a set.")
     score -= 1
+    puts("Your current score: #{score}")
   end
 end
 end

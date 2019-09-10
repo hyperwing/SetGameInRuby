@@ -7,7 +7,7 @@
 # Edited 09/07/2019 by Sri Ramya Dandu
 # Edited 09/08/2019 by Sharon Qiu
 # Edited 09/08/2019 by Neel Mansukhani
-#edited 9/9 david
+# Edited 09/09/2019 by David Wing 
 # Edited 09/09/2019 by Sharon Qiu
 # Edited 09/09/2019 by David Wing
 # Edited 09/09/2019 by Sri Ramya Dandu

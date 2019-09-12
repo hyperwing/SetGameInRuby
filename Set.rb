@@ -12,6 +12,7 @@
 # Edited 09/09/2019 by David Wing
 # Edited 09/09/2019 by Sri Ramya Dandu
 # Edited 09/10/2019 by Sri Ramya Dandu
+# Edited 09/12/2019 by Leah Gillespie
 
 # Created 09/05/2019 by Leah Gillespie
 # Edited 09/06/2019 by Neel Mansukhani: Added id and set_id function to Card
@@ -44,6 +45,18 @@ class Card
   # Created 09/06/2019 by Neel Mansukhani
   def set_id(num)
     @id = num
+  end
+end
+
+#Created 09/12/2019 by Leah Gillespie
+class AllTimers
+  attr_reader :current
+  def initialize
+    @initial = Time.now
+    @current = 0
+  end
+  def updateTime
+    @current = Time.now - @initial
   end
 end
 
@@ -246,8 +259,6 @@ def computerPlayer()
   end
 end
 
-
-
 # Acts as the beginning of what would be the main method in Java
 # Edited 09/07/2019 by Neel Mansukhani: Testing fix
 # Edited 09/08/2019 by Sharon Qiu: Cleaned up main checking conditions for dealing cards.
@@ -260,15 +271,20 @@ end
 # Edited 09/08/2019 by David Wing: Added hint implementation
 # Edited 09/09/2019 by Sri Ramya Dandu: Display score changes
 # Edited 09/09/2019 by Sri Ramya Dandu: added global variable and changed method of input
+# Edited 09/12/2019 by Leah Gillespie: setting up a timer for the game
 #=========================== MAIN ==================================================
 
 #global variables defined for data that is shared between the computer and the player
 $deck = createDeck
 $cardsShowing = Array.new
 $playerScore,$computerScore = 0,0
+gameTimer = AllTimers.initialize
+player1Timer = AllTimers.initialize
+computerTimer = AllTimers.initialize
+player2Timer = AllTimers.initialize
 
 
-#boolean used to comunciate between threatds to prevent interuptions while printing cards
+#boolean used to communicate between threads to prevent interruptions while printing cards
 $signal = false
 
 
@@ -278,7 +294,7 @@ def player
   sets = Array.new
   while true
 
-    #changes signal to false to prevent computer thread from printing it's cards
+    #changes signal to false to prevent computer thread from printing its cards
     $signal = false
     dealCards()
 

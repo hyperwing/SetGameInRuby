@@ -20,8 +20,8 @@ class Card
   attr_reader :id, :number, :color, :shape, :shade
 
     # Created 09/05/2019 by Leah Gillespie
-    def initialize(number, color, shape, shade)
-      @id = nil
+    def initialize(id, number, color, shape, shade)
+      @id = id
       @number = number
       @color = color
       @shape = shape
@@ -78,8 +78,7 @@ def dealCards(deck,playingCards)
   if playingCards.length == 0
     for count in 0...12
       card = deck.delete_at(rand(deck.length))
-      card.set_id($cardCount)
-      $cardCount += 1
+
       playingCards.push(card)
     end
     return
@@ -91,8 +90,6 @@ def dealCards(deck,playingCards)
       #print("\n Empty: #{(valid_table(playingCards)).length == 0} \n")
       for count in 0...3
         card = deck.delete_at(rand(deck.length))
-        card.set_id($cardCount)
-        $cardCount += 1
         playingCards.push(card)
       end
     end
@@ -100,8 +97,6 @@ def dealCards(deck,playingCards)
     # Adds cards if there is a set but less than 12 playing cards.
     for count in 0...3
       card = deck.delete_at(rand(deck.length))
-      card.set_id($cardCount)
-      $cardCount += 1
       playingCards.push(card)
     end
 
@@ -115,11 +110,13 @@ end
 # Creates an array to be the deck and initializes 81 unique cards into it
 def createDeck
 deck = Array.new
+id = 0
 for number in 0..2
   for color in 0..2
     for shape in 0..2
       for shade in 0..2
-        deck.push(Card.new(number,color,shape,shade))
+        deck.push(Card.new(id, number,color,shape,shade))
+        id+=1
       end
     end
   end
@@ -155,32 +152,38 @@ end
 # an array holding the 3 cards that form the set
 def valid_table(tableArray)
 
-  valid_set = Array[]
+  #make hash of all table cards
+  #id is the key, location is the value
+  tableHash =  Hash.new
+  if tableArray.length < 1
+    return []
+  end
+
+  for i in 0...tableArray.length
+    tableHash[tableArray[i].id] = i
+  end
+
   for card1 in 0...tableArray.length
-    for card2 in 0...tableArray.length
+    for card2 in 1...tableArray.length
       if(card1 == card2) #skip if same card
         next
       end
 
-      for card3 in 0...tableArray.length
-        
-        if card2 == card3 or card1 == card3 #skip if same card
-          next
-        end 
+      #find attributes needed by id 
+      cardToFind = 27 * ((6- tableArray[card1].number - tableArray[card2].number) % 3)
+      cardToFind += 9 * ((6- tableArray[card1].color - tableArray[card2].color) %3)
+      cardToFind += 3 * ((6- tableArray[card1].shape - tableArray[card2].shape) %3)
+      cardToFind += (6-tableArray[card1].shade - tableArray[card2].shade) %3
 
-        if isASet?([tableArray[card1], tableArray[card2], tableArray[card3]])
-          #found valid set
-          valid_set[0] = card1
-          valid_set[1] = card2
-          valid_set[2] = card3
-          break
-        end
-
+      #cardToFind is now the card ID for the last card
+      if tableHash.include?(cardToFind)
+        return [card1, card2, tableHash[cardToFind]]
       end
+
     end
   end
   
-  return valid_set
+  return []
 end
 
 # Acts as the beginning of what would be the main method in Java

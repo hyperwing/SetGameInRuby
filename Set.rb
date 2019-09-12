@@ -9,10 +9,6 @@
 # Edited 09/08/2019 by Neel Mansukhani
 # Edited 09/09/2019 by David Wing
 # Edited 09/09/2019 by Sri Ramya Dandu
-# sudo apt-get install build-essential libsdl2-dev libsdl2-ttf-dev libpango1.0-dev \
-#                      libgl1-mesa-dev libopenal-dev libsndfile-dev libmpg123-dev \
-#                      libgmp-dev
-# gem install gosu
 require 'gosu'
 # Created 09/05/2019 by Leah Gillespie
 # Edited 09/06/2019 by Neel Mansukhani: Added id and set_id function to Card

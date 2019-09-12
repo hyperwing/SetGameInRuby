@@ -9,6 +9,10 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" scope="PROVIDED" name="bundler (v2.0.2, rbenv: 2.6.3) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="diff-lcs (v1.3, rbenv: 2.6.3) [gem]" level="application" />
+<<<<<<< HEAD
+=======
+    <orderEntry type="library" scope="PROVIDED" name="gosu (v0.14.5, rbenv: 2.6.3) [gem]" level="application" />
+>>>>>>> 3753891da1d6b7e999e6e1fc00b2326fafd89a10
     <orderEntry type="library" scope="PROVIDED" name="rspec (v3.8.0, rbenv: 2.6.3) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="rspec-core (v3.8.2, rbenv: 2.6.3) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="rspec-expectations (v3.8.4, rbenv: 2.6.3) [gem]" level="application" />

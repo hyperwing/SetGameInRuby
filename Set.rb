@@ -264,7 +264,6 @@ end
 # Edited 09/09/2019 by Sri Ramya Dandu: Display score changes
 # Edited 09/09/2019 by Sri Ramya Dandu: added global variable and changed method of input
 #=========================== MAIN ==================================================
-if __FILE__ == $0
 StartScreen.new.show
 deck = createDeck
 cardsShowing = Array.new
@@ -341,7 +340,6 @@ def players
     puts("Your current score: #{$playerScore}")
   end
 end
-
 # creating thread for the player execution
 playerThread = Thread.new{players}
 

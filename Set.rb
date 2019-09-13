@@ -358,11 +358,20 @@ def player
   end
 end
 
-# creating thread for the player execution
-playerThread = Thread.new{player}
+if __FILE__ == $0
 
-# creating thread for the computer execution
-computerThread = Thread.new{computerPlayer}
+  puts "Enter 1 to play solo, or 2 to play vs Computer"
+  choice = gets.to_i
+  if choice == 1
+    player
+  elsif choice == 2
+    # creating thread for the player execution
+    playerThread = Thread.new{player}
 
-playerThread.join
-computerThread.join
+    # creating thread for the computer execution
+    computerThread = Thread.new{computerPlayer}
+
+    playerThread.join
+    computerThread.join
+  end
+  end

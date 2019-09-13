@@ -48,7 +48,8 @@ class Card
   end
 end
 
-$cardCount = 0
+# TODO: figure out button pressing returns and how it works
+# $environment = ??
 
 # Created 09/06/2019 by Neel Mansukhani
 # Returns card from the total deck with the given id
@@ -273,7 +274,7 @@ $playerScore,$computerScore = 0,0
 $signal = false
 
 
-def player
+def players
 
   dealCards()
   sets = Array.new
@@ -336,7 +337,7 @@ def player
 end
 
 # creating thread for the player execution
-playerThread = Thread.new{player}
+playerThread = Thread.new{players}
 
 # creating thread for the computer execution
 computerThread = Thread.new{computerPlayer}

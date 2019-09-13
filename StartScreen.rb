@@ -47,3 +47,5 @@ class StartScreen < Gosu::Window
     end
   end
 end
+
+StartScreen.new.show

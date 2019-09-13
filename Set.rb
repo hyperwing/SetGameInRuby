@@ -13,6 +13,7 @@
 # Edited 09/09/2019 by Sri Ramya Dandu
 # Edited 09/10/2019 by Sri Ramya Dandu
 # Edited 09/12/2019 by Leah Gillespie
+# edited 9/12 david Wing
 
 # Created 09/05/2019 by Leah Gillespie
 # Edited 09/06/2019 by Neel Mansukhani: Added id and set_id function to Card
@@ -23,8 +24,8 @@ class Card
   attr_reader :id, :number, :color, :shape, :shade
 
   # Created 09/05/2019 by Leah Gillespie
-  def initialize(number, color, shape, shade)
-    @id = nil
+  def initialize(id, number, color, shape, shade)
+    @id = id
     @number = number
     @color = color
     @shape = shape
@@ -97,7 +98,6 @@ def dealCards()
   if $cardsShowing.length == 0
     for count in 0...12
       card = $deck.delete_at(rand($deck.length))
-      card.set_id($cardCount)
       $cardCount += 1
       $cardsShowing.push(card)
     end
@@ -110,7 +110,6 @@ def dealCards()
       #print("\n Empty: #{(valid_table(playingCards)).length == 0} \n")
       for count in 0...3
         card = $deck.delete_at(rand($deck.length))
-        card.set_id($cardCount)
         $cardCount += 1
         $cardsShowing.push(card)
       end
@@ -119,7 +118,6 @@ def dealCards()
     # Adds cards if there is a set but less than 12 playing cards.
     for count in 0...3
       card = $deck.delete_at(rand($deck.length))
-      card.set_id($cardCount)
       $cardCount += 1
       $cardsShowing.push(card)
     end
@@ -131,15 +129,25 @@ end
 # Created 09/05/2019 by Leah Gillespie
 # Edited 09/06/2019 by Neel Mansukhani: Moved code to function
 # Edited 09/09/2019 by Sri Ramya Dandu: changed deck to a global variable
+<<<<<<< HEAD
 # Edited 09/12/2019 by Leah Gillespie: made sure to use terse code
+=======
+# Edited 9/12 David: added id to be inited
+>>>>>>> 8964359236ab91505a7bb8458f38b17b6d92fd7e
 # Creates an array to be the deck and initializes 81 unique cards into it
 def createDeck
   $deck = Array.new
+  id = 0
   for number in 0..2
     for color in 0..2
       for shape in 0..2
         for shade in 0..2
+<<<<<<< HEAD
           $deck.push Card.new(number,color,shape,shade)
+=======
+          $deck.push(Card.new(id, number,color,shape,shade))
+          id+=1
+>>>>>>> 8964359236ab91505a7bb8458f38b17b6d92fd7e
         end
       end
     end
@@ -170,37 +178,44 @@ end
 #Edited 9/07/2019 by David Wing
 #Edited 9/08/2019 by David Wing
 # Edited 09/09/2019 by Sri Ramya Dandu: changed cardsShowing to a global variable
+#edited 9/12 David optimized table searching
 # Given an Array of the displayed cards, checks if there is a set
 # Returns an empty Array if there is not a set. If there is  set, it returns
 # an array holding the 3 cards that form the set
 def valid_table()
 
-  valid_set = Array[]
+  #make hash of all table cards
+  #id is the key, location is the value
+  tableHash =  Hash.new
+  if $cardsShowing.length < 1
+    return []
+  end
+
+  for i in 0...$cardsShowing.length
+    tableHash[$cardsShowing[i].id] = i
+  end
+
   for card1 in 0...$cardsShowing.length
-    for card2 in 0...$cardsShowing.length
+    for card2 in 1...$cardsShowing.length
       if(card1 == card2) #skip if same card
         next
       end
 
-      for card3 in 0...$cardsShowing.length
+      #find attributes of the last card needed
+      cardToFind = 27 * ((6- $cardsShowing[card1].number - $cardsShowing[card2].number) % 3)
+      cardToFind += 9 * ((6- $cardsShowing[card1].color - $cardsShowing[card2].color) %3)
+      cardToFind += 3 * ((6- $cardsShowing[card1].shape - $cardsShowing[card2].shape) %3)
+      cardToFind += (6-$cardsShowing[card1].shade - $cardsShowing[card2].shade) %3
 
-        if card2 == card3 or card1 == card3 #skip if same card
-          next
-        end
-
-        if isASet?([$cardsShowing[card1], $cardsShowing[card2], $cardsShowing[card3]])
-          #found valid set
-          valid_set[0] = card1
-          valid_set[1] = card2
-          valid_set[2] = card3
-          break
-        end
-
+      #cardToFind is now the card ID for the last card
+      if tableHash.include?(cardToFind)
+        return [card1, card2, tableHash[cardToFind]]
       end
+
     end
   end
-
-  return valid_set
+  
+  return []
 end
 
 
@@ -261,7 +276,39 @@ def computerPlayer()
   end
 end
 
+<<<<<<< HEAD
 #Edited 09/12/2019 by Leah Gillespie: Adding player statistics
+=======
+# Acts as the beginning of what would be the main method in Java
+# Edited 09/07/2019 by Neel Mansukhani: Testing fix
+# Edited 09/08/2019 by Sharon Qiu: Cleaned up main checking conditions for dealing cards.
+# Edited 09/08/2019 by Neel Mansukhani
+# Made score local variable instead of global
+# Edited 09/08/2019 by Sharon Qiu: Fixed when cards should be displayed.
+# Edited 09/09/2019 by Sharon Qiu: Added comment regarding checks for valid input.
+# Edited 09/08/2019 by Neel Mansukhani: Made score local variable instead of global
+# Edited 09/08/2019 by Sharon Qiu: Fixed when cards should be displayed.
+# Edited 09/08/2019 by David Wing: Added hint implementation
+# Edited 09/09/2019 by Sri Ramya Dandu: Display score changes
+# Edited 09/09/2019 by Sri Ramya Dandu: added global variable and changed method of input
+# Edited 09/12/2019 by Leah Gillespie: setting up a timer for the game
+#=========================== MAIN ==================================================
+
+#global variables defined for data that is shared between the computer and the player
+$deck = createDeck
+$cardsShowing = Array.new
+$playerScore,$computerScore = 0,0
+# gameTimer = AllTimers.initialize
+# player1Timer = AllTimers.initialize
+# computerTimer = AllTimers.initialize
+# player2Timer = AllTimers.initialize
+
+
+#boolean used to communicate between threads to prevent interruptions while printing cards
+$signal = false
+
+
+>>>>>>> 8964359236ab91505a7bb8458f38b17b6d92fd7e
 def player
 
   dealCards()
@@ -343,6 +390,7 @@ def player
   end
 end
 
+<<<<<<< HEAD
 # Acts as the beginning of what would be the main method in Java
 # Edited 09/07/2019 by Neel Mansukhani: Testing fix
 # Edited 09/08/2019 by Sharon Qiu: Cleaned up main checking conditions for dealing cards.
@@ -373,9 +421,22 @@ $signal = false
 
 # creating thread for the player execution
 playerThread = Thread.new{player}
+=======
+if __FILE__ == $0
 
-# creating thread for the computer execution
-computerThread = Thread.new{computerPlayer}
+  puts "Enter 1 to play solo, or 2 to play vs Computer"
+  choice = gets.to_i
+  if choice == 1
+    player
+  elsif choice == 2
+    # creating thread for the player execution
+    playerThread = Thread.new{player}
+>>>>>>> 8964359236ab91505a7bb8458f38b17b6d92fd7e
 
-playerThread.join
-computerThread.join
+    # creating thread for the computer execution
+    computerThread = Thread.new{computerPlayer}
+
+    playerThread.join
+    computerThread.join
+  end
+  end

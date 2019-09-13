@@ -314,19 +314,9 @@ def player
     #HINT logic David Wing 9/9
     print("Need a hint? y/n: ")
     input = gets.chomp
-<<<<<<< HEAD
     if input.eql? "y"
       $p1Hints += 1
-      puts("look for a pair with these cards: ")
-      puts("card " + $cardsShowing[valid_set[0]].id.to_s + " and card " + $cardsShowing[valid_set[1]].id.to_s)
-      #puts("card 3:" + cardsShowing[valid_set[2]].id.to_s) #DEBUG message
-
-      #decrease score because you cheated
-      $playerScore -= 0.5
-=======
-    if input.eql?("y") == true
       get_hint(valid_set)
->>>>>>> refs/remotes/origin/develop
     end
 
     print("Enter your 3 card numbers, separated by a comma: ")

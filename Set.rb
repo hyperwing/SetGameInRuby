@@ -129,11 +129,8 @@ end
 # Created 09/05/2019 by Leah Gillespie
 # Edited 09/06/2019 by Neel Mansukhani: Moved code to function
 # Edited 09/09/2019 by Sri Ramya Dandu: changed deck to a global variable
-<<<<<<< HEAD
 # Edited 09/12/2019 by Leah Gillespie: made sure to use terse code
-=======
 # Edited 9/12 David: added id to be inited
->>>>>>> 8964359236ab91505a7bb8458f38b17b6d92fd7e
 # Creates an array to be the deck and initializes 81 unique cards into it
 def createDeck
   $deck = Array.new
@@ -142,12 +139,8 @@ def createDeck
     for color in 0..2
       for shape in 0..2
         for shade in 0..2
-<<<<<<< HEAD
-          $deck.push Card.new(number,color,shape,shade)
-=======
-          $deck.push(Card.new(id, number,color,shape,shade))
+          $deck.push Card.new(id, number,color,shape,shade)
           id+=1
->>>>>>> 8964359236ab91505a7bb8458f38b17b6d92fd7e
         end
       end
     end
@@ -276,49 +269,12 @@ def computerPlayer()
   end
 end
 
-<<<<<<< HEAD
+
 #Edited 09/12/2019 by Leah Gillespie: Adding player statistics
-=======
-# Acts as the beginning of what would be the main method in Java
-# Edited 09/07/2019 by Neel Mansukhani: Testing fix
-# Edited 09/08/2019 by Sharon Qiu: Cleaned up main checking conditions for dealing cards.
-# Edited 09/08/2019 by Neel Mansukhani
-# Made score local variable instead of global
-# Edited 09/08/2019 by Sharon Qiu: Fixed when cards should be displayed.
-# Edited 09/09/2019 by Sharon Qiu: Added comment regarding checks for valid input.
-# Edited 09/08/2019 by Neel Mansukhani: Made score local variable instead of global
-# Edited 09/08/2019 by Sharon Qiu: Fixed when cards should be displayed.
-# Edited 09/08/2019 by David Wing: Added hint implementation
-# Edited 09/09/2019 by Sri Ramya Dandu: Display score changes
-# Edited 09/09/2019 by Sri Ramya Dandu: added global variable and changed method of input
-# Edited 09/12/2019 by Leah Gillespie: setting up a timer for the game
-#=========================== MAIN ==================================================
-
-#global variables defined for data that is shared between the computer and the player
-$deck = createDeck
-$cardsShowing = Array.new
-$playerScore,$computerScore = 0,0
-# gameTimer = AllTimers.initialize
-# player1Timer = AllTimers.initialize
-# computerTimer = AllTimers.initialize
-# player2Timer = AllTimers.initialize
-
-
-#boolean used to communicate between threads to prevent interruptions while printing cards
-$signal = false
-
-
->>>>>>> 8964359236ab91505a7bb8458f38b17b6d92fd7e
 def player
 
   dealCards()
   sets = Array.new
-  #this timer tracks the time it took to achieve the current set
-  p1SetTimer = AllTimers.new
-  #this keeps track of all times for each set the player finds, in order from fastest to slowest
-  p1SetTimes = Array.new
-  #this tracks how many hints the player has requested
-  p1Hints = 0
   while true
 
     #changes signal to false to prevent computer thread from printing its cards
@@ -341,7 +297,7 @@ def player
     print("Need a hint? y/n: ")
     input = gets.chomp
     if input.eql? "y"
-      p1Hints += 1
+      $p1Hints += 1
       puts("look for a pair with these cards: ")
       puts("card " + $cardsShowing[valid_set[0]].id.to_s + " and card " + $cardsShowing[valid_set[1]].id.to_s)
       #puts("card 3:" + cardsShowing[valid_set[2]].id.to_s) #DEBUG message
@@ -362,13 +318,22 @@ def player
     set = [getCardById($cardsShowing,card1),getCardById($cardsShowing,card2),getCardById($cardsShowing,card3)]
 
     if(isASet?(set))
-      p1SetTimer.updateTime
-      p1SetTimes.push p1SetTimer.current
+      $p1SetTimer.updateTime
+      $p1SetTimes.push $p1SetTimer.current
       puts "That is a set!"
       #TODO: Score should increment/decrement here
       $playerScore += 1
       #TODO: set up hash or something to clean sets up.
       sets.push(set)
+      $p1SetTimes.sort!
+      puts "Fastest time to find a set: #{$p1SetTimes.at(0)}"
+      puts "Slowest time to find a set: #{$p1SetTimes.at($p1SetTimes.length-1)}"
+      avgTime = 0
+      $p1SetTimes.each {|time| avgTime += time}
+      avgTime = avgTime / $p1SetTimes.length
+      puts "Average time to find a set: #{avgTime}"
+      puts "Hints used so far: #{$p1Hints}"
+      $p1SetTimer.reset
       $cardsShowing -= set
     else
       puts "That is not a set."
@@ -377,20 +342,12 @@ def player
 
     puts "Computer score: #{$computerScore}"
     puts "Your current score: #{$playerScore}"
-    p1SetTimes.sort!
-    puts "Fastest time to find a set: #{p1SetTimes.at(0)}"
-    puts "Slowest time to find a set: #{p1SetTimes.at(p1SetTimes.length)}"
-    avgTime = 0
-    p1SetTimes.each {|time| avgTime += time}
-    avgTime /= p1SetTimes.length
-    puts "Average time to find a set: "
-    puts "Hints used so far: #{p1Hints}"
-    puts "Total elapsed time: #{$gameTimer}"
-    p1SetTimer.reset
+    $gameTimer.updateTime
+    puts "Total elapsed time: #{$gameTimer.current}"
   end
 end
 
-<<<<<<< HEAD
+
 # Acts as the beginning of what would be the main method in Java
 # Edited 09/07/2019 by Neel Mansukhani: Testing fix
 # Edited 09/08/2019 by Sharon Qiu: Cleaned up main checking conditions for dealing cards.
@@ -414,6 +371,12 @@ $playerScore,$computerScore = 0,0
 #timer for the entire game, from as close to initial deal as possible until game ends, should be displayed in GUI
 # and will need to be updated regularly
 $gameTimer = AllTimers.new
+#this timer tracks the time it took player 1 to achieve the current set
+$p1SetTimer = AllTimers.new
+#this keeps track of all times for each set player 1 finds, in order from fastest to slowest
+$p1SetTimes = Array.new
+#this tracks how many hints player 1 has requested
+$p1Hints = 0
 
 
 #boolean used to communicate between threads to prevent interruptions while printing cards
@@ -421,7 +384,7 @@ $signal = false
 
 # creating thread for the player execution
 playerThread = Thread.new{player}
-=======
+
 if __FILE__ == $0
 
   puts "Enter 1 to play solo, or 2 to play vs Computer"
@@ -431,7 +394,7 @@ if __FILE__ == $0
   elsif choice == 2
     # creating thread for the player execution
     playerThread = Thread.new{player}
->>>>>>> 8964359236ab91505a7bb8458f38b17b6d92fd7e
+
 
     # creating thread for the computer execution
     computerThread = Thread.new{computerPlayer}

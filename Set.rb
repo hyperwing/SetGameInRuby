@@ -10,6 +10,7 @@
 # Edited 09/09/2019 by David Wing
 # Edited 09/09/2019 by Sri Ramya Dandu
 require 'gosu'
+require_relative 'StartScreen'
 # Created 09/05/2019 by Leah Gillespie
 # Edited 09/06/2019 by Neel Mansukhani: Added id and set_id function to Card
 class Card
@@ -192,6 +193,7 @@ end
 # Edited 09/09/2019 by Sri Ramya Dandu: Display score changes
 #=========================== MAIN ==================================================
 if __FILE__ == $0
+StartScreen.new.show
 score = 0
 deck = createDeck
 cardsShowing = Array.new

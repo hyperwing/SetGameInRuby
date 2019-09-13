@@ -278,7 +278,6 @@ context "Check table for valid sets" do
     card1 = Card.new(28,1,0,0,1)
     card2 = Card.new(47,1,2,0,2)
     card3 = Card.new(38,1,1,0,2)    
-    puts("HERE")
     $cardsShowing = [card1, card2, card3]
     expected = []
     expect(valid_table()).to eql(expected)
@@ -423,4 +422,36 @@ context "Checks that the deck is created correctly" do
     expect isUnique
   end
 
+end
+
+
+# Created 09/13 David 
+context "Checks hints are correct" do
+
+  it "returns 2 cards that could make up a set" do
+    card1 = Card.new(80,2,2,2,2)
+    card2 = Card.new(79,2,2,2,1)
+    card3 = Card.new(78,2,2,2,0)
+    
+    $cardsShowing = [card1, card2, card3, Card.new(76,2,2,1,1), Card.new(74,2,2,0,2),  Card.new(23,0,2,1,2)]
+    
+    expected = [card1, card2]
+    ret = get_hint(valid_table)
+
+    expect(ret).to eql(expected)
+    
+  end
+
+  it "returns 2 cards that could make up a set from a table " do
+    card1 = Card.new(80,2,2,2,2)
+    card2 = Card.new(79,2,2,2,1)
+    card3 = Card.new(78,2,2,2,0)
+    $cardsShowing = [card1, card2, card3]
+
+    expected = [card1, card2]
+    ret = get_hint(valid_table)
+
+    expect(ret).to eql(expected)
+    
+  end
 end

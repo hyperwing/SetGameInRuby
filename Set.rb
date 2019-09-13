@@ -209,6 +209,24 @@ def valid_table()
 end
 
 
+#Created David 9/13
+#given a valid set from the table, outputs two cards that make up a set
+#Returns array of two card objects that are the hint
+def get_hint(valid_set)
+  #HINT logic David Wing 9/9
+  puts("look for a pair with these cards: ")
+  puts("card " + $cardsShowing[valid_set[0]].id.to_s + " and card " + $cardsShowing[valid_set[1]].id.to_s)
+  #puts("card 3:" + cardsShowing[valid_set[2]].id.to_s) #DEBUG message
+
+  return( [ $cardsShowing[valid_set[0]], $cardsShowing[valid_set[1]] ])
+  #decrease score because you cheated
+  $playerScore -= 0.5
+  
+end
+  
+
+
+
 #Created 09/08/2019 by Sri Ramya Dandu
 #Edited 09/09/2019 by Sri Ramya Dandu: Update and display deck and scores
 #Edited 09/09/2019 by Sri Ramya Dandu:Modifed so that the computer can guess wrong sets too
@@ -322,12 +340,7 @@ def player
     print("Need a hint? y/n: ")
     input = gets.chomp
     if input.eql?("y") == true
-      puts("look for a pair with these cards: ")
-      puts("card " + $cardsShowing[valid_set[0]].id.to_s + " and card " + $cardsShowing[valid_set[1]].id.to_s)
-      #puts("card 3:" + cardsShowing[valid_set[2]].id.to_s) #DEBUG message
-
-      #decrease score because you cheated
-      $playerScore -= 0.5
+      get_hint(valid_set)
     end
 
     print("Enter your 3 card numbers, seprated by a comma: ")

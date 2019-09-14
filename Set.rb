@@ -78,7 +78,6 @@ def dealCards
   if $cardsShowing.length == 0
     for count in 0...12
       card = $deck.delete_at(rand($deck.length))
-      $cardCount += 1
       $cardsShowing.push(card)
     end
     return
@@ -90,7 +89,6 @@ def dealCards
       #print("\n Empty: #{(valid_table(playingCards)).length == 0} \n")
       for count in 0...3
         card = $deck.delete_at(rand($deck.length))
-        $cardCount += 1
         $cardsShowing.push(card)
       end
     end
@@ -98,7 +96,6 @@ def dealCards
     # Adds cards if there is a set but less than 12 playing cards.
     for count in 0...3
       card = $deck.delete_at(rand($deck.length))
-      $cardCount += 1
       $cardsShowing.push(card)
     end
 

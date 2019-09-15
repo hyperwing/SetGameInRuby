@@ -1,5 +1,5 @@
 # File Created 09/15/2019 by Neel Mansukhani
-
+require 'gosu'
 # Created 09/05/2019 by Leah Gillespie
 # Edited 09/06/2019 by Neel Mansukhani: Added id and set_id function to Card
 # Edited 09/10/2019 by David Wing: Added id to initialize.

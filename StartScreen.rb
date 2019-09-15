@@ -15,12 +15,12 @@ end
 GAME_TITLE = "The Game of Set"
 
 class StartScreen < Gosu::Window
-
   def initialize
     @game_settings = GameSettings.new
     super 840, 480
     self.caption = GAME_TITLE
-    @settings_hovered = nil
+    @settings_hovered = Options::START_SCREEN[0]
+    @pressed = false
     @title_font = Gosu::Font.new(50)
     @subtitle_font = Gosu::Font.new(20)
     @background_image = Gosu::Image.new("media/background1.jpg", :tileable => true)
@@ -29,10 +29,61 @@ class StartScreen < Gosu::Window
   end
 
   def update
-    if Gosu.button_down? Gosu::KB_SPACE
-      @game_settings.currentScreen = "game"
-    elsif Gosu.button_down Gosu::KB_ESCAPE
-      @game_settings.currentScreen = "levels"
+    if @game_settings.currentScreen == "start"
+      index = Options::START_SCREEN.find_index @settings_hovered
+      if button_down? Gosu::KB_D
+        if index == 2
+          @settings_hovered = Options::START_SCREEN[0]
+        else
+          index += 1
+          @settings_hovered = Options::START_SCREEN[index]
+        end
+        sleep(0.5)
+      elsif Gosu.button_down? Gosu::KB_A
+        if index == 0
+          @settings_hovered = Options::START_SCREEN[2]
+        else
+          index -= 1
+          @settings_hovered = Options::START_SCREEN[index]
+        end
+        sleep(0.5)
+      elsif Gosu.button_down? Gosu::KB_SPACE
+        if @settings_hovered == "Computer" or @settings_hovered == "SOLO"
+          @game_settings.currentScreen = "levels"
+          @settings_hovered = Options::LEVELS_SCREEN[0]
+        else
+          @game_settings.currentScreen = "game"
+          # TODO: Move Cursor
+        end
+        sleep(0.5)
+      else
+      end
+    elsif @game_settings.currentScreen =="levels"
+      index = Options::LEVELS_SCREEN.find_index @settings_hovered
+      if button_down? Gosu::KB_S
+        if index == 2
+          @settings_hovered = Options::LEVELS_SCREEN[0]
+        else
+          index += 1
+          @settings_hovered = Options::LEVELS_SCREEN[index]
+        end
+        sleep(0.5)
+      elsif Gosu.button_down? Gosu::KB_W
+        if index == 0
+          @settings_hovered = Options::LEVELS_SCREEN[2]
+        else
+          index -= 1
+          @settings_hovered = Options::LEVELS_SCREEN[index]
+        end
+        sleep(0.5)
+      elsif Gosu.button_down? Gosu::KB_SPACE
+          @game_settings.currentScreen = "game"
+          # TODO: Move cursor
+        sleep(0.5)
+      else
+      end
+    elsif  @game_settings.currentScreen == "game"
+
     end
   end
 
@@ -47,6 +98,9 @@ class StartScreen < Gosu::Window
     @subtitle_font.draw_text(Options::START_SCREEN[0], 240, 282, ZOrder::TEXT, 1.0, 1.0, Gosu::Color::BLACK)
     @subtitle_font.draw_text(Options::START_SCREEN[1], 395, 282, ZOrder::TEXT, 1.0, 1.0, Gosu::Color::BLACK)
     @subtitle_font.draw_text(Options::START_SCREEN[2], 573, 282, ZOrder::TEXT, 1.0, 1.0, Gosu::Color::BLACK)
+    draw_rect(190,220,20,20,Gosu::Color::GRAY,ZOrder::UI) if @settings_hovered == Options::START_SCREEN[0]
+    draw_rect(360,220,20,20,Gosu::Color::GRAY,ZOrder::UI) if @settings_hovered == Options::START_SCREEN[1]
+    draw_rect(530,220,20,20,Gosu::Color::GRAY,ZOrder::UI) if @settings_hovered == Options::START_SCREEN[2]
   end
 
   def levelsScreen
@@ -57,6 +111,9 @@ class StartScreen < Gosu::Window
     @subtitle_font.draw_text(Options::LEVELS_SCREEN[0], 410, 151, ZOrder::TEXT, 1.0, 1.0, Gosu::Color::BLACK)
     @subtitle_font.draw_text(Options::LEVELS_SCREEN[1], 400, 230, ZOrder::TEXT, 1.0, 1.0, Gosu::Color::BLACK)
     @subtitle_font.draw_text(Options::LEVELS_SCREEN[2], 410, 310, ZOrder::TEXT, 1.0, 1.0, Gosu::Color::BLACK)
+    draw_rect(360,90,20,20,Gosu::Color::GRAY,ZOrder::UI) if @settings_hovered == Options::LEVELS_SCREEN[0]
+    draw_rect(360,170,20,20,Gosu::Color::GRAY,ZOrder::UI) if @settings_hovered == Options::LEVELS_SCREEN[1]
+    draw_rect(360,250,20,20,Gosu::Color::GRAY,ZOrder::UI) if @settings_hovered == Options::LEVELS_SCREEN[2]
   end
   def draw
     @background_image.draw(0, 0, ZOrder::BACKGROUND)

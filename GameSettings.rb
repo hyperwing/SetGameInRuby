@@ -6,6 +6,10 @@ class GameSettings
     @areHintsEnabled = true
     @isTwoPlayerEnabled = false
     @isCPUPlayerEnabled = false
+    @cpuDifficulty = "Easy"
     @isTimerEnabled = false
+  end
+  def changeGameMode(gameMode)
+    # TODO: do this
   end
 end

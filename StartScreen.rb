@@ -1,4 +1,5 @@
 # File Created 09/10/2019 by Neel Mansukhani
+# Edited 09/15/2019 by Sharon Qiu
 require 'gosu'
 require_relative 'GameSettings'
 require_relative "Card"
@@ -7,12 +8,73 @@ module ZOrder
   BACKGROUND, UI, BUTTON, TEXT, CARDS= *0..4
 end
 
+# Edited 09/15/2019 by Sharon Qiu: Added PLAYER_COLOR, where Gray is computer, red is player1, blue is player2.
 module Options
   START_SCREEN = ["SOLO", "Computer", "2 Player"]
+  PLAYER_COLOR = ["GRAY", "RED", "BLUE"]
   LEVELS_SCREEN = ["Easy", "Medium", "Hard"]
+  
 end
 
 GAME_TITLE = "The Game of Set"
+
+# Created 09/12/2019 by Sharon Qiu: Skeleton code for player movement only within the game.
+# Edited 09/15/2019 BY Sharon Qiu: merged in player class into StartScreen file.
+class Player
+
+  attr_accessor :selectedSet
+
+  def initialize playerNumber
+    @currentCard = draw_rect(50,35+(135/2),20,20,Gosu::Color::PLAYER_COLOR[playerNumber],ZOrder::CARDS)
+  end
+
+  # Created 09/12/2019 by Sharon Qiu
+  # Updates/keeps track of player score
+=begin   def scoreUpdate set, hint_used
+      setFound = isASet? set
+      return "#{}" if !setFound # TODO: Add to codeblock something to return if invalid set
+      if hint_used && setFound
+        @score += 0.5
+      elsif setFound
+        @score += 1
+      end
+  end 
+=end
+
+  # Created 09/12/2019 by Sharon Qiu
+  def move_left
+    # Fill in when we know set up of cards
+    # Offsets depending on card positions
+  end
+
+  # Created 09/12/2019 by Sharon Qiu
+  def move_right
+    # Fill in when we know set up of cards
+    # Offsets depending on card positions
+  end
+
+  # Created 09/12/2019 by Sharon Qiu
+  def move_up
+    # Fill in when we know set up of cards
+    # Offsets depending on card positions
+  end
+
+  # Created 09/12/2019 by Sharon Qiu
+  def move_down
+    # Fill in when we know set up of cards
+    # Offsets depending on card positions
+  end
+
+  # Created 09/12/2019 by Sharon Qiu
+  def selection chosenCards = nil
+    # chosenCards is selected cards
+    # @currentSelected = position
+    # chosenCards.push(@currentSelected)
+
+    # Fill in when we know set up of cards
+    # will probably have to highlight cards, kept track of chosen cards by array
+  end
+end
 
 class StartScreen < Gosu::Window
   def initialize
@@ -29,6 +91,8 @@ class StartScreen < Gosu::Window
   end
 
   def update
+
+    # Edited 09/15/2019 by Sharon Qiu: Edited game settings for gameplay selection.
     if @game_settings.currentScreen == "start"
       index = Options::START_SCREEN.find_index @settings_hovered
       if button_down? Gosu::KB_D
@@ -48,16 +112,23 @@ class StartScreen < Gosu::Window
         end
         sleep(0.5)
       elsif Gosu.button_down? Gosu::KB_SPACE
-        if @settings_hovered == "Computer" or @settings_hovered == "SOLO"
+        if @settings_hovered == "SOLO" 
+          @game_settings.currentScreen = "levels"
+          @settings_hovered = Options::LEVELS_SCREEN[0]
+        elsif @settings_hovered == "Computer"
+          @game_settings.isCPUPlayerEnabled = true
           @game_settings.currentScreen = "levels"
           @settings_hovered = Options::LEVELS_SCREEN[0]
         else
+          @game_settings.isTwoPlayerEnabled = true
           @game_settings.currentScreen = "game"
           # TODO: Move Cursor
         end
         sleep(0.5)
       else
       end
+    
+    # Edited 09/15/2019 by Sharon Qiu: Edited game settings for levels.
     elsif @game_settings.currentScreen =="levels"
       index = Options::LEVELS_SCREEN.find_index @settings_hovered
       if button_down? Gosu::KB_S
@@ -77,12 +148,22 @@ class StartScreen < Gosu::Window
         end
         sleep(0.5)
       elsif Gosu.button_down? Gosu::KB_SPACE
+          if @settings_hovered = "Easy"
+            @game_settings.cpuDifficulty = "Easy"
+          elsif @settings_hovered = "Medium"
+            @game_settings.cpuDifficulty = "Medium"
+          elsif @settings_hovered = "Hard"
+            @game_settings.cpuDifficulty = "Hard"
+          end
+
           @game_settings.currentScreen = "game"
           # TODO: Move cursor
         sleep(0.5)
       else
+        #TODO: anything else?
       end
     elsif  @game_settings.currentScreen == "game"
+      
 
     end
   end
@@ -115,6 +196,19 @@ class StartScreen < Gosu::Window
     draw_rect(360,170,20,20,Gosu::Color::GRAY,ZOrder::UI) if @settings_hovered == Options::LEVELS_SCREEN[1]
     draw_rect(360,250,20,20,Gosu::Color::GRAY,ZOrder::UI) if @settings_hovered == Options::LEVELS_SCREEN[2]
   end
+
+  def activeGame gameMode
+    if gameMode == startScreen[0]
+      @player1 = Player.new 1
+    elsif gameMode == startScreen[1]
+      @comp = Player.new 0
+      @player1 = Player.new 1
+    elsif gameMode == startScreen[2]
+      @player1 = Player.new 1
+      @player2 = Player.new 2
+    end
+  end
+
   def draw
     @background_image.draw(0, 0, ZOrder::BACKGROUND)
     if @game_settings.currentScreen == "start"
@@ -123,10 +217,7 @@ class StartScreen < Gosu::Window
       levelsScreen
     elsif  @game_settings.currentScreen == "game"
       draw_rect(640,0,200,480,Gosu::Color::GRAY,ZOrder::UI)
-      x_offset = 5
-      y_offset = 35
-      x_between = 90
-      y_between = 135
+      x_offset, y_offset, x_between, y_between = 5, 35, 90, 135
       for row in 0...3
         for col in 0...7 #cardsPlaying.length/3
           @blank_card.draw(x_offset + x_between*col,y_offset + y_between*row,ZOrder::CARDS, 0.15, 0.15)

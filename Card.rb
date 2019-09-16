@@ -28,7 +28,10 @@ class Card
     print("Shape: #{@shape} ")
     puts("Shade: #{@shade}")
   end
-  def createCard
-    # TODO: Make this.
+  def image
+    blank_card = Gosu::Image.new("media/card.png", :tileable => true)
+    img = Gosu.render(88,141) {
+      blank_card.draw(0,0,ZOrder::CARDS, 1.0, 1.0)
+    }
   end
 end

@@ -54,7 +54,8 @@ class StartScreen < Gosu::Window
           @game_settings.currentScreen = "game"
           # TODO: Move Cursor
         end
-      else
+      elsif button_up? Gosu::KB_ESCAPE
+        @game_settings.currentScreen == "test"
       end
     elsif @game_settings.currentScreen =="levels"
       index = Options::LEVELS_SCREEN.find_index @settings_hovered
@@ -127,8 +128,11 @@ class StartScreen < Gosu::Window
     @background_image.draw(0, 0, ZOrder::BACKGROUND)
     if @game_settings.currentScreen == "start"
       startScreen
-    elsif @game_settings.currentScreen =="levels"
+    elsif @game_settings.currentScreen == "levels"
       levelsScreen
+    elsif @game_settings.currentScreen == "test"
+      x = Card.new(0,0,0,0,0)
+      x.image.draw(0,0,ZOrder::CARDS, 0.15, 0.15)
     elsif  @game_settings.currentScreen == "game"
       draw_rect(640,0,200,480,Gosu::Color::GRAY,ZOrder::UI)
       x_offset = 5

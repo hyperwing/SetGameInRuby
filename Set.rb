@@ -21,44 +21,9 @@
 
 # TODO: Add file description for every file.
 # TODO: Multi line comments for function descriptions.
-<<<<<<< HEAD
+require "gosu"
 require_relative "Card"
-=======
-# Created 09/05/2019 by Leah Gillespie
-# Edited 09/06/2019 by Neel Mansukhani: Added id and set_id function to Card
-# Edited 09/10/2019 by David Wing: Added id to initialize.
-# Edited 09/14/2019 by Neel Mansukhani: Added attribute accessor.
-class Card
-
-  attr_accessor :id, :number, :color, :shape, :shade
-
-  # Created 09/05/2019 by Leah Gillespie
-  # Edited 09/10/2019 by David Wing: Added id
-  # Edited 09/15/2019 by Sri Ramya Dandu: Added documentation
-
-  # Creates a new instance of Card with the given attributes
-  def initialize(id, number, color, shape, shade)
-    @id = id
-    @number = number
-    @color = color
-    @shape = shape
-    @shade = shade
-  end
-
-  # Created 09/05/2019 by Neel Mansukhani
-  # Edited 09/06/2019 by Neel Mansukhani: Cleaned up display
-  # Edited 09/15/2019 by Sri Ramya Dandu: Added documentation
-
-  # Prints out the cards attributes
-  def display
-    print("Card: #{@id} ")
-    print("Number: #{@number} ")
-    print("Color: #{@color} ")
-    print("Shape: #{@shape} ")
-    puts("Shade: #{@shade}")
-  end
-end
->>>>>>> e11d2858e7c13271aa4a8084af59c2e24346289a
+require_relative "StartScreen"
 
 # Created 09/12/2019 by Leah Gillespie
 # TODO: Add documentation for the class and each function
@@ -86,7 +51,7 @@ end
 # Updates the passed in array of playingCards to a playable status for the player.
 # Does nothing if deck of unplayed cards is empty.
 # @updates playingCards
-def dealCards(deck,cardsShowing)
+def dealCards!(deck,cardsShowing)
   return if deck.length == 0
 
   #initializing deck.
@@ -300,7 +265,7 @@ end
 #Created 09/08/2019 by Sri Ramya Dandu
 #Edited 09/12/2019 by Leah Gillespie: Adding player statistics
 # Edited 09/15/2019 by Sri Ramya Dandu: changed arrays back to local variables
-def player(deck,cardsShowing)
+def playerThrd(deck,cardsShowing)
 
   dealCards(deck,cardsShowing)
   sets = Array.new
@@ -414,21 +379,12 @@ cardsShowing = Array.new
 puts "Enter 1 to play solo, or 2 to play vs Computer"
 choice = gets.to_i
 if choice == 1
-  player(deck, cardsShowing)
+  playerThrd(deck, cardsShowing)
 elsif choice == 2
 
   print "Choose a mode of difficulty (e/m/h): "
   mode = gets
 
-<<<<<<< HEAD
-    # Creating thread for the computer execution
-    computerThread = Thread.new{computerPlayer}
-
-    playerThread.join
-    computerThread.join
-  end
-end
-=======
   case mode
   when 'm'
     $range = 75
@@ -438,7 +394,7 @@ end
     $range = 100
   end
   # Creating thread for the player execution
-  playerThread = Thread.new{player(deck, cardsShowing)}
+  playerThread = Thread.new{playerThrd(deck, cardsShowing)}
 
   # Creating thread for the computer execution
   computerThread = Thread.new{computerPlayer(deck, cardsShowing)}
@@ -446,4 +402,3 @@ end
   playerThread.join
   computerThread.join
 end
->>>>>>> e11d2858e7c13271aa4a8084af59c2e24346289a

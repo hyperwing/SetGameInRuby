@@ -16,127 +16,11 @@
 # Edited 09/12/2019 by David Wing
 # Edited 09/14/2019 by Neel Mansukhani
 # Edited 09/15/2019 by Sri Ramya Dandu
+# eDited 09/15/2019 by David Wing
 
-
-
-# TODO: Add file description for every file.
-# TODO: Multi line comments for function descriptions.
-# Created 09/05/2019 by Leah Gillespie
-# Edited 09/06/2019 by Neel Mansukhani: Added id and set_id function to Card
-# Edited 09/10/2019 by David Wing: Added id to initialize.
-# Edited 09/14/2019 by Neel Mansukhani: Added attribute accessor.
-class Card
-
-  attr_accessor :id, :number, :color, :shape, :shade
-
-  # Created 09/05/2019 by Leah Gillespie
-  # Edited 09/10/2019 by David Wing: Added id
-  # Edited 09/15/2019 by Sri Ramya Dandu: Added documentation
-
-  # Creates a new instance of Card with the given attributes
-  def initialize(id, number, color, shape, shade)
-    @id = id
-    @number = number
-    @color = color
-    @shape = shape
-    @shade = shade
-  end
-
-  # Created 09/05/2019 by Neel Mansukhani
-  # Edited 09/06/2019 by Neel Mansukhani: Cleaned up display
-  # Edited 09/15/2019 by Sri Ramya Dandu: Added documentation
-
-  # Prints out the cards attributes
-  def display
-    print("Card: #{@id} ")
-    print("Number: #{@number} ")
-    print("Color: #{@color} ")
-    print("Shape: #{@shape} ")
-    puts("Shade: #{@shade}")
-  end
-end
-
-# Created 09/12/2019 by Leah Gillespie
-# TODO: Add documentation for the class and each function
-class AllTimers
-  attr_reader :current
-  def initialize
-    @initial = Time.now
-    @current = 0
-  end
-  def updateTime
-    @current = Time.now - @initial
-  end
-  def reset
-    @initial = Time.now
-  end
-end
-
-
-# Created 09/06/2019 by Neel Mansukhani
-# Edited 09/07/2019 by Sharon Qiu: Added in playingCards parameter and boolean value. Method now updates the showing cards.
-# Edited 09/08/2019 by Sharon Qiu: Added in checks for situations to deal cards. Removed boolean value.
-# Edited 09/09/2019 by Sri Ramya Dandu: changed deck and cardsShowing to a global variable
-
-
-# Updates the passed in array of playingCards to a playable status for the player.
-# Does nothing if deck of unplayed cards is empty.
-# @updates playingCards
-def dealCards(deck,cardsShowing)
-  return if deck.length == 0
-
-  #initializing deck.
-  if cardsShowing.length == 0
-    for count in 0...12
-      card = deck.delete_at(rand(deck.length))
-      cardsShowing.push(card)
-    end
-    return
-  end
-
-  if valid_table(cardsShowing).length == 0
-    #continually adds cards until there is a set or there are no more cards.
-    while (valid_table(cardsShowing).length == 0) && deck.length > 0
-      #print("\n Empty: #{(valid_table(playingCards)).length == 0} \n")
-      for count in 0...3
-        card = deck.delete_at(rand(deck.length))
-        cardsShowing.push(card)
-      end
-    end
-  elsif cardsShowing.length < 12
-    # Adds cards if there is a set but less than 12 playing cards.
-    for count in 0...3
-      card = deck.delete_at(rand(deck.length))
-      cardsShowing.push(card)
-    end
-
-  end
-
-end
-
-# Created 09/05/2019 by Leah Gillespie
-# Edited 09/06/2019 by Neel Mansukhani: Moved code to function.
-# Edited 09/09/2019 by Sri Ramya Dandu: Changed deck to a global variable.
-# Edited 09/12/2019 by Leah Gillespie: Made sure to use terse code.
-# Edited 09/12/2019 by David Wing: Added id to be initialized.
-# Edited 09/14/2019 by Neel Mansukhani: Made deck a local variable.
-
-# Creates an array to be the deck and initializes 81 unique cards into it
-def createDeck
-  deck = Array.new
-  id = 0
-  for number in 0..2
-    for color in 0..2
-      for shape in 0..2
-        for shade in 0..2
-          deck.push Card.new(id, number,color,shape,shade)
-          id += 1
-        end
-      end
-    end
-  end
-  return deck
-end
+require_relative 'card'
+require_relative 'deck'
+require_relative 'timer'
 
 # Created 09/06/2019 by Neel Mansukhani
 # Edited 09/15/2019 by Sri Ramya Dandu: added function back to the file
@@ -222,7 +106,7 @@ def get_hint(cardsShowing)
   puts("look for a pair with these cards: ")
   puts("card " + cardsShowing[valid_set[0]].id.to_s + " and card " + cardsShowing[valid_set[1]].id.to_s)
   # TODO: Remove before submitting.
-  #puts("card 3:" + cardsShowing[valid_set[2]].id.to_s) #DEBUG message
+  # puts("card 3:" + cardsShowing[valid_set[2]].id.to_s) #DEBUG message
   # TODO: Terse code?
   return( [cardsShowing[valid_set[0]], cardsShowing[valid_set[1]] ])
   # Decrease score because you cheated
@@ -285,7 +169,7 @@ def computerPlayer(deck, cardsShowing)
 
       #changes signal to false to prevent player thread from printing it's cards
       $signal = false
-      dealCards(deck,cardsShowing)
+      deck.dealCards(cardsShowing)
       cardsShowing.each{ |card| card.display }
       $signal = true
     end
@@ -300,13 +184,13 @@ end
 # Edited 09/15/2019 by Sri Ramya Dandu: changed arrays back to local variables
 def player(deck,cardsShowing)
 
-  dealCards(deck,cardsShowing)
+  deck.dealCards(cardsShowing)
   sets = Array.new
   while true
 
     #changes signal to false to prevent computer thread from printing its cards
     $signal = false
-    dealCards(deck,cardsShowing)
+    deck.dealCards(cardsShowing)
 
     #Displays cards
     cardsShowing.each { |card| card.display }
@@ -315,7 +199,7 @@ def player(deck,cardsShowing)
     valid_set = valid_table(cardsShowing)
 
     # no valid sets
-    break if valid_set.length == 0 && deck.length == 0
+    break if valid_set.length == 0 && deck.cards.length == 0
 
     # No checks for valid input because we plan to implement a GUI.
 
@@ -407,7 +291,7 @@ $signal = false
 
 if __FILE__ == $0
 
-deck = createDeck
+deck = Deck.new
 cardsShowing = Array.new
 puts "Enter 1 to play solo, or 2 to play vs Computer"
 choice = gets.to_i

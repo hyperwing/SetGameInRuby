@@ -1,7 +1,7 @@
 # File Created 09/10/2019 by Neel Mansukhani
 require 'gosu'
 require_relative 'GameSettings'
-require_relative "Card"
+require_relative "card"
 
 module ZOrder
   BACKGROUND, UI, BUTTON, TEXT, CARDS= *0..4
@@ -29,10 +29,10 @@ class StartScreen < Gosu::Window
   end
 
   def update
+    close if button_up? Gosu::KB_ESCAPE
     if @game_settings.currentScreen == "start"
       index = Options::START_SCREEN.find_index @settings_hovered
       if button_up? Gosu::KB_D
-
         if index == 2
           @settings_hovered = Options::START_SCREEN[0]
         else
@@ -54,8 +54,8 @@ class StartScreen < Gosu::Window
           @game_settings.currentScreen = "game"
           # TODO: Move Cursor
         end
-      elsif button_up? Gosu::KB_ESCAPE
-        @game_settings.currentScreen == "test"
+      elsif button_up? Gosu::KB_E
+        @game_settings.currentScreen = "test"
       end
     elsif @game_settings.currentScreen =="levels"
       index = Options::LEVELS_SCREEN.find_index @settings_hovered
@@ -74,9 +74,8 @@ class StartScreen < Gosu::Window
           @settings_hovered = Options::LEVELS_SCREEN[index]
         end
       elsif button_up? Gosu::KB_SPACE
-          @game_settings.currentScreen = "game"
-          # TODO: Move cursor
-      else
+        @game_settings.currentScreen = "game"
+        # TODO: Move cursor
       end
     elsif  @game_settings.currentScreen == "game"
 
@@ -131,7 +130,7 @@ class StartScreen < Gosu::Window
     elsif @game_settings.currentScreen == "levels"
       levelsScreen
     elsif @game_settings.currentScreen == "test"
-      x = Card.new(0,0,0,0,0)
+      x = Card.new(0,2,0,1,1)
       x.image.draw(0,0,ZOrder::CARDS, 0.15, 0.15)
     elsif  @game_settings.currentScreen == "game"
       draw_rect(640,0,200,480,Gosu::Color::GRAY,ZOrder::UI)

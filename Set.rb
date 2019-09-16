@@ -7,7 +7,7 @@
 # Edited 09/07/2019 by Sri Ramya Dandu
 # Edited 09/08/2019 by Sharon Qiu
 # Edited 09/08/2019 by Neel Mansukhani
-# Edited 09/09/2019 by David Wing 
+# Edited 09/09/2019 by David Wing
 # Edited 09/09/2019 by Sharon Qiu
 # Edited 09/09/2019 by David Wing
 # Edited 09/09/2019 by Sri Ramya Dandu
@@ -15,98 +15,34 @@
 # Edited 09/12/2019 by Leah Gillespie
 # Edited 09/12/2019 by David Wing
 # Edited 09/14/2019 by Neel Mansukhani
+# Edited 09/15/2019 by Sri Ramya Dandu
+# eDited 09/15/2019 by David Wing
 
 # TODO: Add file description for every file.
 # TODO: Multi line comments for function descriptions.
-require_relative "Card"
 
-# Created 09/12/2019 by Leah Gillespie
-class AllTimers
-  attr_reader :current
-  def initialize
-    @initial = Time.now
-    @current = 0
-  end
-  def updateTime
-    @current = Time.now - @initial
-  end
-  def reset
-    @initial = Time.now
-  end
-end
-
+require_relative 'card'
+require_relative 'deck'
+require_relative 'timer'
 
 # Created 09/06/2019 by Neel Mansukhani
-# Edited 09/07/2019 by Sharon Qiu: Added in playingCards parameter and boolean value. Method now updates the showing cards.
-# Edited 09/08/2019 by Sharon Qiu: Added in checks for situations to deal cards. Removed boolean value.
-# Edited 09/09/2019 by Sri Ramya Dandu: changed deck and cardsShowing to a global variable
-# Updates the passed in array of playingCards to a playable status for the player.
-# Does nothing if deck of unplayed cards is empty.
-# @updates playingCards
-def dealCards
-  return if $deck.length == 0
-
-  #initializing deck.
-  if $cardsShowing.length == 0
-    for count in 0...12
-      card = $deck.delete_at(rand($deck.length))
-      $cardsShowing.push(card)
-    end
-    return
+# Edited 09/15/2019 by Sri Ramya Dandu: added function back to the file
+#
+# Returns card from an array with the given id
+# Returns card from the total deck with the given id
+def getCardById(deck,id)
+  deck.each do |card|
+    return card if card.id == id
   end
-
-  if valid_table.length == 0
-    #continually adds cards until there is a set or there are no more cards.
-    while (valid_table.length == 0) && $deck.length > 0
-      #print("\n Empty: #{(valid_table(playingCards)).length == 0} \n")
-      for count in 0...3
-        card = $deck.delete_at(rand($deck.length))
-        $cardsShowing.push(card)
-      end
-    end
-  elsif $cardsShowing.length < 12
-    # Adds cards if there is a set but less than 12 playing cards.
-    for count in 0...3
-      card = $deck.delete_at(rand($deck.length))
-      $cardsShowing.push(card)
-    end
-
-  end
-
-end
-
-# Created 09/05/2019 by Leah Gillespie
-# Edited 09/06/2019 by Neel Mansukhani: Moved code to function.
-# Edited 09/09/2019 by Sri Ramya Dandu: Changed deck to a global variable.
-# Edited 09/12/2019 by Leah Gillespie: Made sure to use terse code.
-# Edited 09/12/2019 by David Wing: Added id to be initialized.
-# Edited 09/14/2019 by Neel Mansukhani: Made deck a local variable.
-# Creates an array to be the deck and initializes 81 unique cards into it
-def createDeck
-  deck = Array.new
-  id = 0
-  for number in 0..2
-    for color in 0..2
-      for shape in 0..2
-        for shade in 0..2
-          deck.push Card.new(id, number,color,shape,shade)
-          id += 1
-        end
-      end
-    end
-  end
-  return deck
 end
 
 # Created 09/04/2019 by Sri Ramya Dandu
 # Edited 09/07/2019 by Sri Ramya Dandu: Optimized the checking method - made function concise
-=begin
-  Checks if the 3 cards are a valid set or not. To be a valid set, all 3 cards must either have the same
-  attribute or all different attributes for each of the following attributes: number, color,shape,shade.
-  @param card1, card2, card3 to evaluate whether they form a set or not
-  @returns true if cards form a valid set, false otherwise
-  @updates $score
-=end
+#   Checks if the 3 cards are a valid set or not. To be a valid set, all 3 cards must either have the same
+#   attribute or all different attributes for each of the following attributes: number, color,shape,shade.
+#   @param card1, card2, card3 to evaluate whether they form a set or not
+#   @returns true if cards form a valid set, false otherwise
+#   @updates $score
 def isASet?(cards)
   # The sum when adding one number 3 times or adding 3 consecutive numbers is divisible by 3.
   # This represents having all the same attribute or all different attributes.
@@ -125,21 +61,21 @@ end
 # Given an Array of the displayed cards, checks if there is a set
 # Returns an empty Array if there is not a set. If there is  set, it returns
 # an array holding the 3 cards that form the set
-def valid_table
+def valid_table(cardsShowing)
 
   # make hash of all table cards
   # id is the key, location is the value
   tableHash =  Hash.new
-  if $cardsShowing.length < 1
+  if cardsShowing.length < 1
     return []
   end
 
-  for i in 0...$cardsShowing.length
-    tableHash[$cardsShowing[i].id] = i
+  for i in 0...cardsShowing.length
+    tableHash[cardsShowing[i].id] = i
   end
 
-  for card1 in 0...$cardsShowing.length
-    for card2 in 1...$cardsShowing.length
+  for card1 in 0...cardsShowing.length
+    for card2 in 1...cardsShowing.length
       if(card1 == card2) #skip if same card
         next
       end
@@ -147,10 +83,10 @@ def valid_table
       # Find attributes of the last card needed
       # TODO: Make 1 line?
       # TODO: Explain this shit
-      cardToFind = 27 * ((6- $cardsShowing[card1].number - $cardsShowing[card2].number) % 3)
-      cardToFind += 9 * ((6- $cardsShowing[card1].color - $cardsShowing[card2].color) %3)
-      cardToFind += 3 * ((6- $cardsShowing[card1].shape - $cardsShowing[card2].shape) %3)
-      cardToFind += (6-$cardsShowing[card1].shade - $cardsShowing[card2].shade) %3
+      cardToFind = 27 * ((6- cardsShowing[card1].number - cardsShowing[card2].number) % 3)
+      cardToFind += 9 * ((6- cardsShowing[card1].color - cardsShowing[card2].color) %3)
+      cardToFind += 3 * ((6- cardsShowing[card1].shape - cardsShowing[card2].shape) %3)
+      cardToFind += (6-cardsShowing[card1].shade - cardsShowing[card2].shade) %3
 
       # cardToFind is now the card ID for the last card
       if tableHash.include?(cardToFind)
@@ -165,15 +101,17 @@ end
 
 
 # Created 09/13/2019 by David Wing: Moved functionality to its own method.
+# Edited 09/15/2019 by Sri Ramya Dandu: Removed a parameter
 # Given a valid set from the table, outputs two cards that make up a set
 # Returns array of two card objects that are the hint
-def get_hint(valid_set)
+def get_hint(cardsShowing)
+  valid_set = valid_table(cardsShowing)
   puts("look for a pair with these cards: ")
-  puts("card " + $cardsShowing[valid_set[0]].id.to_s + " and card " + $cardsShowing[valid_set[1]].id.to_s)
+  puts("card " + cardsShowing[valid_set[0]].id.to_s + " and card " + cardsShowing[valid_set[1]].id.to_s)
   # TODO: Remove before submitting.
-  #puts("card 3:" + cardsShowing[valid_set[2]].id.to_s) #DEBUG message
+  # puts("card 3:" + cardsShowing[valid_set[2]].id.to_s) #DEBUG message
   # TODO: Terse code?
-  return( [ $cardsShowing[valid_set[0]], $cardsShowing[valid_set[1]] ])
+  return( [cardsShowing[valid_set[0]], cardsShowing[valid_set[1]] ])
   # Decrease score because you cheated
   $playerScore -= 0.5
 end
@@ -184,8 +122,10 @@ end
 # Created 09/08/2019 by Sri Ramya Dandu
 # Edited 09/09/2019 by Sri Ramya Dandu: Update and display deck and scores
 # Edited 09/09/2019 by Sri Ramya Dandu: Modifed so that the computer can guess wrong sets too
+# Edited 09/15/2019 by Sri Ramya Dandu: Added levels of difficulty
+# Edited 09/15/2019 by Sri Ramya Dandu: changed arrays back to local variables  
 # TODO: Give CPU random name by generator
-def computerPlayer
+def computerPlayer(deck, cardsShowing)
   # Repeats execution in thread
   while true
 
@@ -194,17 +134,17 @@ def computerPlayer
       indexSet = Array.new
 
       #generates 3 card index values
-      winOrLose = rand(0..1)
-      if winOrLose == 1
+      winOrLose = rand(0..$range)
+      if winOrLose % 3 == 0
         #will always return 3 values that form a set
-        indexSet = valid_table();
+        indexSet = valid_table(cardsShowing);
       else
-        indexSet = (0...$cardsShowing.length).to_a.sample(3)
+        indexSet = (0...cardsShowing.length).to_a.sample(3)
       end
 
-      card1 = $cardsShowing[indexSet[0]]
-      card2 = $cardsShowing[indexSet[1]]
-      card3 = $cardsShowing[indexSet[2]]
+      card1 = cardsShowing[indexSet[0]]
+      card2 = cardsShowing[indexSet[1]]
+      card3 = cardsShowing[indexSet[2]]
 
       # Output for Computer Player
       # TODO: Replace puts with \n
@@ -216,7 +156,9 @@ def computerPlayer
       if(isASet?([card1,card2,card3]))
         puts("That is a set!")
         $computerScore += 1
-        $cardsShowing -= [card1,card2,card3]
+        cardsShowing.delete(card1)
+        cardsShowing.delete(card2)
+        cardsShowing.delete(card3)
       else
         puts("That is not a set.")
         $computerScore  -= 1
@@ -230,36 +172,37 @@ def computerPlayer
 
       #changes signal to false to prevent player thread from printing it's cards
       $signal = false
-      dealCards
-      $cardsShowing.each{ |card| card.display }
+      deck.dealCards(cardsShowing)
+      cardsShowing.each{ |card| card.display }
       $signal = true
     end
 
     #thread sleeps for a variable interval of time
-    sleep(rand(15...20))
+    sleep(rand(40...$range))
   end
 end
 
 #Created 09/08/2019 by Sri Ramya Dandu
 #Edited 09/12/2019 by Leah Gillespie: Adding player statistics
-def player
+# Edited 09/15/2019 by Sri Ramya Dandu: changed arrays back to local variables
+def player(deck,cardsShowing)
 
-  dealCards
+  deck.dealCards(cardsShowing)
   sets = Array.new
   while true
 
     #changes signal to false to prevent computer thread from printing its cards
     $signal = false
-    dealCards()
+    deck.dealCards(cardsShowing)
 
     #Displays cards
-    $cardsShowing.each { |card| card.display }
+    cardsShowing.each { |card| card.display }
     $signal = true
 
-    valid_set = valid_table
+    valid_set = valid_table(cardsShowing)
 
     # no valid sets
-    break if valid_set.length == 0 && $deck.length == 0
+    break if valid_set.length == 0 && deck.cards.length == 0
 
     # No checks for valid input because we plan to implement a GUI.
 
@@ -268,7 +211,7 @@ def player
     input = gets.chomp
     if input.eql? "y"
       $p1Hints += 1
-      get_hint(valid_set)
+      get_hint(cardsShowing)
     end
 
     print("Enter your 3 card numbers, separated by a comma: ")
@@ -280,7 +223,7 @@ def player
     card2 = strInput[0,comma].to_i
     strInput = strInput[comma+1,strInput.length]
     card3 = strInput[0,strInput.length].to_i
-    set = [getCardById($cardsShowing,card1),getCardById($cardsShowing,card2),getCardById($cardsShowing,card3)]
+    set = [getCardById(cardsShowing,card1),getCardById(cardsShowing,card2),getCardById(cardsShowing,card3)]
 
     if(isASet?(set))
       $p1SetTimer.updateTime
@@ -299,7 +242,9 @@ def player
       puts "Average time to find a set: #{avgTime}"
       puts "Hints used so far: #{$p1Hints}"
       $p1SetTimer.reset
-      $cardsShowing -= set
+      cardsShowing.delete(set[0])
+      cardsShowing.delete(set[1])
+      cardsShowing.delete(set[2])
     else
       puts "That is not a set."
       $playerScore -= 1
@@ -324,12 +269,13 @@ end
 # Edited 09/08/2019 by David Wing: Added hint implementation
 # Edited 09/09/2019 by Sri Ramya Dandu: Display score changes
 # Edited 09/09/2019 by Sri Ramya Dandu: added global variable and changed method of input
-# Edited 09/12/2019 by Leah Gillespie: setting up a timer for the game
+# Edited 09/12/2019 by Leah Gillespie: set up a timer for the game
+# Edited 09/15/2019 by Sri Ramya Dandu: added levels of difficulty
+# Edited 09/15/2019 by Sri Ramya Dandu: changed arrays back to local variables
 #=========================== MAIN ==================================================
 
 #global variables defined for data that is shared between the computer and the player
-$deck = createDeck
-$cardsShowing = Array.new
+
 $playerScore,$computerScore = 0,0
 
 # Timer for the entire game, from as close to initial deal as possible until game ends, should be displayed in GUI
@@ -346,22 +292,32 @@ $p1Hints = 0
 # Boolean used to communicate between threads to prevent interruptions while printing cards
 $signal = false
 
-# Creating thread for the player execution
-playerThread = Thread.new{player}
-
 if __FILE__ == $0
 
-  puts "Enter 1 to play solo, or 2 to play vs Computer"
-  choice = gets.to_i
-  if choice == 1
-    player
-  elsif choice == 2
-    # Creating thread for the player execution
-    playerThread = Thread.new{player}
+deck = Deck.new
+cardsShowing = Array.new
+puts "Enter 1 to play solo, or 2 to play vs Computer"
+choice = gets.to_i
+if choice == 1
+  player(deck, cardsShowing)
+elsif choice == 2
 
+  print "Choose a mode of difficulty (e/m/h): "
+  mode = gets
 
-    # Creating thread for the computer execution
-    computerThread = Thread.new{computerPlayer}
+  case mode
+  when 'm'
+    $range = 75
+  when 'h'
+    $range = 50
+  else
+    $range = 100
+  end
+  # Creating thread for the player execution
+  playerThread = Thread.new{player(deck, cardsShowing)}
+
+  # Creating thread for the computer execution
+  computerThread = Thread.new{computerPlayer(deck, cardsShowing)}
 
     playerThread.join
     computerThread.join

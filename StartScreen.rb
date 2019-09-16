@@ -2,7 +2,8 @@
 # Edited 09/15/2019 by Sharon Qiu
 require 'gosu'
 require_relative 'GameSettings'
-require_relative "Card"
+require_relative 'card'
+require_relative 'deck'
 
 module ZOrder
   BACKGROUND, UI, BUTTON, TEXT, CARDS= *0..4
@@ -22,27 +23,15 @@ GAME_TITLE = "The Game of Set"
 # Edited 09/15/2019 BY Sharon Qiu: merged in player class into StartScreen file.
 class Player
 
-  attr_accessor :currentCard, :currentCardIndex, :chosenCards, :chosenCardsIndexes
+  attr_accessor :playerNumber, :currentCardIndex, :chosenCards, :chosenCardsIndexes, :moved
 
   def initialize playerNumber
-    @currentCardIndex = 0 # Kept this as 0 because idk if we'll need to access cards directly in the future, can be changed to 1 later
-    @currentCard = draw_rect(50,35+(135/2),20,20,Gosu::Color::PLAYER_COLOR[playerNumber],ZOrder::CARDS)
+    @currentCardIndex = 0 
+    @playerNumber = playerNumber
     @chosenCards = Array.new
     @chosenCardsIndexes = Array.new
+    @moved = false
   end
-
-  # Created 09/12/2019 by Sharon Qiu
-  # Updates/keeps track of player score
-=begin   def scoreUpdate set, hint_used
-      setFound = isASet? set
-      return "#{}" if !setFound # TODO: Add to codeblock something to return if invalid set
-      if hint_used && setFound
-        @score += 0.5
-      elsif setFound
-        @score += 1
-      end
-  end 
-=end
 
   # Created 09/12/2019 by Sharon Qiu
   def move_left
@@ -54,6 +43,7 @@ class Player
       @currentCardIndex += 1
     end
 
+    @moved = true
   end
 
   # Created 09/12/2019 by Sharon Qiu
@@ -66,6 +56,7 @@ class Player
       @currentCardIndex -= 1
     end
 
+    @moved = true
   end
 
   # Created 09/12/2019 by Sharon Qiu
@@ -77,25 +68,20 @@ class Player
     else
       @currentCardIndex -= numCols
     end
-
+    @moved = true
   end
 
   # Created 09/12/2019 by Sharon Qiu
   def move_down
 
     numCols = deck.length/3
-    if @currentCardIndex + numcols >deck.length
+    if @currentCardIndex + numcols > deck.length
       @currentCardIndex -= 2 * numCols
     else
       @currentCardIndex += numCols
     end
-
+    @moved = true
   end
-
-
-  #TO MOVE RECTANGLE:
-    # X POSITION = @currentCardIndex % numCols
-    # Y POSITION = @currentCardIndex / numCols
 
   # Created 09/12/2019 by Sharon Qiu
   def selection chosenCards
@@ -111,9 +97,9 @@ class Player
       else
         # TODO: Print a message that says it is not a set.
         chosenCards.clear
+      end
 
-    # Fill in when we know set up of cards
-    # will probably have to highlight cards, kept track of chosen cards by array
+     @moved = true
   end
 
   # Created 09/12/2019 by Sharon Qiu: For future reference to hint functionality
@@ -129,39 +115,39 @@ class StartScreen < Gosu::Window
     super 840, 480
     self.caption = GAME_TITLE
     @settings_hovered = Options::START_SCREEN[0]
-    @pressed = false
-    @threadsCreated = false
+    @pressed = nil
     @title_font = Gosu::Font.new(50)
     @subtitle_font = Gosu::Font.new(20)
     @background_image = Gosu::Image.new("media/background1.jpg", :tileable => true)
     @blank_card = Gosu::Image.new("media/card.png", :tileable => true)
     @buttonOption = Gosu::Image.new("media/button.png", :tileable => true)
-    @deck = dealCards
+    @deck = Deck.new
     @playingCards = Array.new
+
+    #players
+    @p1, @p2, @comp = nil, nil, nil
   end
 
   def update
-
     # Edited 09/15/2019 by Sharon Qiu: Edited game settings for gameplay selection.
+    close if button_up? Gosu::KB_ESCAPE
     if @game_settings.currentScreen == "start"
       index = Options::START_SCREEN.find_index @settings_hovered
-      if button_down? Gosu::KB_D
+      if button_up? Gosu::KB_D
         if index == 2
           @settings_hovered = Options::START_SCREEN[0]
         else
           index += 1
           @settings_hovered = Options::START_SCREEN[index]
         end
-        sleep(0.5)
-      elsif Gosu.button_down? Gosu::KB_A
+      elsif button_up? Gosu::KB_A
         if index == 0
           @settings_hovered = Options::START_SCREEN[2]
         else
           index -= 1
           @settings_hovered = Options::START_SCREEN[index]
         end
-        sleep(0.5)
-      elsif Gosu.button_down? Gosu::KB_SPACE
+      elsif button_up? Gosu::KB_SPACE
         if @settings_hovered == "SOLO" 
           @game_settings.p1Init = true
           @game_settings.currentScreen = "levels" 
@@ -170,8 +156,6 @@ class StartScreen < Gosu::Window
           @game_settings.isCPUPlayerEnabled = true
           @game_settings.p1Init = true
           @game_settings.computerInit = true
-          @game_settings.currentScreen = "levels"
-          @settings_hovered = Options::LEVELS_SCREEN[0]
         else
           @game_settings.isTwoPlayerEnabled = true
           @game_settings.p1Init = true
@@ -179,22 +163,21 @@ class StartScreen < Gosu::Window
           @game_settings.currentScreen = "game"
           # TODO: Move Cursor
         end
-        sleep(0.5)
-      else
+      elsif button_up? Gosu::KB_E
+        @game_settings.currentScreen = "test"
       end
     
     # Edited 09/15/2019 by Sharon Qiu: Edited game settings for levels.
     elsif @game_settings.currentScreen =="levels"
       index = Options::LEVELS_SCREEN.find_index @settings_hovered
-      if button_down? Gosu::KB_S
+      if button_up? Gosu::KB_S
         if index == 2
           @settings_hovered = Options::LEVELS_SCREEN[0]
         else
           index += 1
           @settings_hovered = Options::LEVELS_SCREEN[index]
         end
-        sleep(0.5)
-      elsif Gosu.button_down? Gosu::KB_W
+      elsif button_up? Gosu::KB_W
         if index == 0
           @settings_hovered = Options::LEVELS_SCREEN[2]
         else
@@ -202,7 +185,7 @@ class StartScreen < Gosu::Window
           @settings_hovered = Options::LEVELS_SCREEN[index]
         end
         sleep(0.5)
-      elsif Gosu.button_down? Gosu::KB_SPACE
+      elsif Gosu.button_up? Gosu::KB_SPACE
           if @settings_hovered = "Easy"
             @game_settings.cpuDifficulty = "Easy"
           elsif @settings_hovered = "Medium"
@@ -213,7 +196,6 @@ class StartScreen < Gosu::Window
 
           @game_settings.currentScreen = "game"
           # TODO: Move cursor
-        sleep(0.5)
       else
         #TODO: anything else?
       end
@@ -221,86 +203,38 @@ class StartScreen < Gosu::Window
 
       dealCards!(@deck,@cardsShowing)
 
+    if Gosu.button_up? Gosu::KB_LEFT or Gosu.button_down? Gosu::KB_A
+      @P1.move_left
+    elsif Gosu.button_down? Gosu::KB_RIGHT or Gosu.button_down? Gosu::KB_D
+      @P1.move_right
+    elsif Gosu.button_down? Gosu::KB_UP or Gosu.button_down? Gosu::KB_W
+      @P1.move_up
+    elsif Gosu.button_down? Gosu::KB_DOWN or Gosu.button_down? Gosu::KB_S
+      @P1.move_down
+    elsif Gosu.button_down? Gosu::KB_SPACE or Gosu.button_down? Gosu::KB_RETURN
+      @P1.select
+    end
 
 
 
     end
   end
 
-  #Created 09/08/2019 by Sri Ramya Dandu
-  #Edited 09/12/2019 by Leah Gillespie: Adding player statistics
-  # Edited 09/15/2019 by Sri Ramya Dandu: changed arrays back to local variables
-  def playerThrd(deck,cardsShowing,playerNum)
-
-    sets = Array.new
-    while true
-
-      #changes signal to false to prevent computer thread from printing its cards
-      $signal = false
-      dealCards(deck,cardsShowing)
-
-      #Displays cards
-      cardsShowing.each { |card| card.display }
-      $signal = true
-
-      valid_set = valid_table(cardsShowing)
-
-      # no valid sets
-      break if valid_set.length == 0 && deck.length == 0
-
-      # No checks for valid input because we plan to implement a GUI.
-
-
-      print("Need a hint? y/n: ")
-      input = gets.chomp
-      if input.eql? "y"
-        $p1Hints += 1
-        get_hint(valid_set,cardsShowing)
-      end
-
-      print("Enter your 3 card numbers, separated by a comma: ")
-      strInput = gets
-      comma = strInput.index(",")
-      card1 = strInput[0,comma].to_i
-      strInput = strInput[comma+1,strInput.length]
-      comma = strInput.index(",")
-      card2 = strInput[0,comma].to_i
-      strInput = strInput[comma+1,strInput.length]
-      card3 = strInput[0,strInput.length].to_i
-      set = [getCardById(cardsShowing,card1),getCardById(cardsShowing,card2),getCardById(cardsShowing,card3)]
-
-      if(isASet?(set))
-        $p1SetTimer.updateTime
-        $p1SetTimes.push $p1SetTimer.current
-        puts "That is a set!"
-        #TODO: Score should increment/decrement here
-        $playerScore += 1
-        #TODO: set up hash or something to clean sets up.
-        sets.push(set)
-        $p1SetTimes.sort!
-        puts "Fastest time to find a set: #{$p1SetTimes.at(0)}"
-        puts "Slowest time to find a set: #{$p1SetTimes.at($p1SetTimes.length-1)}"
-        avgTime = 0
-        $p1SetTimes.each {|time| avgTime += time}
-        avgTime = avgTime / $p1SetTimes.length
-        puts "Average time to find a set: #{avgTime}"
-        puts "Hints used so far: #{$p1Hints}"
-        $p1SetTimer.reset
-        cardsShowing.delete(set[0])
-        cardsShowing.delete(set[1])
-        cardsShowing.delete(set[2])
-      else
-        puts "That is not a set."
-        $playerScore -= 1
-      end
-
-      puts "Computer score: #{$computerScore}"
-      puts "Your current score: #{$playerScore}"
-      $gameTimer.updateTime
-      puts "Total elapsed time: #{$gameTimer.current}"
+  def button_up? id
+    button = button_down? id
+    if @pressed != id and @pressed != nil
+      return false
     end
+    if button and @pressed != id
+      @pressed = id
+      return true
+    elsif !button
+      @pressed = nil
+    end
+    return false
   end
 
+  #Created by Sri Ramya Dandu
   def startScreen
     @title_font.draw_text("The Game of Set", 250, 50, ZOrder::TEXT, 1.0, 1.0, Gosu::Color::BLACK)
     @subtitle_font.draw_text("Instructions: Select a mode of play below. The objective of the game", 160, 115, ZOrder::TEXT, 1.0, 1.0, Gosu::Color::BLACK)
@@ -348,29 +282,33 @@ class StartScreen < Gosu::Window
     # end
   end
 
-
+  # Edited 09/15/2019 by Sharon Qiu: Set up cards based on number of cards played.
   def draw
     @background_image.draw(0, 0, ZOrder::BACKGROUND)
     if @game_settings.currentScreen == "start"
       startScreen
-    elsif @game_settings.currentScreen =="levels"
+    elsif @game_settings.currentScreen == "levels"
       levelsScreen
+    elsif @game_settings.currentScreen == "test"
+      x = Card.new(0,2,0,1,1)
+      x.image.draw(0,0,ZOrder::CARDS, 0.15, 0.15)
     elsif  @game_settings.currentScreen == "game"
 
-      # Creates threads if need be.
-      if !threadsCreated
-        comp = thread.new(playerThrd(deck, cardsShowing, 0)) if game_settings.computerInit = true
-        p1 = thread.new(playerThrd(deck, cardsShowing, 1)) if game_settings.p1Init = true
-        p2 = thread.new(playerThrd(deck, cardsShowing, 2)) if game_settings.p2Init = true
-        threadsCreated == true
+      # Creates players if need be.
+      if !playersCreated
+        #todo: make computer class
+        # @comp = comp.new if game_settings.computerInit = true
+        @p1 = Player(1).new if game_settings.p1Init = true
+        @p2 = Player(2).new if game_settings.p2Init = true
+        playersCreated == true
       end
       
       # Set-up of maximum available cards
-      # Edited 09/15/2019 by Sharon Qiu: Set up cards based on number of cards played.
       draw_rect(640,0,200,480,Gosu::Color::GRAY,ZOrder::UI)
       
       # todo: conditions like hint conditions etc that tell you when to pop up
       # need booleans here to check if something's been pressed
+
 
       numCols = @playingCards.length / 3
       x_offset, y_offset, x_between, y_between = 5, 35, 90, 135
@@ -380,8 +318,16 @@ class StartScreen < Gosu::Window
         end
       end
 
-      
+    #TO MOVE RECTANGLE:
+    # X POSITION = @currentCardIndex % numCols
+    # Y POSITION = @currentCardIndex / numCols
 
+      draw_rect(x_offset + (x_between/2)*(@p1.currentCardIndex  % numCols),y_offset + y_between*(@p1.currentCardIndex  / numCols),20,20,Gosu::Color::PLAYER_COLOR[@p1.playerNumber],ZOrder::CARDS)
+
+      @p1.chosenCardsIndexes.each do |index|
+        xpos, ypos = index % numCols, index / numCols
+        draw_rect(x_offset + (x_between/2)*xpos,y_offset + y_between*ypos,20,20,Gosu::Color::PLAYER_COLOR[@p1.playerNumber],ZOrder::CARDS)
+      end
 
     end
   end

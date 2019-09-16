@@ -214,9 +214,11 @@ end
 
 
 # Created 09/13/2019 by David Wing: Moved functionality to its own method.
+# Edited 09/15/2019 by Sri Ramya Dandu: Removed a parameter
 # Given a valid set from the table, outputs two cards that make up a set
 # Returns array of two card objects that are the hint
-def get_hint(valid_set, cardsShowing)
+def get_hint(cardsShowing)
+  valid_set = valid_table(cardsShowing)
   puts("look for a pair with these cards: ")
   puts("card " + cardsShowing[valid_set[0]].id.to_s + " and card " + cardsShowing[valid_set[1]].id.to_s)
   # TODO: Remove before submitting.
@@ -322,7 +324,7 @@ def player(deck,cardsShowing)
     input = gets.chomp
     if input.eql? "y"
       $p1Hints += 1
-      get_hint(valid_set,cardsShowing)
+      get_hint(cardsShowing)
     end
 
     print("Enter your 3 card numbers, separated by a comma: ")
@@ -403,7 +405,7 @@ $p1Hints = 0
 # Boolean used to communicate between threads to prevent interruptions while printing cards
 $signal = false
 
-
+if __FILE__ == $0
 
 deck = createDeck
 cardsShowing = Array.new
@@ -432,4 +434,5 @@ elsif choice == 2
 
   playerThread.join
   computerThread.join
+end
 end

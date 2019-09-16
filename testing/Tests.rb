@@ -134,33 +134,33 @@ end
 context "No more unplayed cards in the deck left." do
 
   it "Does not add cards when cards showing is empty and deck of unplayed cards is empty." do
-    $cardsShowing = []
-    $deck = []
-    dealCards()
+    playingSet = []
+    unplayedDeck = []
+    dealCards(unplayedDeck,playingSet)
 
-    expect($cardsShowing.eql?([].to_a))
+    expect(playingSet.eql?([].to_a))
   end
 
   it "Does not add cards when there is a set and no more unplayed cards left." do
     card1 = Card.new(32,1,0,1,2)
     card2 = Card.new(47,1,2,0,2)
     card3 = Card.new(44,1,1,2,2)
-    $cardsShowing = [card1, card2, card3]
-    $deck = []
-    dealCards
+    playingSet = [card1, card2, card3]
+    unplayedDeck = []
+    dealCards(unplayedDeck,playingSet)
 
-    expect($cardsShowing.eql?([card1, card2, card3].to_a))
+    expect(playingSet.eql?([card1, card2, card3].to_a))
   end
 
   it "Does not add cards when there is not a set and no more unplayed cards left." do
     card1 = Card.new(29,1,0,0,2)
     card2 = Card.new(47,1,2,0,2)
     card3 = Card.new(44,1,1,2,2)
-    $cardsShowing = [card1, card2, card3]
-    $deck = []
-    dealCards
+    playingSet = [card1, card2, card3]
+    unplayedDeck = []
+    dealCards(unplayedDeck,playingSet)
 
-    expect($cardsShowing.eql?([card1, card2, card3].to_a))
+    expect(playingSet.eql?([card1, card2, card3].to_a))
   end
 end
 
@@ -181,11 +181,11 @@ context "There is not a set in the current cards and there are cards unplayed le
     card10 = Card.new(3,0,0,1,0)
     card11 = Card.new(41,1,1,1,2)
     card12 = Card.new(16,0,1,2,1)
-    $cardsShowing = [card1, card2, card3, card4, card5, card6]
-    $deck = [card7, card8, card9,card10,card11,card12]
-    dealCards
+    playingSet = [card1, card2, card3, card4, card5, card6]
+    unplayedDeck = [card7, card8, card9,card10,card11,card12]
+    dealCards(unplayedDeck,playingSet)
 
-    expect($cardsShowing.length == 9)
+    expect(playingSet.length == 9)
   end
 
   it "Adds cards when there is no set but more than 12 cards played." do
@@ -206,11 +206,11 @@ context "There is not a set in the current cards and there are cards unplayed le
     card13 = Card.new(60,2,0,2,0)
     card14 = Card.new(24,0,2,2,0)
     card15 = Card.new(78,2,2,2,0)
-    $cardsShowing = [card1, card2, card3, card4, card5, card6, card7, card8, card9, card10,card11,card12]
-    $deck = [card13,card14,card15]
-    dealCards
+    playingSet = [card1, card2, card3, card4, card5, card6, card7, card8, card9, card10,card11,card12]
+    unplayedDeck = [card13,card14,card15]
+    dealCards(unplayedDeck,playingSet)
 
-    expect($cardsShowing.eql?([card1, card2, card3, card4, card5, card6, card7, card8, card9, card10, card11, card12,card13,card14,card15].to_a))
+    expect(playingSet.eql?([card1, card2, card3, card4, card5, card6, card7, card8, card9, card10, card11, card12,card13,card14,card15].to_a))
   end
 
 end
@@ -232,11 +232,11 @@ context "There is a set, but less than 12 cards. There are also cards unplayed l
     card10 = Card.new(3,0,0,1,0)
     card11 = Card.new(41,1,1,1,2)
     card12 = Card.new(16,0,1,2,1)
-    $cardsShowing = [card1, card2, card3, card4, card5, card6, card7, card8, card9]
-    $deck = [card10,card11,card12]
-    dealCards
+    playingSet = [card1, card2, card3, card4, card5, card6, card7, card8, card9]
+    unplayedDeck = [card10,card11,card12]
+    dealCards(unplayedDeck,playingSet)
 
-    expect($cardsShowing.eql?([card1, card2, card3, card4, card5, card6, card7, card8, card9,card10,card11,card12].to_a))
+    expect(playingSet.eql?([card1, card2, card3, card4, card5, card6, card7, card8, card9,card10,card11,card12].to_a))
   end
 
 end
@@ -260,11 +260,11 @@ context "There is a set and more than or equal to 12 cards. There are also cards
     card13 = Card.new(15,0,1,2,0)
     card14 = Card.new(50,1,2,1,2)
     card15 = Card.new(13,0,1,1,1)
-    $cardsShowing = [card1, card2, card3, card4, card5, card6, card7, card8, card9, card10,card11,card12]
-    $deck = [card13,card14,card15]
-    dealCards
+    playingSet = [card1, card2, card3, card4, card5, card6, card7, card8, card9, card10,card11,card12]
+    unplayedDeck = [card13,card14,card15]
+    dealCards(unplayedDeck,playingSet)
 
-    expect($cardsShowing.eql?([card1, card2, card3, card4, card5, card6, card7, card8, card9, card10, card11, card12].to_a))
+    expect(playingSet.eql?([card1, card2, card3, card4, card5, card6, card7, card8, card9, card10, card11, card12].to_a))
   end
 
 end
@@ -277,83 +277,84 @@ context "Check table for valid sets" do
   it "returns empty array when there are no valid sets and only 3 cards" do
     card1 = Card.new(28,1,0,0,1)
     card2 = Card.new(47,1,2,0,2)
-    card3 = Card.new(38,1,1,0,2)    
-    $cardsShowing = [card1, card2, card3]
+    card3 = Card.new(38,1,1,0,2)
+    puts("HERE")
+    tableArray = [card1, card2, card3]
     expected = []
-    expect(valid_table()).to eql(expected)
+    expect(valid_table(tableArray)).to eql(expected)
   end
 
-  it "returns an index array of valid cards when there is only a valid set left" do 
+  it "returns an index array of valid cards when there is only a valid set left" do
     card1 = Card.new(80,2,2,2,2)
     card2 = Card.new(79,2,2,2,1)
     card3 = Card.new(78,2,2,2,0)
-    $cardsShowing = [card1, card2, card3]
+    tableArray = [card1, card2, card3]
 
     expected = [0,1,2]
-    ret = valid_table()
+    ret = valid_table(tableArray)
 
     expect(ret).to eql(expected)
   end
 
   it "returns an empty array when there are no valid sets in a standard 12 card table" do
 
-    $cardsShowing =[
-      Card.new(0,0,0,0,0),
-      Card.new(30,1,0,1,0),
-      Card.new(27,1,0,0,0),
-      Card.new(3,0,0,1,0),
-      Card.new(9,0,1,0,0),
-      Card.new(39,1,1,1,0),
-      Card.new(36,1,1,0,0),
-      Card.new(12,0,1,1,0),
-      Card.new(19,0,2,0,1),
-      Card.new(76,2,2,1,1),
-      Card.new(74,2,2,0,2),
-      Card.new(23,0,2,1,2)
+    tableArray =[
+        Card.new(0,0,0,0,0),
+        Card.new(30,1,0,1,0),
+        Card.new(27,1,0,0,0),
+        Card.new(3,0,0,1,0),
+        Card.new(9,0,1,0,0),
+        Card.new(39,1,1,1,0),
+        Card.new(36,1,1,0,0),
+        Card.new(12,0,1,1,0),
+        Card.new(19,0,2,0,1),
+        Card.new(76,2,2,1,1),
+        Card.new(74,2,2,0,2),
+        Card.new(23,0,2,1,2)
     ]
 
     expected = []
-    expect(valid_table()).to eql(expected)
+    expect(valid_table(tableArray)).to eql(expected)
   end
 
   it "returns an valid card array when there is a valid sets in a standard 12 card table" do
 
-    $cardsShowing =[
-      Card.new(0,0,0,0,0),
-      Card.new(30,1,0,1,0),
-      Card.new(27,1,0,0,0),
-      Card.new(3,0,0,1,0),
-      Card.new(9,0,1,0,0),
-      Card.new(39,1,1,1,0),
-      Card.new(36,1,1,0,0),
-      Card.new(12,0,1,1,0),
-      Card.new(18,0,2,0,0),
-      Card.new(76,2,2,1,1),
-      Card.new(74,2,2,0,2),
-      Card.new(23,0,2,1,2)
+    tableArray =[
+        Card.new(0,0,0,0,0),
+        Card.new(30,1,0,1,0),
+        Card.new(27,1,0,0,0),
+        Card.new(3,0,0,1,0),
+        Card.new(9,0,1,0,0),
+        Card.new(39,1,1,1,0),
+        Card.new(36,1,1,0,0),
+        Card.new(12,0,1,1,0),
+        Card.new(18,0,2,0,0),
+        Card.new(76,2,2,1,1),
+        Card.new(74,2,2,0,2),
+        Card.new(23,0,2,1,2)
     ]
 
     expected = [0,4,8]
-    ret = valid_table()
+    ret = valid_table(tableArray)
 
     expect(ret).to eql(expected)
   end
 
-  it "returns an array of valid cards when there is a full table of cards" do 
+  it "returns an array of valid cards when there is a full table of cards" do
     deck = createDeck
-    $cardsShowing = deck
+    tableArray = deck
 
     #first set that is generated by createDeck
     card1 = Card.new(80,2,2,2,2)
     card2 = Card.new(79,2,2,2,1)
     card3 = Card.new(78,2,2,2,0)
 
-    ret = valid_table()
+    ret = valid_table(tableArray)
 
     expected = [0,1,2]
 
     expect(ret).to eql(expected)
-  end    
+  end
 
 end
 
@@ -424,34 +425,33 @@ context "Checks that the deck is created correctly" do
 
 end
 
-
-# Created 09/13 David 
+# Created 09/13 David
 context "Checks hints are correct" do
 
   it "returns 2 cards that could make up a set" do
     card1 = Card.new(80,2,2,2,2)
     card2 = Card.new(79,2,2,2,1)
     card3 = Card.new(78,2,2,2,0)
-    
-    $cardsShowing = [card1, card2, card3, Card.new(76,2,2,1,1), Card.new(74,2,2,0,2),  Card.new(23,0,2,1,2)]
-    
+
+    cardsShowing = [card1, card2, card3, Card.new(76,2,2,1,1), Card.new(74,2,2,0,2),  Card.new(23,0,2,1,2)]
+
     expected = [card1, card2]
-    ret = get_hint(valid_table)
+    ret = get_hint(cardsShowing)
 
     expect(ret).to eql(expected)
-    
+
   end
 
   it "returns 2 cards that could make up a set from a table " do
     card1 = Card.new(80,2,2,2,2)
     card2 = Card.new(79,2,2,2,1)
     card3 = Card.new(78,2,2,2,0)
-    $cardsShowing = [card1, card2, card3]
+    cardsShowing = [card1, card2, card3]
 
     expected = [card1, card2]
-    ret = get_hint(valid_table)
+    ret = get_hint(cardsShowing)
 
     expect(ret).to eql(expected)
-    
+
   end
 end

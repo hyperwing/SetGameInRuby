@@ -1,5 +1,6 @@
 # File Created 09/10/2019 by Neel Mansukhani
 # Edited 09/15/2019 by Sharon Qiu
+# Edited 09/17/2019 by Sharon Qiu
 require 'gosu'
 require_relative 'GameSettings'
 require_relative 'card'
@@ -12,53 +13,54 @@ end
 # Edited 09/15/2019 by Sharon Qiu: Added PLAYER_COLOR, where Gray is computer, red is player1, blue is player2.
 module Options
   START_SCREEN = ["SOLO", "Computer", "2 Player"]
-  PLAYER_COLOR = ["GRAY", "RED", "BLUE"]
   LEVELS_SCREEN = ["Easy", "Medium", "Hard"]
-  
 end
 
 GAME_TITLE = "The Game of Set"
 
 # Created 09/12/2019 by Sharon Qiu: Skeleton code for player movement only within the game.
-# Edited 09/15/2019 BY Sharon Qiu: merged in player class into StartScreen file.
+# Edited 09/15/2019 by Sharon Qiu: merged in player class into StartScreen file.
+# Edited 09/17/2019 by Sharon Qiu: Edited all player movement functions.
 class Player
 
-  attr_accessor :playerNumber, :currentCardIndex, :chosenCards, :chosenCardsIndexes
+  attr_accessor :currentCardIndex, :chosenCards, :chosenCardsIndexes, :moved
 
-  def initialize playerNumber
-    @currentCardIndex = 0 
-    @playerNumber = playerNumber
+  def initialize
+    @currentCardIndex = 0
     @chosenCards = Array.new
     @chosenCardsIndexes = Array.new
   end
 
   # Created 09/12/2019 by Sharon Qiu
-  def move_left
+  # Edited 09/17/2019 by Sharon Qiu: Created conditions for movement leftwards.
+  def move_left playingCards
     
-    numCols = deck.length/3
-    if (@currentCardIndex + 1)% numCols == 1
+    numCols = playingCards.length/3
+    if @currentCardIndex % numCols == 0 and @currentCardIndex < playingCards.length
       @currentCardIndex += (numCols-1)
-    else
-      @currentCardIndex += 1
-    end
-  end
-
-  # Created 09/12/2019 by Sharon Qiu
-  def move_right
-
-   numCols = deck.length/3
-    if (@currentCardIndex + 1)% numCols == 0
-      @currentCardIndex -= (numCols-1)
     else
       @currentCardIndex -= 1
     end
   end
 
   # Created 09/12/2019 by Sharon Qiu
-  def move_up
+  # Edited 09/17/2019 by Sharon Qiu: Created conditions for movement rightwards.
+  def move_right playingCards
 
-    numCols = deck.length/3
-    if @currentCardIndex - numcols < 0
+   numCols = playingCards.length/3
+    if @currentCardIndex % numCols == 3 and @currentCardIndex - (numCols-1) >= 0
+      @currentCardIndex -= (numCols-1)
+    else
+      @currentCardIndex += 1
+    end
+  end
+
+  # Created 09/12/2019 by Sharon Qiu
+  # Edited 09/17/2019 by Sharon Qiu: Created conditions for movement upwards.
+  def move_up playingCards
+
+    numCols = playingCards.length/3
+    if @currentCardIndex - numCols < 0
       @currentCardIndex += 2 * numCols
     else
       @currentCardIndex -= numCols
@@ -66,10 +68,11 @@ class Player
   end
 
   # Created 09/12/2019 by Sharon Qiu
-  def move_down
+  # Edited 09/17/2019 by Sharon Qiu: Created conditions for movement downwards.
+  def move_down playingCards
 
-    numCols = deck.length/3
-    if @currentCardIndex + numcols > deck.length
+    numCols = playingCards.length/3
+    if @currentCardIndex + numCols >= playingCards.length
       @currentCardIndex -= 2 * numCols
     else
       @currentCardIndex += numCols
@@ -77,18 +80,10 @@ class Player
   end
 
   # Created 09/12/2019 by Sharon Qiu
-  def selection 
-
-    @chosenCardsIndexes.push @currentCardIndex
-    @chosenCards.push playingCards[@currentCardIndex]
-    if @chosenCards.length == 3
-      # TODO: In the future, implement check for score adjustments with hint usage
-      if isASet?(@chosenCards)
-        # TODO: Change score, Print msg saying it is a set
-      else
-        # TODO: Print a message that says it is not a set.
-      end
-      @chosenCards.clear
+  # Edited 09/17/2019 by Sharon Qiu: Created conditions for card selection. This updates the player instance variables and makes sure same cards not selected twice.
+  def selection playingCards
+    @chosenCardsIndexes.push @currentCardIndex if !(@chosenCardsIndexes.include? @currentCardIndex)
+    @chosenCards.push playingCards[@currentCardIndex] if !(@chosenCards.include? playingCards[@currentCardIndex])
   end
 
   # Created 09/12/2019 by Sharon Qiu: For future reference to hint functionality
@@ -99,6 +94,8 @@ class Player
 end
 
 class StartScreen < Gosu::Window
+
+  # Edited 09/17/2019 by Sharon Qiu: added in deck, playingcards, and playersCreated, as well as p1,p2,comp.
   def initialize
     @game_settings = GameSettings.new
     super 840, 480
@@ -117,9 +114,9 @@ class StartScreen < Gosu::Window
     #players
     @p1, @p2, @comp = nil, nil, nil
   end
-
+  # Edited 09/15/2019 by Sharon Qiu: Edited game settings for gameplay selection, game settings for levels.
+  # Edited 09/17/2019 by Sharon Qiu: Edited game screen checks. Split commands into p1 and p2.
   def update
-    # Edited 09/15/2019 by Sharon Qiu: Edited game settings for gameplay selection.
     close if button_up? Gosu::KB_ESCAPE
     if @game_settings.currentScreen == "start"
       index = Options::START_SCREEN.find_index @settings_hovered
@@ -157,7 +154,7 @@ class StartScreen < Gosu::Window
         @game_settings.currentScreen = "test"
       end
     
-    # Edited 09/15/2019 by Sharon Qiu: Edited game settings for levels.
+
     elsif @game_settings.currentScreen =="levels"
       index = Options::LEVELS_SCREEN.find_index @settings_hovered
       if button_up? Gosu::KB_S
@@ -174,12 +171,12 @@ class StartScreen < Gosu::Window
           index -= 1
           @settings_hovered = Options::LEVELS_SCREEN[index]
         end
-      elsif Gosu.button_up? Gosu::KB_SPACE
-          if @settings_hovered = "Easy"
+      elsif button_up? Gosu::KB_SPACE
+          if @settings_hovered == "Easy"
             @game_settings.cpuDifficulty = "Easy"
-          elsif @settings_hovered = "Medium"
+          elsif @settings_hovered == "Medium"
             @game_settings.cpuDifficulty = "Medium"
-          elsif @settings_hovered = "Hard"
+          elsif @settings_hovered == "Hard"
             @game_settings.cpuDifficulty = "Hard"
           end
 
@@ -188,22 +185,75 @@ class StartScreen < Gosu::Window
       else
         #TODO: anything else?
       end
+
+
     elsif  @game_settings.currentScreen == "game"
 
-      dealCards!(@deck,@cardsShowing)
+      if button_up? Gosu::KB_A
+        @p1.move_left @playingCards
+        puts "p1: #{@p1.currentCardIndex}"
+      elsif button_up? Gosu::KB_D
+        @p1.move_right @playingCards
+        puts "p1: #{@p1.currentCardIndex}"
+      elsif button_up? Gosu::KB_W
+        @p1.move_up @playingCards
+        puts "p1: #{@p1.currentCardIndex}"
+      elsif button_up? Gosu::KB_S
+        @p1.move_down @playingCards
+        puts "p1: #{@p1.currentCardIndex}"
+      elsif button_up? Gosu::KB_SPACE
+        @p1.selection @playingCards
 
-      if Gosu.button_up? Gosu::KB_LEFT or Gosu.button_up? Gosu::KB_A
-        @P1.move_left
-      elsif Gosu.button_up? Gosu::KB_RIGHT or Gosu.button_up? Gosu::KB_D
-        @P1.move_right
-      elsif Gosu.button_up? Gosu::KB_UP or Gosu.button_up? Gosu::KB_W
-        @P1.move_up
-      elsif Gosu.button_up? Gosu::KB_DOWN or Gosu.button_up? Gosu::KB_S
-        @P1.move_down
-      elsif Gosu.button_up? Gosu::KB_SPACE or Gosu.button_up? Gosu::KB_RETURN
-        @P1.selection 
-      elsif Gosu.button_up? Gosu::KB_H 
-        @P1.hint 
+        if @p1.chosenCardsIndexes.length == 3
+          # TODO: In the future, implement check for score adjustments with hint usage
+          if @deck.isASet?(@p1.chosenCards)
+            puts "Set found"
+            @playingCards -= @p1.chosenCards
+            @p2.chosenCards.clear #clears it so if selected cards were ones already chosen/found, it doesn't cause conflicts
+            # TODO: Change score, make a trigger for updating the window
+          else
+            puts "Set not found"
+            # TODO: Change score, make a trigger for updating the window
+          end
+          @p1.chosenCards.clear
+          @p1.chosenCardsIndexes.clear
+        end
+
+        puts "p1: #{@p1.currentCardIndex}"
+      elsif button_up? Gosu::KB_H
+        @p1.hint
+      end
+
+      if button_up? Gosu::KB_LEFT
+        @p2.move_left @playingCards
+        puts "p2: #{@p2.currentCardIndex} "
+      elsif button_up? Gosu::KB_RIGHT
+        @p2.move_right @playingCards
+        puts "p2: #{@p2.currentCardIndex} "
+      elsif button_up? Gosu::KB_UP
+        @p2.move_up @playingCards
+        puts "p2: #{@p2.currentCardIndex} "
+      elsif button_up? Gosu::KB_DOWN
+        @p2.move_down @playingCards
+        puts "p2: #{@p2.currentCardIndex} "
+      elsif button_up? Gosu::KB_RETURN
+        @p2.selection @playingCards
+
+        if @p2.chosenCardsIndexes.length == 3
+          # TODO: In the future, implement check for score adjustments with hint usage
+          if @deck.isASet?(@p2.chosenCards)
+            puts "Set found"
+            @playingCards -= @p2.chosenCards
+            @p1.chosenCards.clear #clears it so if selected cards were ones already chosen/found, it doesn't cause conflicts
+            # TODO: Change score, make a trigger for updating the window
+          else
+            puts "Set not found"
+            # TODO: Change score, make a trigger for updating the window
+          end
+          @p2.chosenCards.clear
+          @p2.chosenCardsIndexes.clear
+        end
+        puts "p2: #{@p2.currentCardIndex} "
       end
 
     end
@@ -222,7 +272,6 @@ class StartScreen < Gosu::Window
     end
     return false
   end
-
   #Created by Sri Ramya Dandu
   def startScreen
     @title_font.draw_text("The Game of Set", 250, 50, ZOrder::TEXT, 1.0, 1.0, Gosu::Color::BLACK)
@@ -255,7 +304,9 @@ class StartScreen < Gosu::Window
 
   # Edited 09/15/2019 by Sharon Qiu: Set up cards based on number of cards played.
   # Edited 09/16/2019 by Sharon Qiu: Draws rectangles based on selections and current position.
+  # Edited 09/17/2019 by Sharon Qiu: Added check for player type.
   def draw
+
     @background_image.draw(0, 0, ZOrder::BACKGROUND)
     if @game_settings.currentScreen == "start"
       startScreen
@@ -266,17 +317,19 @@ class StartScreen < Gosu::Window
       x.image.draw(0,0,ZOrder::CARDS, 0.15, 0.15)
     elsif  @game_settings.currentScreen == "game"
 
+      @deck.dealCards! @playingCards
+
       # Creates players if need be.
       if !@playersCreated
         #todo: make computer class
-        # @comp = comp.new if game_settings.computerInit = true
-        @p1 = Player(1).new if game_settings.p1Init = true
-        @p2 = Player(2).new if game_settings.p2Init = true
-        @playersCreated == true
+        # @comp = comp.new if @game_settings.computerInit = true
+        @p1 = Player.new if @game_settings.p1Init == true
+        @p2 = Player.new if @game_settings.p2Init == true
+        @playersCreated = true
+
       end
-      
-      # Set-up of maximum available cards
-      draw_rect(640,0,200,480,Gosu::Color::GRAY,ZOrder::UI)
+
+      Gosu.draw_rect(640,0,200,480,Gosu::Color::GRAY,ZOrder::UI)
       
       # todo: conditions like hint conditions etc that tell you when to pop up
       # need booleans here to check if something's been pressed
@@ -295,23 +348,30 @@ class StartScreen < Gosu::Window
       # Y POSITION = @currentCardIndex / numCols
 
       if @game_settings.p1Init
+
         # Draws current position
-        draw_rect(x_offset + (x_between/2)*(@p1.currentCardIndex  % numCols),y_offset + y_between*(@p1.currentCardIndex  / numCols),20,20,Gosu::Color::PLAYER_COLOR[@p1.playerNumber],ZOrder::CARDS)
-        # Draws current selected values
-        @p1.chosenCardsIndexes.each do |index|
-          xpos, ypos = index % numCols, index / numCols
-          draw_rect(x_offset + (x_between/2)*xpos,y_offset + y_between*ypos,20,20,Gosu::Color::PLAYER_COLOR[@p1.playerNumber],ZOrder::CARDS)
+        if @p1.currentCardIndex % numCols == 0 or (@p1.currentCardIndex % numCols == 1 and @p1.currentCardIndex >= numCols-1)
+          draw_rect((x_between/2)*((@p1.currentCardIndex % numCols)+1),(y_between/2)*((@p1.currentCardIndex  / numCols)+1),20,20,Gosu::Color::BLUE,ZOrder::CARDS)
+        else
+          draw_rect((x_between/1.85)*((@p1.currentCardIndex % numCols)+1),(y_between/2)*((@p1.currentCardIndex  / numCols)+1),20,20,Gosu::Color::BLUE,ZOrder::CARDS)
         end
+
+        # Draws current selected values
+        @p1.chosenCardsIndexes.each {|index| draw_rect((x_between/1.85)*((index % numCols)+1),(y_between/2)*((index / numCols)+1),20,20,Gosu::Color::BLUE,ZOrder::CARDS)}
       end
 
       if @game_settings.p2Init
+
         # Draws current position
-        draw_rect(x_offset + (x_between/2)*(@p2.currentCardIndex  % numCols),y_offset + y_between*(@p2.currentCardIndex  / numCols),20,20,Gosu::Color::PLAYER_COLOR[@p2.playerNumber],ZOrder::CARDS)
-        # Draws current selected values
-        @p2.chosenCardsIndexes.each do |index|
-          xpos, ypos = index % numCols, index / numCols
-          draw_rect(x_offset + (x_between/2)*xpos,y_offset + y_between*ypos,20,20,Gosu::Color::PLAYER_COLOR[@p2.playerNumber],ZOrder::CARDS)
+        if @p2.currentCardIndex % numCols == 0 or (@p2.currentCardIndex % numCols == 1 and @p2.currentCardIndex >= numCols-1)
+          draw_rect((x_between/2)*((@p2.currentCardIndex % numCols)+1),(y_between/2)*((@p2.currentCardIndex  / numCols)+1),20,20,Gosu::Color::RED,ZOrder::CARDS)
+        else
+          draw_rect((x_between/1.85)*((@p2.currentCardIndex % numCols)+1),(y_between/2)*((@p2.currentCardIndex  / numCols)+1),20,20,Gosu::Color::RED,ZOrder::CARDS)
         end
+
+        # Draws current selected values
+        @p2.chosenCardsIndexes.each {|index| draw_rect((x_between/1.85)*((index % numCols)+1),(y_between/2)*((index / numCols)+1),20,20,Gosu::Color::RED,ZOrder::CARDS)}
+
       end
 
     end

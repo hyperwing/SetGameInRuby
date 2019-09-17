@@ -1,6 +1,7 @@
-#File Created 09/12/2019 by Neel Mansukhani
+# File Created 09/12/2019 by Neel Mansukhani
+# Edited 09/17/2019 by Sharon Qiu: Added attributes to the accessor.
 class GameSettings
-  attr_accessor :currentScreen
+  attr_accessor :currentScreen,:isTwoPlayerEnabled,:isCPUPlayerEnabled,:cpuDifficulty,:p1Init,:p2Init,:computerInit
   def initialize
     @currentScreen = "start"
     @areHintsEnabled = true

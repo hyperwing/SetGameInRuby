@@ -23,14 +23,13 @@ GAME_TITLE = "The Game of Set"
 # Edited 09/15/2019 BY Sharon Qiu: merged in player class into StartScreen file.
 class Player
 
-  attr_accessor :playerNumber, :currentCardIndex, :chosenCards, :chosenCardsIndexes, :moved
+  attr_accessor :playerNumber, :currentCardIndex, :chosenCards, :chosenCardsIndexes
 
   def initialize playerNumber
     @currentCardIndex = 0 
     @playerNumber = playerNumber
     @chosenCards = Array.new
     @chosenCardsIndexes = Array.new
-    @moved = false
   end
 
   # Created 09/12/2019 by Sharon Qiu
@@ -42,8 +41,6 @@ class Player
     else
       @currentCardIndex += 1
     end
-
-    @moved = true
   end
 
   # Created 09/12/2019 by Sharon Qiu
@@ -55,8 +52,6 @@ class Player
     else
       @currentCardIndex -= 1
     end
-
-    @moved = true
   end
 
   # Created 09/12/2019 by Sharon Qiu
@@ -68,7 +63,6 @@ class Player
     else
       @currentCardIndex -= numCols
     end
-    @moved = true
   end
 
   # Created 09/12/2019 by Sharon Qiu
@@ -80,26 +74,21 @@ class Player
     else
       @currentCardIndex += numCols
     end
-    @moved = true
   end
 
   # Created 09/12/2019 by Sharon Qiu
-  def selection chosenCards
+  def selection 
 
-    chosenCardsIndexes.push @currentCardIndex
-    chosenCards.push playingCards[@currentCardIndex]
-    if chosenCards.length == 3
-
+    @chosenCardsIndexes.push @currentCardIndex
+    @chosenCards.push playingCards[@currentCardIndex]
+    if @chosenCards.length == 3
       # TODO: In the future, implement check for score adjustments with hint usage
-      if isASet?(chosenCards)
+      if isASet?(@chosenCards)
         # TODO: Change score, Print msg saying it is a set
-
       else
         # TODO: Print a message that says it is not a set.
-        chosenCards.clear
       end
-
-     @moved = true
+      @chosenCards.clear
   end
 
   # Created 09/12/2019 by Sharon Qiu: For future reference to hint functionality
@@ -123,6 +112,7 @@ class StartScreen < Gosu::Window
     @buttonOption = Gosu::Image.new("media/button.png", :tileable => true)
     @deck = Deck.new
     @playingCards = Array.new
+    @playersCreated = false
 
     #players
     @p1, @p2, @comp = nil, nil, nil
@@ -184,7 +174,6 @@ class StartScreen < Gosu::Window
           index -= 1
           @settings_hovered = Options::LEVELS_SCREEN[index]
         end
-        sleep(0.5)
       elsif Gosu.button_up? Gosu::KB_SPACE
           if @settings_hovered = "Easy"
             @game_settings.cpuDifficulty = "Easy"
@@ -203,19 +192,19 @@ class StartScreen < Gosu::Window
 
       dealCards!(@deck,@cardsShowing)
 
-    if Gosu.button_up? Gosu::KB_LEFT or Gosu.button_down? Gosu::KB_A
-      @P1.move_left
-    elsif Gosu.button_down? Gosu::KB_RIGHT or Gosu.button_down? Gosu::KB_D
-      @P1.move_right
-    elsif Gosu.button_down? Gosu::KB_UP or Gosu.button_down? Gosu::KB_W
-      @P1.move_up
-    elsif Gosu.button_down? Gosu::KB_DOWN or Gosu.button_down? Gosu::KB_S
-      @P1.move_down
-    elsif Gosu.button_down? Gosu::KB_SPACE or Gosu.button_down? Gosu::KB_RETURN
-      @P1.select
-    end
-
-
+      if Gosu.button_up? Gosu::KB_LEFT or Gosu.button_up? Gosu::KB_A
+        @P1.move_left
+      elsif Gosu.button_up? Gosu::KB_RIGHT or Gosu.button_up? Gosu::KB_D
+        @P1.move_right
+      elsif Gosu.button_up? Gosu::KB_UP or Gosu.button_up? Gosu::KB_W
+        @P1.move_up
+      elsif Gosu.button_up? Gosu::KB_DOWN or Gosu.button_up? Gosu::KB_S
+        @P1.move_down
+      elsif Gosu.button_up? Gosu::KB_SPACE or Gosu.button_up? Gosu::KB_RETURN
+        @P1.selection 
+      elsif Gosu.button_up? Gosu::KB_H 
+        @P1.hint 
+      end
 
     end
   end
@@ -264,25 +253,8 @@ class StartScreen < Gosu::Window
     draw_rect(360,250,20,20,Gosu::Color::GRAY,ZOrder::UI) if @settings_hovered == Options::LEVELS_SCREEN[2]
   end
 
-  def printRect selected
-
-    for i in selected.length
-      selected[i]
-    end
-
-
-    # if gameMode == startScreen[0]
-    #   @player1 = Player.new 1
-    # elsif gameMode == startScreen[1]
-    #   @comp = Player.new 0
-    #   @player1 = Player.new 1
-    # elsif gameMode == startScreen[2]
-    #   @player1 = Player.new 1
-    #   @player2 = Player.new 2
-    # end
-  end
-
   # Edited 09/15/2019 by Sharon Qiu: Set up cards based on number of cards played.
+  # Edited 09/16/2019 by Sharon Qiu: Draws rectangles based on selections and current position.
   def draw
     @background_image.draw(0, 0, ZOrder::BACKGROUND)
     if @game_settings.currentScreen == "start"
@@ -295,12 +267,12 @@ class StartScreen < Gosu::Window
     elsif  @game_settings.currentScreen == "game"
 
       # Creates players if need be.
-      if !playersCreated
+      if !@playersCreated
         #todo: make computer class
         # @comp = comp.new if game_settings.computerInit = true
         @p1 = Player(1).new if game_settings.p1Init = true
         @p2 = Player(2).new if game_settings.p2Init = true
-        playersCreated == true
+        @playersCreated == true
       end
       
       # Set-up of maximum available cards
@@ -318,15 +290,28 @@ class StartScreen < Gosu::Window
         end
       end
 
-    #TO MOVE RECTANGLE:
-    # X POSITION = @currentCardIndex % numCols
-    # Y POSITION = @currentCardIndex / numCols
+      #TO MOVE RECTANGLE:
+      # X POSITION = @currentCardIndex % numCols
+      # Y POSITION = @currentCardIndex / numCols
 
-      draw_rect(x_offset + (x_between/2)*(@p1.currentCardIndex  % numCols),y_offset + y_between*(@p1.currentCardIndex  / numCols),20,20,Gosu::Color::PLAYER_COLOR[@p1.playerNumber],ZOrder::CARDS)
+      if @game_settings.p1Init
+        # Draws current position
+        draw_rect(x_offset + (x_between/2)*(@p1.currentCardIndex  % numCols),y_offset + y_between*(@p1.currentCardIndex  / numCols),20,20,Gosu::Color::PLAYER_COLOR[@p1.playerNumber],ZOrder::CARDS)
+        # Draws current selected values
+        @p1.chosenCardsIndexes.each do |index|
+          xpos, ypos = index % numCols, index / numCols
+          draw_rect(x_offset + (x_between/2)*xpos,y_offset + y_between*ypos,20,20,Gosu::Color::PLAYER_COLOR[@p1.playerNumber],ZOrder::CARDS)
+        end
+      end
 
-      @p1.chosenCardsIndexes.each do |index|
-        xpos, ypos = index % numCols, index / numCols
-        draw_rect(x_offset + (x_between/2)*xpos,y_offset + y_between*ypos,20,20,Gosu::Color::PLAYER_COLOR[@p1.playerNumber],ZOrder::CARDS)
+      if @game_settings.p2Init
+        # Draws current position
+        draw_rect(x_offset + (x_between/2)*(@p2.currentCardIndex  % numCols),y_offset + y_between*(@p2.currentCardIndex  / numCols),20,20,Gosu::Color::PLAYER_COLOR[@p2.playerNumber],ZOrder::CARDS)
+        # Draws current selected values
+        @p2.chosenCardsIndexes.each do |index|
+          xpos, ypos = index % numCols, index / numCols
+          draw_rect(x_offset + (x_between/2)*xpos,y_offset + y_between*ypos,20,20,Gosu::Color::PLAYER_COLOR[@p2.playerNumber],ZOrder::CARDS)
+        end
       end
 
     end

@@ -1,6 +1,9 @@
 # File Created 09/10/2019 by Neel Mansukhani
 # Edited 09/15/2019 by Sharon Qiu
 # Edited 09/17/2019 by Sharon Qiu
+# Edited 09/17/2019 by Sri Ramya Dandu
+# Edited 09/18/2019 by Sri Ramya Dandu
+
 require 'gosu'
 require_relative 'GameSettings'
 require_relative 'card'
@@ -8,6 +11,8 @@ require_relative 'deck'
 require_relative 'Draws'
 require_relative 'Player'
 require_relative 'Inputs'
+require_relative 'Set'
+require_relative 'ComputerTimer'
 
 module ZOrder
   BACKGROUND, UI, BUTTON, TEXT, CARDS= *0..4
@@ -23,7 +28,11 @@ GAME_TITLE = "The Game of Set"
 
 
 class StartScreen < Gosu::Window
+
+  # Edited 09/14/2019 by Sri Ramya Dandu: changed background and added buttons
   # Edited 09/17/2019 by Sharon Qiu: added in deck, playingcards, and playersCreated, as well as p1,p2,comp.
+  # Edited 09/17/2019 by Sri Ramya Dandu: added computer timer
+  # Edited 09/18/2019 by Sri Ramya Dandu: Added booleans to track when message is printed
   def initialize
     @game_settings = GameSettings.new
     super 840, 480
@@ -38,22 +47,34 @@ class StartScreen < Gosu::Window
     @deck = Deck.new
     @playingCards = Array.new
     @playersCreated = false
+    @computer_signal = ComputerTimer.new(20)
+    @mes,@false_mes,@true_mes = false,false,false
 
     #players
     @p1, @p2, @comp = nil, nil, nil
   end
   # Edited 09/15/2019 by Sharon Qiu: Edited game settings for gameplay selection, game settings for levels.
   # Edited 09/17/2019 by Sharon Qiu: Edited game screen checks. Split commands into p1 and p2.
+  # Edited 09/17/2019 by Sri Ramya Dandu: Added computer functionality
   def update
     if @game_settings.currentScreen == "start"
       startScreenInputs
     elsif @game_settings.currentScreen =="levels"
       levelsScreenInputs
     elsif  @game_settings.currentScreen == "game"
+      if @game_settings.isCPUPlayerEnabled
+        @computer_signal.level = 100
+        if @computer_signal.update
+          @mes = computerMove(@p1)
+        end
+        @true_mes = @mes && @computer_signal.display_message?
+        @false_mes = !@mes && @computer_signal.display_message?
+      end
       gameScreenInputs(@p1,@p2)
-
     end
   end
+
+
 
   def button_up? id
     button = button_down? id
@@ -75,6 +96,7 @@ class StartScreen < Gosu::Window
   # Edited 09/15/2019 by Sharon Qiu: Set up cards based on number of cards played.
   # Edited 09/16/2019 by Sharon Qiu: Draws rectangles based on selections and current position.
   # Edited 09/17/2019 by Sharon Qiu: Added check for player type.
+  # Edited 09/18/2019 by Sri Ramya Dandu: Added output for computer to GUI
   def draw
 
     @background_image.draw(0, 0, ZOrder::BACKGROUND)
@@ -89,10 +111,22 @@ class StartScreen < Gosu::Window
 
       @deck.dealCards! @playingCards
 
+      if @game_settings.isCPUPlayerEnabled
+        @computer_signal.level = 100
+      end
+
+      if @true_mes
+        @subtitle_font.draw_text("Computer:", 645, 215, ZOrder::TEXT, 1.0, 1.0, Gosu::Color::BLACK)
+        @subtitle_font.draw_text("I found a set!", 645, 245, ZOrder::TEXT, 1.0, 1.0, Gosu::Color::BLACK)
+      end
+
+      if @false_mes
+        @subtitle_font.draw_text("Computer:", 645, 215, ZOrder::TEXT, 1.0, 1.0, Gosu::Color::BLACK)
+        @subtitle_font.draw_text("Oops not a set!", 645, 245, ZOrder::TEXT, 1.0, 1.0, Gosu::Color::BLACK)
+      end
+
       # Creates players if need be.
       if !@playersCreated
-        #todo: make computer class
-        # @comp = comp.new if @game_settings.computerInit = true
         @p1 = Player.new if @game_settings.p1Init == true
         @p2 = Player.new if @game_settings.p2Init == true
         @playersCreated = true

@@ -12,7 +12,7 @@ require_relative 'deck'
 # Edited 09/14/2019 by Neel Mansukhani: Added attribute accessor.
 class Card
 
-    attr_accessor :id, :number, :color, :shape, :shade
+    attr_accessor :id, :number, :color, :shape, :shade, :image
   
     # Created 09/05/2019 by Leah Gillespie
     # Edited 09/10/2019 by David Wing: Added id
@@ -25,6 +25,7 @@ class Card
       @color = color
       @shape = shape
       @shade = shade
+      @image = createCard
     end
   
     # Created 09/05/2019 by Neel Mansukhani
@@ -40,7 +41,7 @@ class Card
       puts("Shade: #{@shade}")
     end
 
-    def image
+    def createCard
       blank_card = Gosu::Image.new("media/card.png", :tileable => true)
       if @color == 0
         color = Gosu::Color::RED
@@ -56,12 +57,27 @@ class Card
           if @shape == 0
             Gosu.draw_rect(x,y,487,200,color,ZOrder::CARDS)
             Gosu.draw_rect(x+20,y+20,487 - 40,200 - 40,Gosu::Color::WHITE,ZOrder::CARDS) if @shade != 0
+            if @shade == 2
+              Gosu.draw_rect(x,y+40,487,20,color,ZOrder::CARDS)
+              Gosu.draw_rect(x,y+90,487,20,color,ZOrder::CARDS)
+              Gosu.draw_rect(x,y+130,487,20,color,ZOrder::CARDS)
+            end
           elsif @shape == 1
             Gosu.draw_triangle(294, y, color, 94, y + 200, color, 494, y + 200, color,ZOrder::CARDS)
             Gosu.draw_triangle(294, y + 20, Gosu::Color::WHITE, 94 + 40, y + 200 - 20, Gosu::Color::WHITE, 494 - 40, y + 200 - 20, Gosu::Color::WHITE,ZOrder::CARDS) if @shade != 0
+            if @shade == 2
+              Gosu.draw_rect(294-40,y+40,80,20,color,ZOrder::CARDS)
+              Gosu.draw_rect(294-90,y+90,180,20,color,ZOrder::CARDS)
+              Gosu.draw_rect(294-130,y+130,260,20,color,ZOrder::CARDS)
+            end
           else
             Gosu.draw_quad(x,y,color,x+437,y,color,x+50,y+200,color,x+487,y+200,color,ZOrder::CARDS)
-            Gosu.draw_quad(x+20,y+20,Gosu::Color::WHITE,x+437-20,y+20,Gosu::Color::WHITE,x+50+20,y+200-20,Gosu::Color::WHITE,x+487-20,y+200-20,Gosu::Color::WHITE,ZOrder::CARDS) if @shade != 0
+       Gosu.draw_quad(x+20,y+20,Gosu::Color::WHITE,x+437-20,y+20,Gosu::Color::WHITE,x+50+20,y+200-20,Gosu::Color::WHITE,x+487-20,y+200-20,Gosu::Color::WHITE,ZOrder::CARDS) if @shade != 0
+            if @shade == 2
+              Gosu.draw_rect(x,y+40,487,20,color,ZOrder::CARDS)
+              Gosu.draw_rect(x,y+90,487,20,color,ZOrder::CARDS)
+              Gosu.draw_rect(x,y+130,487,20,color,ZOrder::CARDS)
+            end
           end
           y += 250
         end

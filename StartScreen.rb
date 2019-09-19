@@ -195,5 +195,6 @@ class StartScreen < Gosu::Window
     end
   end
 end
-
-StartScreen.new.show
+if __FILE__ == $0
+  StartScreen.new.show
+end

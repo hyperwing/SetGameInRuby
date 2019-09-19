@@ -32,6 +32,7 @@ Any minor edits to main functionalities were implemented by whichever group memb
 Step 1. Install Gosu using the instructions below.
 
   Gosu Requirements: 
+  
   a. Update/ upgrade exisiting packages with the following call
     sudo apt-get update
     sudo apt-get upgrade

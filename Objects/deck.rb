@@ -3,20 +3,19 @@
 # Edited 09/16/2019 by Sri Ramya Dandu
 # Edited 09/17/2019 by Sharon Qiu
 
-require_relative 'Set'
-require_relative 'card'
-
 # File created 9/05/2019 by David Wing
 # Edited 09/16/2019 by Sri Ramya Dandu
 # Defines the methods and structures for a deck of cards
 class Deck
+    # TODO: Temporary Fix
+    include SetFunctions
     # cards is an array of Card Objects in the deck
     # count is how many cards are in the deck
     attr_accessor :cards, :deckCount
 
     # Created 9/05/2019 by David Wing
     # Creates a new instance of Card with the given attributes
-    def initialize()
+    def initialize
         @cards = createDeck
         @deckCount = 81
     end
@@ -63,7 +62,7 @@ class Deck
     
         #initializing deck.
         if cardsShowing.length == 0
-            12.times do
+            15.times do
                 card = cards.delete_at(rand(cards.length))
                 cardsShowing.push(card)
                 self.deckCount-=1
@@ -89,16 +88,4 @@ class Deck
             end
         end
     end
-
-    # Created 09/06/2019 by Neel Mansukhani
-    # Edited 09/15/2019 by Sri Ramya Dandu: added function back to the file
-    #
-    # Returns card from an array with the given id
-    # Returns card from the total deck with the given id
-    def getCardById(deck,id)
-        deck.each do |card|
-            return card if card.id == id
-        end
-    end
-
 end

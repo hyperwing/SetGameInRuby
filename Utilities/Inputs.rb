@@ -72,8 +72,9 @@ module Inputs
       end
     end
   end
-
-  # Created 09/17/2019 by Neel Mansukhani
+  # Created 09/17/2019 by Sharon Qiu
+  # Edited 09/17/2019 by Neel Mansukhani: Moved to Inputs Module
+  # Edited 09/18/2019 by Neel Mansukhani: Removed isASet? from deck.
   # Edited 09/18/2019 by Leah Gillespie: adding statistics and score calculations
   # Checks in game user input for one and two players
   # Edited 09/19/2019 by Sharon Qiu: Edited code
@@ -113,6 +114,7 @@ module Inputs
       if @p1.chosenCardsIndexes.length == 3
         # TODO: In the future, implement check for score adjustments with hint usage
         if @p1.chosenSetValidity @playingCards
+
           puts "Set found"
           @p2.cleanSlate if @game_settings.p2Init
 
@@ -171,7 +173,6 @@ module Inputs
       # Checks the validity of a set.
       if @p2.chosenCardsIndexes.length == 3
         # TODO: In the future, implement check for score adjustments with hint usage
-
         if @p2.chosenSetValidity @playingCards
           puts "Set found"
           @p1.cleanSlate if @game_settings.p1Init
@@ -189,12 +190,17 @@ module Inputs
           puts "Average time to find a set: #{avgTime}"
           #puts "Hints used so far: #{@p2.hintsUsed}"
           @p2.setTimer.reset
+
         else
           puts "Set not found"
           @p2.score -=1
           # TODO: Make a trigger for updating the window
         end
       end
+    end
+
+    if @game_settings.areHintsEnabled and button_up? Gosu::KB_H
+      @hint = @p1.get_hint @playingCards
     end
 
   end
@@ -247,7 +253,5 @@ def computerMove p1
   puts
 
   return found
-
-
 end
 

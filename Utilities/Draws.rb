@@ -5,6 +5,7 @@
 module Draws
   # Created 09/15/2019 by Sri Ramya Dandu
   # Edited 09/15/2019 by Neel Mansukhani: Moved to Draw File
+  # Edited 09/19/2019 by Sharon Qiu: Edited offset of drawn
   # Draws images, shapes, and text on start screen.
   def startScreen
     @title_font.draw_text("The Game of Set", 250, 50, ZOrder::TEXT, 1.0, 1.0, Gosu::Color::BLACK)
@@ -17,9 +18,9 @@ module Draws
     @subtitle_font.draw_text(Options::START_SCREEN[0], 240, 282, ZOrder::TEXT, 1.0, 1.0, Gosu::Color::BLACK)
     @subtitle_font.draw_text(Options::START_SCREEN[1], 395, 282, ZOrder::TEXT, 1.0, 1.0, Gosu::Color::BLACK)
     @subtitle_font.draw_text(Options::START_SCREEN[2], 573, 282, ZOrder::TEXT, 1.0, 1.0, Gosu::Color::BLACK)
-    draw_rect(190,220,20,20,Gosu::Color::GRAY,ZOrder::UI) if @settings_hovered == Options::START_SCREEN[0]
-    draw_rect(360,220,20,20,Gosu::Color::GRAY,ZOrder::UI) if @settings_hovered == Options::START_SCREEN[1]
-    draw_rect(530,220,20,20,Gosu::Color::GRAY,ZOrder::UI) if @settings_hovered == Options::START_SCREEN[2]
+    draw_rect(250,250,20,20,Gosu::Color::GRAY,ZOrder::TEXT) if @settings_hovered == Options::START_SCREEN[0]
+    draw_rect(420,250,20,20,Gosu::Color::GRAY,ZOrder::TEXT) if @settings_hovered == Options::START_SCREEN[1]
+    draw_rect(590,250,20,20,Gosu::Color::GRAY,ZOrder::TEXT) if @settings_hovered == Options::START_SCREEN[2]
   end
 
   # Created 09/15/2019 by Sri Ramya Dandu

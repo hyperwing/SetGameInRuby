@@ -1,14 +1,15 @@
 # File Created 09/17/2019 by Neel Mansukhani
 
-#srequire_relative 'Set'
 # Created 09/12/2019 by Sharon Qiu: Skeleton code for player movement only within the game.
 # Edited 09/15/2019 by Sharon Qiu: merged in player class into StartScreen file.
 # Edited 09/17/2019 by Sharon Qiu: Edited all player movement functions.
 # Edited 09/18/2019 by Sharon Qiu: Introduced parallel mapping keys.
 # Edited 09/18/2019 by Leah Gillespie: Added player stats and score as instance variables
+# Edited 09/18/2019 by Sharon Qiu: Included setFunctions module. Also moved get_hint into player class.
 class Player
 
-  attr_accessor :currentCardIndex, :chosenCards, :chosenCardsIndexes, :playerControls, :playerMovement, :setTimer, :setTimes, :hintsUsed, :score
+  include SetFunctions
+  attr_accessor :currentCardIndex, :chosenCards, :chosenCardsIndexes, :playerControls, :playerMovement, :setTimer, :setTimes, :hintsUsed, :score, :hint_open
 
   @@p1Controls = [Gosu::KB_A, Gosu::KB_D, Gosu::KB_W, Gosu::KB_S, Gosu::KB_SPACE]
   @@p2Controls = [Gosu::KB_LEFT, Gosu::KB_RIGHT, Gosu::KB_UP, Gosu::KB_DOWN, Gosu::KB_RETURN]
@@ -24,6 +25,7 @@ class Player
     @setTimer = AllTimers.new
     @setTimes = Array.new
     @hintsUsed = 0
+    @hint_open = false
     @score = 0
   end
 
@@ -44,7 +46,7 @@ class Player
   def move_right playingCards
 
     numCols = playingCards.length/3
-    if @currentCardIndex % numCols == 3 and @currentCardIndex - (numCols-1) >= 0
+    if @currentCardIndex % numCols == (numCols-1) and @currentCardIndex - (numCols-1) >= 0
       @currentCardIndex -= (numCols-1)
     else
       @currentCardIndex += 1
@@ -96,4 +98,23 @@ class Player
     valid
   end
 
+  # Created 09/13/2019 by David Wing: Moved functionality to its own method.
+  # Edited 09/15/2019 by Sri Ramya Dandu: Removed a parameter
+  # Edited 09/19/2019 by Sharon Qiu: edited so it triggers hint_open.
+  #
+  # Given a valid set from the table, outputs two cards that make up a set
+  # Returns array of two card objects that are the hint
+  def get_hint cardsShowing
+    valid_set = valid_table cardsShowing
+    puts("look for a pair with these cards: ")
+    puts("card " + cardsShowing[valid_set[0]].id.to_s + " and card " + cardsShowing[valid_set[1]].id.to_s)
+    # TODO: Remove before submitting.
+    # puts("card 3:" + cardsShowing[valid_set[2]].id.to_s) #DEBUG message
+
+    @hint_open = true
+    @score -= 0.5
+
+    return [cardsShowing[valid_set[0]], cardsShowing[valid_set[1]]]
+
+  end
 end

@@ -49,7 +49,7 @@ class StartScreen < Gosu::Window
     @game_settings = GameSettings.new
     super 840, 480
     self.caption = GAME_TITLE
-    @settings_hovered = Options::GAMEOVER_SCREEN[0]
+    @settings_hovered = Options::START_SCREEN[0]
     @pressed = nil
     @title_font = Gosu::Font.new(50)
     @subtitle_font = Gosu::Font.new(20)
@@ -86,7 +86,7 @@ class StartScreen < Gosu::Window
         @false_mes = !@mes && @computer_signal.display_message?
       end
       gameScreenInputs
-    elsif @game_settings.currentScreen == "gameOverScreen"
+    elsif @game_settings.currentScreen == "gameover"
       gameOverScreenInputs
 
     end
@@ -125,11 +125,15 @@ class StartScreen < Gosu::Window
     elsif @game_settings.currentScreen == "test"
       x = Card.new(0,2,0,2,2)
       x.image.draw(0,0,ZOrder::CARDS, 0.15, 0.15)
-    elsif @game_settings.currentScreen == "gameOverScreen"
+    elsif @game_settings.currentScreen == "gameover"
       gameOverScreen
     elsif  @game_settings.currentScreen == "game"
 
       @deck.dealCards! @playingCards
+
+      if @deck.deckCount == 0
+        @game_settings.currentScreen == "gameover"
+      end
 
       if @game_settings.isCPUPlayerEnabled
         @computer_signal.level = 100

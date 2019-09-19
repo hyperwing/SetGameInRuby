@@ -3,7 +3,7 @@
 class GameSettings
   attr_accessor :currentScreen,:isTwoPlayerEnabled,:isCPUPlayerEnabled,:cpuDifficulty,:p1Init,:p2Init,:computerInit
   def initialize
-    @currentScreen = "gameOverScreen"
+    @currentScreen = "start"
     @areHintsEnabled = true
     @isTwoPlayerEnabled = false
     @isCPUPlayerEnabled = false

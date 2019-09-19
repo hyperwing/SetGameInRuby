@@ -1,4 +1,5 @@
 # File Created 09/10/2019 by Neel Mansukhani
+# File Renamed 09/19/2019 by Neel Mansukhani to Set.rb
 # Edited 09/12/2019 by Neel Mansukhani
 # Edited 09/15/2019 by Sharon Qiu
 # Edited 09/15/2019 by Neel Mansukhani
@@ -8,15 +9,17 @@
 # Edited 09/18/2019 by Neel Mansukhani
 # Edited 09/18/2019 by Sri Ramya Dandu
 
+# Edited 09/18/2019 by Neel Mansukhani: Change directory location of files.
 require 'gosu'
-require_relative 'GameSettings'
-require_relative 'card'
-require_relative 'deck'
-require_relative 'Draws'
-require_relative 'Player'
-require_relative 'Inputs'
-require_relative 'Set'
-require_relative 'ComputerTimer'
+require_relative 'Utilities/SetFunctions'
+require_relative 'Objects/GameSettings'
+require_relative 'Objects/card'
+require_relative 'Objects/deck'
+require_relative 'Objects/timer'
+require_relative 'Utilities/Draws'
+require_relative 'Objects/Player'
+require_relative 'Utilities/Inputs'
+require_relative 'Objects/ComputerTimer'
 
 module ZOrder
   BACKGROUND, UI, BUTTON, TEXT, CARDS= *0..4
@@ -35,9 +38,9 @@ GAME_TITLE = "The Game of Set"
   this program loops through input calls, draw, update on frequent intervals
   while the game is running.
 =end
-class StartScreen < Gosu::Window
+class SetGame < Gosu::Window
   # Edited 09/18/2019 by Neel Mansukhani: Moved methods to modules.
-  include Inputs, Draws
+  include Inputs, Draws, SetFunctions
 
   #Created 09/10/2019 by Neel Mansukhani
   # Edited 09/14/2019 by Sri Ramya Dandu: changed background and added buttons
@@ -195,5 +198,4 @@ class StartScreen < Gosu::Window
     end
   end
 end
-
-StartScreen.new.show
+SetGame.new.show

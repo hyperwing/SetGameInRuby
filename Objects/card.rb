@@ -3,8 +3,6 @@
 # Edited 09/18/2019 by Neel Mansukhani
 # Defines methods and structures for Card object
 
-require_relative 'Set'
-require_relative 'deck'
 
 # TODO: Add file description for every file.
 # TODO: Multi line comments for function descriptions.

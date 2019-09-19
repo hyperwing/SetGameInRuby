@@ -76,8 +76,8 @@ module Inputs
   # Edited 09/17/2019 by Neel Mansukhani: Moved to Inputs Module
   # Edited 09/18/2019 by Neel Mansukhani: Removed isASet? from deck.
   # Edited 09/18/2019 by Leah Gillespie: adding statistics and score calculations
+  # Edited 09/19/2019 by Sharon Qiu: Cleaned up movement checks.
   # Checks in game user input for one and two players
-  # Edited 09/19/2019 by Sharon Qiu: Edited code
   def gameScreenInputs
 
     movementIndex = 0 # used to track switch cases

@@ -5,7 +5,7 @@
 # Edited 09/17/2019 by Sharon Qiu: Edited all player movement functions.
 # Edited 09/18/2019 by Sharon Qiu: Introduced parallel mapping keys.
 # Edited 09/18/2019 by Leah Gillespie: Added player stats and score as instance variables
-# Edited 09/18/2019 by Sharon Qiu: Included setFunctions module. Also moved get_hint into player class.
+# Edited 09/18/2019 by Sharon Qiu: Included setFunctions module. Also moved get_hint into player class. Also created 2 new functions, chosen set validity and clean slate.
 class Player
 
   include SetFunctions

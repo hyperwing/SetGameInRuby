@@ -87,21 +87,4 @@ module SetFunctions
 
     return []
   end
-
-
-  # Created 09/13/2019 by David Wing: Moved functionality to its own method.
-  # Edited 09/15/2019 by Sri Ramya Dandu: Removed a parameter
-  # Given a valid set from the table, outputs two cards that make up a set
-  # Returns array of two card objects that are the hint
-  def get_hint(cardsShowing)
-    valid_set = valid_table cardsShowing
-    puts("look for a pair with these cards: ")
-    puts("card " + cardsShowing[valid_set[0]].id.to_s + " and card " + cardsShowing[valid_set[1]].id.to_s)
-    # TODO: Remove before submitting.
-    # puts("card 3:" + cardsShowing[valid_set[2]].id.to_s) #DEBUG message
-    # TODO: Terse code?
-    return [cardsShowing[valid_set[0]], cardsShowing[valid_set[1]]]
-    # Decrease score because you cheated
-    $playerScore -= 0.5
-  end
 end

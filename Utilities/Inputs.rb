@@ -76,8 +76,8 @@ module Inputs
   # Edited 09/17/2019 by Neel Mansukhani: Moved to Inputs Module
   # Edited 09/18/2019 by Neel Mansukhani: Removed isASet? from deck.
   # Edited 09/18/2019 by Leah Gillespie: adding statistics and score calculations
+  # Edited 09/19/2019 by Sharon Qiu: Cleaned up movement checks.
   # Checks in game user input for one and two players
-  # Edited 09/19/2019 by Sharon Qiu: Edited code
   def gameScreenInputs
 
     movementIndex = 0 # used to track switch cases
@@ -96,7 +96,6 @@ module Inputs
         @p1.move_left @playingCards
         puts "p1 index: #{@p1.currentCardIndex}"
       when 1
-        puts movementIndex
         @p1.move_right @playingCards
         puts "p1 index: #{@p1.currentCardIndex}"
       when 2
@@ -107,16 +106,17 @@ module Inputs
         puts "p1 index: #{@p1.currentCardIndex}"
       when 4
         @p1.selection @playingCards
-        puts "p1 index: #{@p1.currentCardIndex}"
+      else
+        nil
       end
 
       # Checks the validity of a set.
       if @p1.chosenCardsIndexes.length == 3
         # TODO: In the future, implement check for score adjustments with hint usage
         if @p1.chosenSetValidity @playingCards
+
           puts "Set found"
           @p2.cleanSlate if @game_settings.p2Init
-          # TODO: Change score, make a trigger for updating the window
 
           @p1.setTimer.updateTime
           @p1.setTimes.push @p1.setTimer.current
@@ -133,7 +133,7 @@ module Inputs
 
         else
           puts "Set not found"
-          @p1.score -= 1
+	        @p1.score -= 1
           # TODO: Make a trigger for updating the window
         end
       end
@@ -165,18 +165,18 @@ module Inputs
         puts "p2 index: #{@p2.currentCardIndex}"
       when 4
         @p2.selection @playingCards
-        puts "p2 index: #{@p2.currentCardIndex}"
+      else
+        nil
       end
 
       # Checks the validity of a set.
       if @p2.chosenCardsIndexes.length == 3
         # TODO: In the future, implement check for score adjustments with hint usage
-        # Checks the validity of a set.
         if @p2.chosenSetValidity @playingCards
           puts "Set found"
           @p1.cleanSlate if @game_settings.p1Init
+
 	        @p2.setTimer.updateTime
-          # TODO: Make a trigger for updating the window
           @p2.setTimes.push @p2.setTimer.current
           @p2.score += 1
           @p2.setTimes.sort!
@@ -197,6 +197,10 @@ module Inputs
       end
     end
 
+    if @game_settings.areHintsEnabled and button_up? Gosu::KB_H
+      @hint = @p1.get_hint @playingCards
+    end
+
   end
 end
 
@@ -206,7 +210,8 @@ end
 # Edited 09/15/2019 by Sri Ramya Dandu: Added levels of difficulty
 # Edited 09/15/2019 by Sri Ramya Dandu: changed arrays back to local variables
 # Edited 09/17/2019 by Sri Ramya Dandu: removed threading features and modified for GUI output
-def computerMove(p1)
+# Edited 09/19/2019 by Sharon Qiu: replaced p1 card clearing with method clean slate.
+def computerMove p1
   indexSet = Array.new
 
   found = false
@@ -235,8 +240,7 @@ def computerMove(p1)
     @playingCards.delete(card1)
     @playingCards.delete(card2)
     @playingCards.delete(card3)
-    p1.chosenCards.clear
-    p1.chosenCardsIndexes.clear
+    p1.cleanSlate
 
   else
     puts("That is not a set.")
@@ -247,7 +251,5 @@ def computerMove(p1)
   puts
 
   return found
-
-
 end
 

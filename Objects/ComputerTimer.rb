@@ -1,8 +1,6 @@
 # File created 09/17/2019 by Sri Ramya Dandu
 # Edited 09/18/2019 by Sri Ramya Dandu
 
-require_relative 'card'
-require_relative 'deck'
 
 # Created 09/17/2019 by Sri Ramya Dandu
 # Edited 09/18/2019 by Sri Ramya Dandu: Added function display_message?

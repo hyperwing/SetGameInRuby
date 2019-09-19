@@ -71,9 +71,10 @@ module Inputs
       end
     end
   end
-
-  # Created 09/17/2019 by Neel Mansukhani
-  # Checks in game user input for one and two players
+  # Created 09/17/2019 by Sharon Qiu
+  # Edited 09/17/2019 by Neel Mansukhani: Moved to Inputs Module
+  # Edited 09/18/2019 by Neel Mansukhani: Removed isASet? from deck.
+  # Checks in-game user input for one and two players
   def gameScreenInputs
     if button_up? Gosu::KB_A
       @p1.move_left @playingCards
@@ -92,7 +93,7 @@ module Inputs
 
       if @p1.chosenCardsIndexes.length == 3
         # TODO: In the future, implement check for score adjustments with hint usage
-        if @deck.isASet?(@p1.chosenCards)
+        if isASet?(@p1.chosenCards)
           puts "Set found"
           @playingCards -= @p1.chosenCards
           @p1.chosenCards.clear #clears it so if selected cards were ones already chosen/found, it doesn't cause conflicts
@@ -127,7 +128,7 @@ module Inputs
 
       if @p2.chosenCardsIndexes.length == 3
         # TODO: In the future, implement check for score adjustments with hint usage
-        if @deck.isASet?(@p2.chosenCards)
+        if isASet?(@p2.chosenCards)
           puts "Set found"
           @playingCards -= @p2.chosenCards
           @p1.chosenCards.clear #clears it so if selected cards were ones already chosen/found, it doesn't cause conflicts
@@ -174,7 +175,7 @@ def computerMove(p1)
   puts "--------------------Computer Took A Turn------------------"
   puts "Computer Player: I chose Card #{card1.id}, Card #{card2.id}, and Card #{card3.id}"
 
-  if(@deck.isASet?([card1,card2,card3]))
+  if(isASet?([card1,card2,card3]))
     puts("That is a set!")
     found = true
     @playingCards.delete(card1)

@@ -5,13 +5,15 @@
 
 # Defines the methods and structures for a deck of cards
 class Deck
+    # TODO: Temporary Fix
+    include SetFunctions
     # cards is an array of Card Objects in the deck
     # count is how many cards are in the deck
     attr_accessor :cards, :deckCount
 
     # Created 9/05/2019 by David Wing
     # Creates a new instance of Card with the given attributes
-    def initialize()
+    def initialize
         @cards = createDeck
         @deckCount = 81
     end
@@ -86,33 +88,4 @@ class Deck
             end
         end
     end
-
-    # Created 09/04/2019 by Sri Ramya Dandu
-    # Edited 09/07/2019 by Sri Ramya Dandu: Optimized the checking method - made function concise
-    #   Checks if the 3 cards are a valid set or not. To be a valid set, all 3 cards must either have the same
-    #   attribute or all different attributes for each of the following attributes: number, color,shape,shade.
-    #   @param card1, card2, card3 to evaluate whether they form a set or not
-    #   @returns true if cards form a valid set, false otherwise
-    #   @updates $score
-    def isASet?(cards)
-        # The sum when adding one number 3 times or adding 3 consecutive numbers is divisible by 3.
-        # This represents having all the same attribute or all different attributes.
-        # Adding any other 3 number combo of 1,2,3 will result in a value not divisible by 3, failing to be a set.
-        (cards[0].number + cards[1].number + cards[2].number) % 3 == 0 &&
-            (cards[0].color + cards[1].color + cards[2].color) % 3 == 0 &&
-            (cards[0].shape + cards[1].shape + cards[2].shape) % 3 == 0 &&
-            (cards[0].shade + cards[1].shade + cards[2].shade) % 3 == 0
-    end
-
-    # Created 09/06/2019 by Neel Mansukhani
-    # Edited 09/15/2019 by Sri Ramya Dandu: added function back to the file
-    #
-    # Returns card from an array with the given id
-    # Returns card from the total deck with the given id
-    def getCardById(deck,id)
-        deck.each do |card|
-            return card if card.id == id
-        end
-    end
-
 end

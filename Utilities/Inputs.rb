@@ -113,11 +113,7 @@ module Inputs
       # Checks the validity of a set.
       if @p1.chosenCardsIndexes.length == 3
         # TODO: In the future, implement check for score adjustments with hint usage
-<<<<<<< HEAD
         if @p1.chosenSetValidity @playingCards
-=======
-        if @p1.chosenSetValidity! @playingCards
->>>>>>> 3d7691680fb9ed2d6443cad77783fd58bdacb665
           puts "Set found"
           @p2.cleanSlate if @game_settings.p2Init
 	  @p1.setTimer.updateTime

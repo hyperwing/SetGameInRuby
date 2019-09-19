@@ -1,7 +1,11 @@
 # File Created 09/10/2019 by Neel Mansukhani
+# Edited 09/12/2019 by Neel Mansukhani
 # Edited 09/15/2019 by Sharon Qiu
+# Edited 09/15/2019 by Neel Mansukhani
+# Edited 09/16/2019 by Neel Mansukhani
 # Edited 09/17/2019 by Sharon Qiu
 # Edited 09/17/2019 by Sri Ramya Dandu
+# Edited 09/18/2019 by Neel Mansukhani
 # Edited 09/18/2019 by Sri Ramya Dandu
 
 require 'gosu'
@@ -26,11 +30,16 @@ end
 
 GAME_TITLE = "The Game of Set"
 
-
+=begin
+  This class extends Gosu's window class. When the show method is called,
+  this program loops through input calls, draw, update on frequent intervals
+  while the game is running.
+=end
 class StartScreen < Gosu::Window
   # Edited 09/18/2019 by Neel Mansukhani: Moved methods to modules.
   include Inputs, Draws
 
+  #Created 09/10/2019 by Neel Mansukhani
   # Edited 09/14/2019 by Sri Ramya Dandu: changed background and added buttons
   # Edited 09/17/2019 by Sharon Qiu: added in deck, playingcards, and playersCreated, as well as p1,p2,comp.
   # Edited 09/17/2019 by Sri Ramya Dandu: added computer timer
@@ -55,6 +64,8 @@ class StartScreen < Gosu::Window
     #players
     @p1, @p2, @comp = nil, nil, nil
   end
+
+  # Created 09/10/2019 by Neel Mansukhani
   # Edited 09/15/2019 by Sharon Qiu: Edited game settings for gameplay selection, game settings for levels.
   # Edited 09/17/2019 by Sharon Qiu: Edited game screen checks. Split commands into p1 and p2.
   # Edited 09/17/2019 by Sri Ramya Dandu: Added computer functionality
@@ -76,8 +87,9 @@ class StartScreen < Gosu::Window
     end
   end
 
-
-
+  # TODO: override button_down? instead
+  # Created 09/16/2019 by Neel Mansukhani
+  # Makes Gosu's button_down? function recieve one input per key input.
   def button_up? id
     button = button_down? id
     if @pressed != id and @pressed != nil
@@ -94,13 +106,12 @@ class StartScreen < Gosu::Window
 
 
 
-
+  # Created 09/10/2019 by Neel Mansukhani
   # Edited 09/15/2019 by Sharon Qiu: Set up cards based on number of cards played.
   # Edited 09/16/2019 by Sharon Qiu: Draws rectangles based on selections and current position.
   # Edited 09/17/2019 by Sharon Qiu: Added check for player type.
   # Edited 09/18/2019 by Sri Ramya Dandu: Added output for computer to GUI
   def draw
-
     @background_image.draw(0, 0, ZOrder::BACKGROUND)
     if @game_settings.currentScreen == "start"
       startScreen

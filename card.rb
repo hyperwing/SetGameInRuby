@@ -1,4 +1,6 @@
 # File Created 9/15/019 David Wing
+# Edited 09/17/2019 by Neel Mansukhani
+# Edited 09/18/2019 by Neel Mansukhani
 # Defines methods and structures for Card object
 
 require_relative 'Set'
@@ -17,7 +19,7 @@ class Card
     # Created 09/05/2019 by Leah Gillespie
     # Edited 09/10/2019 by David Wing: Added id
     # Edited 09/15/2019 by Sri Ramya Dandu: Added documentation
-  
+    # Edited 09/17/2019 by Neel Mansukhani: Card is rendered on initialization.
     # Creates a new instance of Card with the given attributes
     def initialize(id, number, color, shape, shade)
       @id = id
@@ -31,7 +33,6 @@ class Card
     # Created 09/05/2019 by Neel Mansukhani
     # Edited 09/06/2019 by Neel Mansukhani: Cleaned up display
     # Edited 09/15/2019 by Sri Ramya Dandu: Added documentation
-  
     # Prints out the cards attributes
     def display
       print("Card: #{@id} ")
@@ -41,6 +42,10 @@ class Card
       puts("Shade: #{@shade}")
     end
 
+    # Created 09/16/2019 by Neel Mansukhani
+    # Edited 09/17/2019 by Neel Mansukhani: Accounted for shade
+    # Edited 09/18/2019 by Neel Mansukhani: Fixed parallelogram shade.
+    # Renders card based on its number, color, shape, shade
     def createCard
       blank_card = Gosu::Image.new("media/card.png", :tileable => true)
       if @color == 0

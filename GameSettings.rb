@@ -13,7 +13,25 @@ class GameSettings
     @p2Init = false
     @computerInit = false
   end
+  # Created 09/18/2019 by Neel Mansukhani
+  # Changes game mode and related variables, based on user selection.
   def changeGameMode(gameMode)
-    # TODO: do this
+    if gameMode == "SOLO"
+      @p1Init = true
+      @currentScreen = "game"
+      @areHintsEnabled = true
+    elsif gameMode == "Computer"
+      @isCPUPlayerEnabled = true
+      @p1Init = true
+      @computerInit = true
+      @currentScreen = "levels"
+      @areHintsEnabled = true
+    else
+      @isTwoPlayerEnabled = true
+      @p1Init = true
+      @p2Init = true
+      @currentScreen = "game"
+      @areHintsEnabled = false
+    end
   end
 end

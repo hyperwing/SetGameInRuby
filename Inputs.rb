@@ -1,6 +1,14 @@
-#File Created 09/17/2019 by Neel Mansukhani
+# File Created 09/17/2019 by Neel Mansukhani
+# File Edited 09/18/2019 by Neel Mansukhani
+=begin
+  This file contains functions for most input checks in the game.
+  The input module is included in the Set class.
+=end
+
+# Edited 09/18/2019 by Neel Mansukhani: Put functions in the module
 module Inputs
-# Created 09/17/2019 by Neel Mansukhani
+  # Created 09/17/2019 by Neel Mansukhani
+  # Checks the user inputs and allows user to select game mode
   def startScreenInputs
     index = Options::START_SCREEN.find_index @settings_hovered
     if button_up? Gosu::KB_D
@@ -18,25 +26,12 @@ module Inputs
         @settings_hovered = Options::START_SCREEN[index]
       end
     elsif button_up? Gosu::KB_SPACE
-      if @settings_hovered == "SOLO"
-        @game_settings.p1Init = true
-        @game_settings.currentScreen = "levels"
-        @settings_hovered = Options::LEVELS_SCREEN[0]
-      elsif @settings_hovered == "Computer"
-        @game_settings.isCPUPlayerEnabled = true
-        @game_settings.p1Init = true
-        @game_settings.computerInit = true
-        @game_settings.currentScreen = "levels"
-      else
-        @game_settings.isTwoPlayerEnabled = true
-        @game_settings.p1Init = true
-        @game_settings.p2Init = true
-        @game_settings.currentScreen = "game"
-        # TODO: Move Cursor
-      end
+      @game_settings.changeGameMode @settings_hovered
+      @settings_hovered = Options::LEVELS_SCREEN[0]
     end
   end
-# Created 09/17/2019 by Neel Mansukhani
+  # Created 09/17/2019 by Neel Mansukhani
+  # Checks the user input and allows users to select CPU difficulty
   def levelsScreenInputs
     index = Options::LEVELS_SCREEN.find_index @settings_hovered
     if button_up? Gosu::KB_S
@@ -77,7 +72,8 @@ module Inputs
     end
   end
 
-# Created 09/17/2019 by Neel Mansukhani
+  # Created 09/17/2019 by Neel Mansukhani
+  # Checks in game user input for one and two players
   def gameScreenInputs
     if button_up? Gosu::KB_A
       @p1.move_left @playingCards

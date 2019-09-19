@@ -3,7 +3,7 @@
 class GameSettings
   attr_accessor :currentScreen,:isTwoPlayerEnabled,:isCPUPlayerEnabled,:cpuDifficulty,:p1Init,:p2Init,:computerInit
   def initialize
-    @currentScreen = "start"
+    @currentScreen = "gameOverScreen"
     @areHintsEnabled = true
     @isTwoPlayerEnabled = false
     @isCPUPlayerEnabled = false
@@ -13,6 +13,7 @@ class GameSettings
     @p2Init = false
     @computerInit = false
   end
+
   # Created 09/18/2019 by Neel Mansukhani
   # Changes game mode and related variables, based on user selection.
   def changeGameMode(gameMode)

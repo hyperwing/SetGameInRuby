@@ -1,5 +1,6 @@
 # File Created 09/17/2019 by Neel Mansukhani
 # File Edited 09/18/2019 by Neel Mansukhani
+# File edited 09/18/2019 by David Wing
 =begin
   This file contains functions for most input checks in the game.
   The input module is included in the Set class.
@@ -144,6 +145,37 @@ module Inputs
   end
 end
 
+# Created 9/18/19 David Wing
+# Checks inputs when player hits gameover screen
+def gameOverScreenInputs
+  index = Options::GAMEOVER_SCREEN.find_index @settings_hovered
+  if button_up? Gosu::KB_D
+    if index == 1
+      @settings_hovered = Options::GAMEOVER_SCREEN[0]
+    else
+      index += 1
+      @settings_hovered = Options::GAMEOVER_SCREEN[index]
+    end
+  elsif button_up? Gosu::KB_A
+    if index == 0
+      @settings_hovered = Options::GAMEOVER_SCREEN[2]
+    else
+      index -= 1
+      @settings_hovered = Options::GAMEOVER_SCREEN[index]
+    end
+  elsif button_up? Gosu::KB_SPACE
+
+    if  index == 0
+    # Choose home
+      # @game_settings.currentScreen = StartScreen
+      StartScreen.new.show
+
+    else 
+      close
+    end
+
+  end
+end
 
 # Created 09/08/2019 by Sri Ramya Dandu
 # Edited 09/09/2019 by Sri Ramya Dandu: Update and display deck and scores

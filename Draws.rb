@@ -37,4 +37,19 @@ module Draws
     draw_rect(360,170,20,20,Gosu::Color::GRAY,ZOrder::UI) if @settings_hovered == Options::LEVELS_SCREEN[1]
     draw_rect(360,250,20,20,Gosu::Color::GRAY,ZOrder::UI) if @settings_hovered == Options::LEVELS_SCREEN[2]
   end
+
+  def gameOverScreen
+    @subtitle_font.draw_text("Final Score: ", 170, 130, ZOrder::TEXT, 1.0, 1.0, Gosu::Color::WHITE)
+    @buttonOption.draw(190,220, ZOrder::BUTTON,0.15,0.15)
+    @buttonOption.draw(360,220, ZOrder::BUTTON,0.15,0.15)
+    @subtitle_font.draw_text(Options::GAMEOVER_SCREEN[0], 240, 282, ZOrder::TEXT, 1.0, 1.0, Gosu::Color::BLACK)
+    @subtitle_font.draw_text(Options::GAMEOVER_SCREEN[1], 395, 282, ZOrder::TEXT, 1.0, 1.0, Gosu::Color::BLACK)
+    draw_rect(190,220,20,20,Gosu::Color::GRAY,ZOrder::UI) if @settings_hovered == Options::GAMEOVER_SCREEN[0]
+    draw_rect(360,220,20,20,Gosu::Color::GRAY,ZOrder::UI) if @settings_hovered == Options::GAMEOVER_SCREEN[1]
+    @image = (Gosu::Image.new("media/Gameover.png"))
+    @image.draw(190,50,20)
+    @background_image = Gosu::Image.new("media/gob.png", :tileable => true)
+
+    
+  end
 end

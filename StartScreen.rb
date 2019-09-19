@@ -26,6 +26,7 @@ end
 module Options
   START_SCREEN = ["SOLO", "Computer", "2 Player"]
   LEVELS_SCREEN = ["Easy", "Medium", "Hard"]
+  GAMEOVER_SCREEN = ["MENU", "EXIT"]
 end
 
 GAME_TITLE = "The Game of Set"
@@ -48,7 +49,7 @@ class StartScreen < Gosu::Window
     @game_settings = GameSettings.new
     super 840, 480
     self.caption = GAME_TITLE
-    @settings_hovered = Options::START_SCREEN[0]
+    @settings_hovered = Options::GAMEOVER_SCREEN[0]
     @pressed = nil
     @title_font = Gosu::Font.new(50)
     @subtitle_font = Gosu::Font.new(20)
@@ -69,6 +70,7 @@ class StartScreen < Gosu::Window
   # Edited 09/15/2019 by Sharon Qiu: Edited game settings for gameplay selection, game settings for levels.
   # Edited 09/17/2019 by Sharon Qiu: Edited game screen checks. Split commands into p1 and p2.
   # Edited 09/17/2019 by Sri Ramya Dandu: Added computer functionality
+  # Edited 09/19/2019 by David Wing: added gameover screen functionality
   def update
     if @game_settings.currentScreen == "start"
       startScreenInputs
@@ -84,6 +86,9 @@ class StartScreen < Gosu::Window
         @false_mes = !@mes && @computer_signal.display_message?
       end
       gameScreenInputs
+    elsif @game_settings.currentScreen == "gameOverScreen"
+      gameOverScreenInputs
+
     end
   end
 
@@ -120,6 +125,8 @@ class StartScreen < Gosu::Window
     elsif @game_settings.currentScreen == "test"
       x = Card.new(0,2,0,2,2)
       x.image.draw(0,0,ZOrder::CARDS, 0.15, 0.15)
+    elsif @game_settings.currentScreen == "gameOverScreen"
+      gameOverScreen
     elsif  @game_settings.currentScreen == "game"
 
       @deck.dealCards! @playingCards

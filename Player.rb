@@ -3,11 +3,20 @@
 # Created 09/12/2019 by Sharon Qiu: Skeleton code for player movement only within the game.
 # Edited 09/15/2019 by Sharon Qiu: merged in player class into StartScreen file.
 # Edited 09/17/2019 by Sharon Qiu: Edited all player movement functions.
+# Edited 09/18/2019 by Sharon Qiu: Introduced parallel mapping keys.
+
 class Player
 
-  attr_accessor :currentCardIndex, :chosenCards, :chosenCardsIndexes, :moved
+  attr_accessor :currentCardIndex, :chosenCards, :chosenCardsIndexes, :playerControls, :playerMovement
 
-  def initialize
+  @@p1Controls = [Gosu::KB_A, Gosu::KB_D, Gosu::KB_W, Gosu::KB_S, Gosu::KB_SPACE]
+  @@p2Controls = [Gosu::KB_LEFT, Gosu::KB_RIGHT, Gosu::KB_UP, Gosu::KB_DOWN, Gosu::KB_RETURN]
+
+  def initialize playerNum
+
+    @playerControls = @@p1Controls if playerNum == 1
+    @playerControls = @@p2Controls if playerNum == 2
+
     @currentCardIndex = 0
     @chosenCards = Array.new
     @chosenCardsIndexes = Array.new
@@ -68,9 +77,18 @@ class Player
     @chosenCards.push playingCards[@currentCardIndex] if !(@chosenCards.include? playingCards[@currentCardIndex])
   end
 
-  # Created 09/12/2019 by Sharon Qiu: For future reference to hint functionality
-  def hint
+  # Created 09/18/2019 by Sharon Qiu: Clears chosen cards and chosen cards indices.
+  def cleanSlate
+    @chosenCards.clear
+    @chosenCardsIndexes.clear
+  end
 
+  # Created 09/18/2019 by Sharon Qiu: Checks for a valid set and adjusts playing cards and chosen cards.
+  def chosenSetValidity playingCards
+    valid = @deck.isASet?(@chosenCards)
+    playingCards -= @chosenCards if valid
+    cleanSlate
+    valid
   end
 
 end

@@ -74,76 +74,99 @@ module Inputs
 
   # Created 09/17/2019 by Neel Mansukhani
   # Checks in game user input for one and two players
+  # Edited 09/19/2019 by Sharon Qiu: Edited code
   def gameScreenInputs
-    if button_up? Gosu::KB_A
-      @p1.move_left @playingCards
-      puts "p1: #{@p1.currentCardIndex}"
-    elsif button_up? Gosu::KB_D
-      @p1.move_right @playingCards
-      puts "p1: #{@p1.currentCardIndex}"
-    elsif button_up? Gosu::KB_W
-      @p1.move_up @playingCards
-      puts "p1: #{@p1.currentCardIndex}"
-    elsif button_up? Gosu::KB_S
-      @p1.move_down @playingCards
-      puts "p1: #{@p1.currentCardIndex}"
-    elsif button_up? Gosu::KB_SPACE
-      @p1.selection @playingCards
 
+    movementIndex = 0 # used to track switch cases
+    if @game_settings.p1Init
+      @p1.playerControls.each do |control|
+        unless button_up? control
+          movementIndex += 1
+        else
+          break
+        end
+      end
+
+      # Determines movement
+      case movementIndex
+      when 0
+        @p1.move_left @playingCards
+        puts "p1 index: #{@p1.currentCardIndex}"
+      when 1
+        puts movementIndex
+        @p1.move_right @playingCards
+        puts "p1 index: #{@p1.currentCardIndex}"
+      when 2
+        @p1.move_up @playingCards
+        puts "p1 index: #{@p1.currentCardIndex}"
+      when 3
+        @p1.move_down @playingCards
+        puts "p1 index: #{@p1.currentCardIndex}"
+      when 4
+        @p1.selection @playingCards
+        puts "p1 index: #{@p1.currentCardIndex}"
+      end
+
+      # Checks the validity of a set.
       if @p1.chosenCardsIndexes.length == 3
         # TODO: In the future, implement check for score adjustments with hint usage
-        if @deck.isASet?(@p1.chosenCards)
+        if @p1.chosenSetValidity @playingCards
           puts "Set found"
-          @playingCards -= @p1.chosenCards
-          @p1.chosenCards.clear #clears it so if selected cards were ones already chosen/found, it doesn't cause conflicts
+          @p2.cleanSlate if @game_settings.p2Init
           # TODO: Change score, make a trigger for updating the window
         else
           puts "Set not found"
           # TODO: Change score, make a trigger for updating the window
         end
-        @p1.chosenCards.clear
-        @p1.chosenCardsIndexes.clear
       end
-
-      puts "p1: #{@p1.currentCardIndex}"
-    elsif button_up? Gosu::KB_H
-      @p1.hint
     end
 
-    if button_up? Gosu::KB_LEFT
-      @p2.move_left @playingCards
-      puts "p2: #{@p2.currentCardIndex} "
-    elsif button_up? Gosu::KB_RIGHT
-      @p2.move_right @playingCards
-      puts "p2: #{@p2.currentCardIndex} "
-    elsif button_up? Gosu::KB_UP
-      @p2.move_up @playingCards
-      puts "p2: #{@p2.currentCardIndex} "
-    elsif button_up? Gosu::KB_DOWN
-      @p2.move_down @playingCards
-      puts "p2: #{@p2.currentCardIndex} "
-    elsif button_up? Gosu::KB_RETURN
-      @p2.selection @playingCards
+    movementIndex = 0
+    if @game_settings.p2Init
+      @p2.playerControls.each do |control|
+        unless button_up? control
+          movementIndex += 1
+        else
+          break
+        end
+      end
 
+      # Determines movement
+      case movementIndex
+      when 0
+        @p2.move_left @playingCards
+        puts "p2 index: #{@p2.currentCardIndex}"
+      when 1
+        @p2.move_right @playingCards
+        puts "p2 index: #{@p2.currentCardIndex}"
+      when 2
+        @p2.move_up @playingCards
+        puts "p2 index: #{@p2.currentCardIndex}"
+      when 3
+        @p2.move_down @playingCards
+        puts "p2 index: #{@p2.currentCardIndex}"
+      when 4
+        @p2.selection @playingCards
+        puts "p2 index: #{@p2.currentCardIndex}"
+      end
+
+      # Checks the validity of a set.
       if @p2.chosenCardsIndexes.length == 3
         # TODO: In the future, implement check for score adjustments with hint usage
-        if @deck.isASet?(@p2.chosenCards)
+        # Checks the validity of a set.
+        if @p2.chosenSetValidity @playingCards
           puts "Set found"
-          @playingCards -= @p2.chosenCards
-          @p1.chosenCards.clear #clears it so if selected cards were ones already chosen/found, it doesn't cause conflicts
+          @p1.cleanSlate if @game_settings.p1Init
           # TODO: Change score, make a trigger for updating the window
         else
           puts "Set not found"
           # TODO: Change score, make a trigger for updating the window
         end
-        @p2.chosenCards.clear
-        @p2.chosenCardsIndexes.clear
       end
-      puts "p2: #{@p2.currentCardIndex} "
     end
+
   end
 end
-
 
 # Created 09/08/2019 by Sri Ramya Dandu
 # Edited 09/09/2019 by Sri Ramya Dandu: Update and display deck and scores
@@ -193,4 +216,6 @@ def computerMove(p1)
 
   return found
 
+
 end
+

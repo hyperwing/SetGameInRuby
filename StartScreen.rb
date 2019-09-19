@@ -140,8 +140,8 @@ class StartScreen < Gosu::Window
 
       # Creates players if need be.
       if !@playersCreated
-        @p1 = Player.new if @game_settings.p1Init == true
-        @p2 = Player.new if @game_settings.p2Init == true
+        @p1 = Player.new 1 if @game_settings.p1Init == true
+        @p2 = Player.new 2 if @game_settings.p2Init == true
         @playersCreated = true
 
       end

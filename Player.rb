@@ -3,14 +3,19 @@
 # Created 09/12/2019 by Sharon Qiu: Skeleton code for player movement only within the game.
 # Edited 09/15/2019 by Sharon Qiu: merged in player class into StartScreen file.
 # Edited 09/17/2019 by Sharon Qiu: Edited all player movement functions.
+# Edited 09/18/2019 by Leah Gillespie: Added player stats and score as instance variables
 class Player
 
-  attr_accessor :currentCardIndex, :chosenCards, :chosenCardsIndexes, :moved
+  attr_accessor :currentCardIndex, :chosenCards, :chosenCardsIndexes, :moved, :setTimer, :setTimes, :hintsUsed, :score
 
   def initialize
     @currentCardIndex = 0
     @chosenCards = Array.new
     @chosenCardsIndexes = Array.new
+    @setTimer = AllTimers.new
+    @setTimes = Array.new
+    @hintsUsed = 0
+    @score = 0
   end
 
   # Created 09/12/2019 by Sharon Qiu

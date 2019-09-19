@@ -23,6 +23,7 @@ GAME_TITLE = "The Game of Set"
 
 
 class StartScreen < Gosu::Window
+  include Inputs, Draws
   # Edited 09/17/2019 by Sharon Qiu: added in deck, playingcards, and playersCreated, as well as p1,p2,comp.
   def initialize
     @game_settings = GameSettings.new
@@ -50,7 +51,7 @@ class StartScreen < Gosu::Window
     elsif @game_settings.currentScreen =="levels"
       levelsScreenInputs
     elsif  @game_settings.currentScreen == "game"
-      gameScreenInputs(@p1,@p2)
+      gameScreenInputs
 
     end
   end

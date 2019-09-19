@@ -72,11 +72,11 @@ class Card
             end
           else
             Gosu.draw_quad(x,y,color,x+437,y,color,x+50,y+200,color,x+487,y+200,color,ZOrder::CARDS)
-       Gosu.draw_quad(x+20,y+20,Gosu::Color::WHITE,x+437-20,y+20,Gosu::Color::WHITE,x+50+20,y+200-20,Gosu::Color::WHITE,x+487-20,y+200-20,Gosu::Color::WHITE,ZOrder::CARDS) if @shade != 0
+            Gosu.draw_quad(x+20,y+20,Gosu::Color::WHITE,x+437-20,y+20,Gosu::Color::WHITE,x+50+20,y+200-20,Gosu::Color::WHITE,x+487-20,y+200-20,Gosu::Color::WHITE,ZOrder::CARDS) if @shade != 0
             if @shade == 2
-              Gosu.draw_rect(x,y+40,487,20,color,ZOrder::CARDS)
-              Gosu.draw_rect(x,y+90,487,20,color,ZOrder::CARDS)
-              Gosu.draw_rect(x,y+130,487,20,color,ZOrder::CARDS)
+              Gosu.draw_rect(x+15,y+40,487-50,20,color,ZOrder::CARDS)
+              Gosu.draw_rect(x+30,y+90,487-60,20,color,ZOrder::CARDS)
+              Gosu.draw_rect(x+45,y+130,487-60,20,color,ZOrder::CARDS)
             end
           end
           y += 250

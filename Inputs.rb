@@ -6,6 +6,7 @@
 =end
 
 # Edited 09/18/2019 by Neel Mansukhani: Put functions in the module
+# Edited 09/18/2019 by Leah Gillespie: Added statistics and scores
 module Inputs
   # Created 09/17/2019 by Neel Mansukhani
   # Checks the user inputs and allows user to select game mode
@@ -73,6 +74,7 @@ module Inputs
   end
 
   # Created 09/17/2019 by Neel Mansukhani
+  # Edited 09/18/2019 by Leah Gillespie: adding statistics and score calculations
   # Checks in game user input for one and two players
   # Edited 09/19/2019 by Sharon Qiu: Edited code
   def gameScreenInputs
@@ -103,6 +105,8 @@ module Inputs
         puts "p1 index: #{@p1.currentCardIndex}"
       when 4
         @p1.selection @playingCards
+      else
+        nil
       end
 
       # Checks the validity of a set.
@@ -111,10 +115,25 @@ module Inputs
         if @p1.chosenSetValidity @playingCards
           puts "Set found"
           @p2.cleanSlate if @game_settings.p2Init
-          # TODO: Change score, make a trigger for updating the window
+
+          # TODO: Make a trigger for updating the window
+          @p1.setTimer.updateTime
+          @p1.setTimes.push @p1.setTimer.current
+          @p1.score += 1
+          @p1.setTimes.sort!
+          puts "Fastest time to find a set: #{@p1.setTimes.at 0}"
+          puts "Slowest time to find a set: #{@p1.setTimes.at -1}"
+          avgTime = 0
+          @p1.setTimes.each {|time| avgTime += time}
+          avgTime = avgTime / @p1.setTimes.length
+          puts "Average time to find a set: #{avgTime}"
+          #puts "Hints used so far: #{@p1.hintsUsed}"
+          @p1.setTimer.reset
+
         else
           puts "Set not found"
-          # TODO: Change score, make a trigger for updating the window
+	        @p1.score -= 1
+          # TODO: Make a trigger for updating the window
         end
       end
     end
@@ -145,19 +164,35 @@ module Inputs
         puts "p2 index: #{@p2.currentCardIndex}"
       when 4
         @p2.selection @playingCards
+      else
+        nil
       end
 
       # Checks the validity of a set.
       if @p2.chosenCardsIndexes.length == 3
         # TODO: In the future, implement check for score adjustments with hint usage
-        # Checks the validity of a set.
+
         if @p2.chosenSetValidity @playingCards
           puts "Set found"
           @p1.cleanSlate if @game_settings.p1Init
-          # TODO: Change score, make a trigger for updating the window
+
+          # TODO: make a trigger for updating the window
+          @p2.setTimer.updateTime
+          @p2.setTimes.push @p2.setTimer.current
+          @p2.score += 1
+          @p2.setTimes.sort!
+          puts "Fastest time to find a set: #{@p2.setTimes.at 0}"
+          puts "Slowest time to find a set: #{@p2.setTimes.at -1}"
+          avgTime = 0
+          @p2.setTimes.each {|time| avgTime += time}
+          avgTime = avgTime / @p2.setTimes.length
+          puts "Average time to find a set: #{avgTime}"
+          #puts "Hints used so far: #{@p2.hintsUsed}"
+          @p2.setTimer.reset
         else
           puts "Set not found"
-          # TODO: Change score, make a trigger for updating the window
+          @p2.score -=1
+          # TODO: Make a trigger for updating the window
         end
       end
     end

@@ -19,7 +19,8 @@ require_relative 'Set'
 require_relative 'ComputerTimer'
 
 module ZOrder
-  BACKGROUND, UI, BUTTON, TEXT, CARDS= *0..4
+
+  BACKGROUND, UI, BUTTON, TEXT, CARDS = *0..4
 end
 
 # Edited 09/15/2019 by Sharon Qiu: Added PLAYER_COLOR, where Gray is computer, red is player1, blue is player2.
@@ -104,8 +105,6 @@ class StartScreen < Gosu::Window
     return false
   end
 
-
-
   # Created 09/10/2019 by Neel Mansukhani
   # Edited 09/15/2019 by Sharon Qiu: Set up cards based on number of cards played.
   # Edited 09/16/2019 by Sharon Qiu: Draws rectangles based on selections and current position.
@@ -167,33 +166,31 @@ class StartScreen < Gosu::Window
 
       if @game_settings.p1Init
 
+        x_movement = x_offset + (x_between/2.4) + x_between*(@p1.currentCardIndex % numCols)
+        y_movement = y_offset + (y_between/2) + y_between*(@p1.currentCardIndex  / numCols)
         # Draws current position
-        if @p1.currentCardIndex % numCols == 0 or (@p1.currentCardIndex % numCols == 1 and @p1.currentCardIndex >= numCols-1)
-          draw_rect((x_between/2)*((@p1.currentCardIndex % numCols)+1),(y_between/2)*((@p1.currentCardIndex  / numCols)+1),20,20,Gosu::Color::BLUE,ZOrder::CARDS)
-        else
-          draw_rect((x_between/1.85)*((@p1.currentCardIndex % numCols)+1),(y_between/2)*((@p1.currentCardIndex  / numCols)+1),20,20,Gosu::Color::BLUE,ZOrder::CARDS)
-        end
+        draw_rect(x_movement,y_movement,20,20,Gosu::Color::CYAN,ZOrder::CARDS)
 
         # Draws current selected values
-        @p1.chosenCardsIndexes.each {|index| draw_rect((x_between/1.85)*((index % numCols)+1),(y_between/2)*((index / numCols)+1),20,20,Gosu::Color::BLUE,ZOrder::CARDS)}
+        @p1.chosenCardsIndexes.each {|index| draw_rect(x_offset + (x_between/2.4) + (x_between)*(index % numCols),y_offset + (y_between/2) + y_between*(index  / numCols),20,20,Gosu::Color::CYAN,ZOrder::CARDS)}
       end
 
       if @game_settings.p2Init
 
+        x_movement = x_offset + (x_between/2.4) + x_between*(@p2.currentCardIndex % numCols)
+        y_movement = (y_between/2) + y_between*(@p2.currentCardIndex  / numCols)
+
         # Draws current position
-        if @p2.currentCardIndex % numCols == 0 or (@p2.currentCardIndex % numCols == 1 and @p2.currentCardIndex >= numCols-1)
-          draw_rect((x_between/2)*((@p2.currentCardIndex % numCols)+1),(y_between/2)*((@p2.currentCardIndex  / numCols)+1),20,20,Gosu::Color::RED,ZOrder::CARDS)
-        else
-          draw_rect((x_between/1.85)*((@p2.currentCardIndex % numCols)+1),(y_between/2)*((@p2.currentCardIndex  / numCols)+1),20,20,Gosu::Color::RED,ZOrder::CARDS)
-        end
+        draw_rect(x_movement,y_movement,20,20,Gosu::Color::FUSCHIA,ZOrder::CARDS)
 
         # Draws current selected values
-        @p2.chosenCardsIndexes.each {|index| draw_rect((x_between/1.85)*((index % numCols)+1),(y_between/2)*((index / numCols)+1),20,20,Gosu::Color::RED,ZOrder::CARDS)}
+        @p2.chosenCardsIndexes.each {|index| draw_rect(x_offset + (x_between/2.4) + (x_between)*(index % numCols),(y_between/2) + y_between*(index  / numCols),20,20,Gosu::Color::FUSCHIA,ZOrder::CARDS)}
 
       end
 
     end
   end
 end
-
-StartScreen.new.show
+if __FILE__ == $0
+  StartScreen.new.show
+end

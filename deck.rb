@@ -1,5 +1,6 @@
 # Created 09/15/2019 by David Wing
 # Defines the methods and structures for a deck of cards
+# Edited 09/16/2019 by Sri Ramya Dandu
 # Edited 09/17/2019 by Sharon Qiu
 
 require_relative 'Set'
@@ -27,9 +28,8 @@ class Deck
     # Edited 09/12/2019 by David Wing: Added id to be initialized.
     # Edited 09/14/2019 by Neel Mansukhani: Made deck a local variable.
     # Edited 09/15/2019 by David Wing: Deck is now object, cards is new structure
-    # Edited 09/17/2019 by Sharon Qiu: Pulled isASet method and placed in class Deck.
     # Edited 09/16/2019 by Sri Ramya Dandu: Replaced for loops with .each
-
+    #
     # Creates an array to be the deck and initializes 81 unique cards into it
     def createDeck
         deck = Array.new
@@ -46,8 +46,6 @@ class Deck
         end
         return deck
     end
-
-
     
     # Created 09/06/2019 by Neel Mansukhani
     # Edited 09/07/2019 by Sharon Qiu: Added in playingCards parameter and boolean value. Method now updates the showing cards.

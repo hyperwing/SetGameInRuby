@@ -16,16 +16,23 @@
 # Edited 09/12/2019 by David Wing
 # Edited 09/14/2019 by Neel Mansukhani
 # Edited 09/15/2019 by Sri Ramya Dandu
-# eDited 09/15/2019 by David Wing
+# Edited 09/15/2019 by David Wing
 # Edited 09/16/2019 by Sri Ramya Dandu
-
+# Edited 09/18/2019 by Neel Mansukhani
 # TODO: Add file description for every file.
 # TODO: Multi line comments for function descriptions.
 
+require 'gosu'
+require_relative 'StartScreen'
+require_relative 'GameSettings'
 require_relative 'card'
 require_relative 'deck'
+require_relative 'Draws'
+require_relative 'Player'
+require_relative 'Inputs'
+require_relative 'Set'
+require_relative 'ComputerTimer'
 require_relative 'timer'
-
 
 # Created 09/04/2019 by Sri Ramya Dandu
 # Edited 09/07/2019 by Sri Ramya Dandu: Optimized the checking method - made function concise
@@ -163,7 +170,7 @@ def computerPlayer(deck, cardsShowing)
 
       #changes signal to false to prevent player thread from printing it's cards
       $signal = false
-      deck.dealCards cardsShowing
+      deck.dealCards! cardsShowing
       cardsShowing.each{ |card| card.display }
       $signal = true
     end
@@ -178,13 +185,13 @@ end
 # Edited 09/15/2019 by Sri Ramya Dandu: changed arrays back to local variables
 def player deck,cardsShowing
 
-  deck.dealCards cardsShowing
+  deck.dealCards! cardsShowing
   sets = Array.new
   while true
 
     #changes signal to false to prevent computer thread from printing its cards
     $signal = false
-    deck.dealCards cardsShowing
+    deck.dealCards! cardsShowing
 
     #Displays cards
     cardsShowing.each { |card| card.display }
@@ -304,6 +311,7 @@ elsif choice == 2
   else
     $range = 100
   end
+
   playerThread = Thread.new{player deck, cardsShowing}
 
   # Creating thread for the computer execution

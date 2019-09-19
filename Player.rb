@@ -5,10 +5,10 @@
 # Edited 09/15/2019 by Sharon Qiu: merged in player class into StartScreen file.
 # Edited 09/17/2019 by Sharon Qiu: Edited all player movement functions.
 # Edited 09/18/2019 by Sharon Qiu: Introduced parallel mapping keys.
-
+# Edited 09/18/2019 by Leah Gillespie: Added player stats and score as instance variables
 class Player
 
-  attr_accessor :currentCardIndex, :chosenCards, :chosenCardsIndexes, :playerControls, :playerMovement
+  attr_accessor :currentCardIndex, :chosenCards, :chosenCardsIndexes, :playerControls, :playerMovement, :setTimer, :setTimes, :hintsUsed, :score
 
   @@p1Controls = [Gosu::KB_A, Gosu::KB_D, Gosu::KB_W, Gosu::KB_S, Gosu::KB_SPACE]
   @@p2Controls = [Gosu::KB_LEFT, Gosu::KB_RIGHT, Gosu::KB_UP, Gosu::KB_DOWN, Gosu::KB_RETURN]
@@ -21,6 +21,10 @@ class Player
     @currentCardIndex = 0
     @chosenCards = Array.new
     @chosenCardsIndexes = Array.new
+    @setTimer = AllTimers.new
+    @setTimes = Array.new
+    @hintsUsed = 0
+    @score = 0
   end
 
   # Created 09/12/2019 by Sharon Qiu
@@ -86,7 +90,7 @@ class Player
 
   # Created 09/18/2019 by Sharon Qiu: Checks for a valid set and adjusts playing cards and chosen cards.
   def chosenSetValidity playingCards
-    valid = isASet?(@chosenCards)
+    valid = isASet? @chosenCards
     playingCards -= @chosenCards if valid
     cleanSlate
     valid

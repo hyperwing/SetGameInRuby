@@ -1,5 +1,4 @@
 #File Created 09/17/2019 by Neel Mansukhani
-require_relative 'Player'
 module Inputs
 # Created 09/17/2019 by Neel Mansukhani
   def startScreenInputs
@@ -27,6 +26,7 @@ module Inputs
         @game_settings.isCPUPlayerEnabled = true
         @game_settings.p1Init = true
         @game_settings.computerInit = true
+        @game_settings.currentScreen = "levels"
       else
         @game_settings.isTwoPlayerEnabled = true
         @game_settings.p1Init = true
@@ -34,11 +34,8 @@ module Inputs
         @game_settings.currentScreen = "game"
         # TODO: Move Cursor
       end
-    elsif button_up? Gosu::KB_E
-      @game_settings.currentScreen = "test"
     end
   end
-
 # Created 09/17/2019 by Neel Mansukhani
   def levelsScreenInputs
     index = Options::LEVELS_SCREEN.find_index @settings_hovered
@@ -64,11 +61,19 @@ module Inputs
       elsif @settings_hovered == "Hard"
         @game_settings.cpuDifficulty = "Hard"
       end
-
       @game_settings.currentScreen = "game"
       # TODO: Move cursor
-    else
-      #TODO: anything else?
+    elsif button_up? Gosu::KB_SPACE
+      if @settings_hovered == "Easy"
+        @game_settings.cpuDifficulty = "Easy"
+        @computer_signal.level = 10
+      elsif @settings_hovered == "Medium"
+        @game_settings.cpuDifficulty = "Medium"
+        @computer_signal.level = 50
+      elsif @settings_hovered == "Hard"
+        @game_settings.cpuDifficulty = "Hard"
+        @computer_signal.level = 100
+      end
     end
   end
 
@@ -91,10 +96,10 @@ module Inputs
 
       if @p1.chosenCardsIndexes.length == 3
         # TODO: In the future, implement check for score adjustments with hint usage
-        if @deck.isASet?(p1.chosenCards)
+        if @deck.isASet?(@p1.chosenCards)
           puts "Set found"
           @playingCards -= @p1.chosenCards
-          @p2.chosenCards.clear #clears it so if selected cards were ones already chosen/found, it doesn't cause conflicts
+          @p1.chosenCards.clear #clears it so if selected cards were ones already chosen/found, it doesn't cause conflicts
           # TODO: Change score, make a trigger for updating the window
         else
           puts "Set not found"
@@ -141,4 +146,55 @@ module Inputs
       puts "p2: #{@p2.currentCardIndex} "
     end
   end
+end
+
+
+# Created 09/08/2019 by Sri Ramya Dandu
+# Edited 09/09/2019 by Sri Ramya Dandu: Update and display deck and scores
+# Edited 09/09/2019 by Sri Ramya Dandu: Modifed so that the computer can guess wrong sets too
+# Edited 09/15/2019 by Sri Ramya Dandu: Added levels of difficulty
+# Edited 09/15/2019 by Sri Ramya Dandu: changed arrays back to local variables
+# Edited 09/17/2019 by Sri Ramya Dandu: removed threading features and modified for GUI output
+def computerMove(p1)
+  indexSet = Array.new
+
+  found = false
+  #generates 3 card index values
+  winOrLose = rand(0..10)
+  if winOrLose % 3 == 0
+    #will always return 3 values that form a set
+    indexSet = valid_table(@playingCards)
+  else
+    indexSet = (0...@playingCards.length).to_a.sample(3)
+  end
+
+  card1 = @playingCards[indexSet[0]]
+  card2 = @playingCards[indexSet[1]]
+  card3 = @playingCards[indexSet[2]]
+
+# Output for Computer Player
+# TODO: Output to UI instead of terminal
+#
+  puts "--------------------Computer Took A Turn------------------"
+  puts "Computer Player: I chose Card #{card1.id}, Card #{card2.id}, and Card #{card3.id}"
+
+  if(@deck.isASet?([card1,card2,card3]))
+    puts("That is a set!")
+    found = true
+    @playingCards.delete(card1)
+    @playingCards.delete(card2)
+    @playingCards.delete(card3)
+    p1.chosenCards.clear
+    p1.chosenCardsIndexes.clear
+
+  else
+    puts("That is not a set.")
+    found = false
+  end
+
+  puts "--------------------Computer Finished Turn------------------"
+  puts
+
+  return found
+
 end

@@ -93,7 +93,6 @@ module Inputs
         @p1.move_left @playingCards
         puts "p1 index: #{@p1.currentCardIndex}"
       when 1
-        puts movementIndex
         @p1.move_right @playingCards
         puts "p1 index: #{@p1.currentCardIndex}"
       when 2
@@ -104,7 +103,6 @@ module Inputs
         puts "p1 index: #{@p1.currentCardIndex}"
       when 4
         @p1.selection @playingCards
-        puts "p1 index: #{@p1.currentCardIndex}"
       end
 
       # Checks the validity of a set.
@@ -147,7 +145,6 @@ module Inputs
         puts "p2 index: #{@p2.currentCardIndex}"
       when 4
         @p2.selection @playingCards
-        puts "p2 index: #{@p2.currentCardIndex}"
       end
 
       # Checks the validity of a set.
@@ -174,7 +171,8 @@ end
 # Edited 09/15/2019 by Sri Ramya Dandu: Added levels of difficulty
 # Edited 09/15/2019 by Sri Ramya Dandu: changed arrays back to local variables
 # Edited 09/17/2019 by Sri Ramya Dandu: removed threading features and modified for GUI output
-def computerMove(p1)
+# Edited 09/19/2019 by Sharon Qiu: replaced p1 card clearing with method clean slate.
+def computerMove p1
   indexSet = Array.new
 
   found = false
@@ -197,14 +195,13 @@ def computerMove(p1)
   puts "--------------------Computer Took A Turn------------------"
   puts "Computer Player: I chose Card #{card1.id}, Card #{card2.id}, and Card #{card3.id}"
 
-  if(@deck.isASet?([card1,card2,card3]))
+  if(isASet?([card1,card2,card3]))
     puts("That is a set!")
     found = true
     @playingCards.delete(card1)
     @playingCards.delete(card2)
     @playingCards.delete(card3)
-    p1.chosenCards.clear
-    p1.chosenCardsIndexes.clear
+    p1.cleanSlate
 
   else
     puts("That is not a set.")

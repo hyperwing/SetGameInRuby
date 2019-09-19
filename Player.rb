@@ -1,5 +1,6 @@
 # File Created 09/17/2019 by Neel Mansukhani
 
+#srequire_relative 'Set'
 # Created 09/12/2019 by Sharon Qiu: Skeleton code for player movement only within the game.
 # Edited 09/15/2019 by Sharon Qiu: merged in player class into StartScreen file.
 # Edited 09/17/2019 by Sharon Qiu: Edited all player movement functions.
@@ -85,7 +86,7 @@ class Player
 
   # Created 09/18/2019 by Sharon Qiu: Checks for a valid set and adjusts playing cards and chosen cards.
   def chosenSetValidity playingCards
-    valid = @deck.isASet?(@chosenCards)
+    valid = isASet?(@chosenCards)
     playingCards -= @chosenCards if valid
     cleanSlate
     valid

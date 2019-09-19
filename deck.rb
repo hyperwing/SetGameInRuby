@@ -93,7 +93,7 @@ class Deck
     #   @param card1, card2, card3 to evaluate whether they form a set or not
     #   @returns true if cards form a valid set, false otherwise
     #   @updates $score
-    def isASet?(cards)
+    def isASet? cards
         # The sum when adding one number 3 times or adding 3 consecutive numbers is divisible by 3.
         # This represents having all the same attribute or all different attributes.
         # Adding any other 3 number combo of 1,2,3 will result in a value not divisible by 3, failing to be a set.

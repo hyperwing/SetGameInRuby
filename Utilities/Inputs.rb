@@ -114,27 +114,17 @@ module Inputs
       if @p1.chosenCardsIndexes.length == 3
         # TODO: In the future, implement check for score adjustments with hint usage
         if @p1.chosenSetValidity @playingCards
-
           puts "Set found"
           @p2.cleanSlate if @game_settings.p2Init
-
-          @p1.setTimer.updateTime
+	  @p1.setTimer.updateTime
           @p1.setTimes.push @p1.setTimer.current
           @p1.score += 1
           @p1.setTimes.sort!
-          puts "Fastest time to find a set: #{@p1.setTimes.at 0}"
-          puts "Slowest time to find a set: #{@p1.setTimes.at -1}"
-          avgTime = 0
-          @p1.setTimes.each {|time| avgTime += time}
-          avgTime = avgTime / @p1.setTimes.length
-          puts "Average time to find a set: #{avgTime}"
-          #puts "Hints used so far: #{@p1.hintsUsed}"
+	  @p1.timeSum += @p1.setTimer.current
           @p1.setTimer.reset
-
         else
           puts "Set not found"
 	        @p1.score -= 1
-          # TODO: Make a trigger for updating the window
         end
       end
     end
@@ -175,20 +165,12 @@ module Inputs
         if @p2.chosenSetValidity @playingCards
           puts "Set found"
           @p1.cleanSlate if @game_settings.p1Init
-
-	        @p2.setTimer.updateTime
+	  @p2.setTimer.updateTime
           @p2.setTimes.push @p2.setTimer.current
           @p2.score += 1
           @p2.setTimes.sort!
-          puts "Fastest time to find a set: #{@p2.setTimes.at 0}"
-          puts "Slowest time to find a set: #{@p2.setTimes.at -1}"
-          avgTime = 0
-          @p2.setTimes.each {|time| avgTime += time}
-          avgTime = avgTime / @p2.setTimes.length
-          puts "Average time to find a set: #{avgTime}"
-          #puts "Hints used so far: #{@p2.hintsUsed}"
+	  @p2.timeSum += @p2.setTimer.current
           @p2.setTimer.reset
-
         else
           puts "Set not found"
           @p2.score -=1

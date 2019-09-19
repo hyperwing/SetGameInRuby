@@ -113,8 +113,7 @@ module Inputs
       # Checks the validity of a set.
       if @p1.chosenCardsIndexes.length == 3
         # TODO: In the future, implement check for score adjustments with hint usage
-        if @p1.chosenSetValidity @playingCards
-
+        if @p1.chosenSetValidity! @playingCards
           puts "Set found"
           @p2.cleanSlate if @game_settings.p2Init
 
@@ -133,6 +132,7 @@ module Inputs
 
         else
           puts "Set not found"
+          @p1.cleanSlate
 	        @p1.score -= 1
           # TODO: Make a trigger for updating the window
         end
@@ -172,7 +172,7 @@ module Inputs
       # Checks the validity of a set.
       if @p2.chosenCardsIndexes.length == 3
         # TODO: In the future, implement check for score adjustments with hint usage
-        if @p2.chosenSetValidity @playingCards
+        if @p2.chosenSetValidity! @playingCards
           puts "Set found"
           @p1.cleanSlate if @game_settings.p1Init
 
@@ -191,6 +191,7 @@ module Inputs
 
         else
           puts "Set not found"
+          @p2.cleanSlate
           @p2.score -=1
           # TODO: Make a trigger for updating the window
         end

@@ -92,10 +92,15 @@ class Player
   end
 
   # Created 09/18/2019 by Sharon Qiu: Checks for a valid set and adjusts playing cards and chosen cards.
-  def chosenSetValidity playingCards
+  # Edited 09/18/2019 by Sharon Qiu: Fixed mutator method to update playingCards.
+  def chosenSetValidity! playingCards
     valid = isASet? @chosenCards
-    playingCards -= @chosenCards if valid
-    cleanSlate
+    if valid
+      playingCards.delete chosenCards[0]
+      playingCards.delete chosenCards[1]
+      playingCards.delete chosenCards[2]
+    end
+    cleanSlate #clears player picks
     valid
   end
 

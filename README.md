@@ -8,7 +8,7 @@ This project required the team to build the game of Set (https://en.wikipedia.or
 * Overall Project Manager: Sharon Qiu
 * Coding Manager: Sri Ramya Dandu
 * Testing Manager: Leah Gillespie
-* Documentation: David Wing 
+* Documentation Manager: David Wing 
 
 ### Contributions
 Checkpoint one:

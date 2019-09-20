@@ -5,11 +5,11 @@
 # Edited 09/17/2019 by Sharon Qiu: Edited all player movement functions.
 # Edited 09/18/2019 by Sharon Qiu: Introduced parallel mapping keys.
 # Edited 09/18/2019 by Leah Gillespie: Added player stats and score as instance variables
-# Edited 09/18/2019 by Sharon Qiu: Included setFunctions module. Also moved get_hint into player class.
+# Edited 09/18/2019 by Sharon Qiu: Included setFunctions module. Also moved get_hint into player class. Also created 2 new functions, chosen set validity and clean slate.
 class Player
 
   include SetFunctions
-  attr_accessor :currentCardIndex, :chosenCards, :chosenCardsIndexes, :playerControls, :playerMovement, :setTimer, :setTimes, :hintsUsed, :score, :hint_open
+  attr_accessor :currentCardIndex, :chosenCards, :chosenCardsIndexes, :playerControls, :playerMovement, :setTimer, :setTimes, :hintsUsed, :score, :hint_open, :timeSum
 
   @@p1Controls = [Gosu::KB_A, Gosu::KB_D, Gosu::KB_W, Gosu::KB_S, Gosu::KB_SPACE]
   @@p2Controls = [Gosu::KB_LEFT, Gosu::KB_RIGHT, Gosu::KB_UP, Gosu::KB_DOWN, Gosu::KB_RETURN]
@@ -24,6 +24,7 @@ class Player
     @chosenCardsIndexes = Array.new
     @setTimer = AllTimers.new
     @setTimes = Array.new
+    @timeSum = 0
     @hintsUsed = 0
     @hint_open = false
     @score = 0
@@ -43,6 +44,7 @@ class Player
 
   # Created 09/12/2019 by Sharon Qiu
   # Edited 09/17/2019 by Sharon Qiu: Created conditions for movement rightwards.
+  # Edited 09/19/2019 by Sharon Qiu: Edited movement so that it accounted for number of columns.
   def move_right playingCards
 
     numCols = playingCards.length/3
@@ -91,10 +93,15 @@ class Player
   end
 
   # Created 09/18/2019 by Sharon Qiu: Checks for a valid set and adjusts playing cards and chosen cards.
-  def chosenSetValidity playingCards
+  # Edited 09/18/2019 by Sharon Qiu: Fixed mutator method to update playingCards.
+  def chosenSetValidity! playingCards
     valid = isASet? @chosenCards
-    playingCards -= @chosenCards if valid
-    cleanSlate
+    if valid
+      playingCards.delete chosenCards[0]
+      playingCards.delete chosenCards[1]
+      playingCards.delete chosenCards[2]
+    end
+    cleanSlate #clears player picks
     valid
   end
 

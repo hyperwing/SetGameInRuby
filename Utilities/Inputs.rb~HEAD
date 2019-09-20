@@ -7,6 +7,7 @@
 =end
 
 # Edited 09/18/2019 by Neel Mansukhani: Put functions in the module
+# Edited 09/18/2019 by Leah Gillespie: Added statistics and scores
 module Inputs
   # Created 09/17/2019 by Neel Mansukhani
   # Checks the user inputs and allows user to select game mode
@@ -72,79 +73,141 @@ module Inputs
       end
     end
   end
-
-  # Created 09/17/2019 by Neel Mansukhani
+  # Created 09/17/2019 by Sharon Qiu
+  # Edited 09/17/2019 by Neel Mansukhani: Moved to Inputs Module
+  # Edited 09/18/2019 by Neel Mansukhani: Removed isASet? from deck.
+  # Edited 09/18/2019 by Leah Gillespie: adding statistics and score calculations
   # Checks in game user input for one and two players
+  # Edited 09/19/2019 by Sharon Qiu: Edited code
   def gameScreenInputs
-    if button_up? Gosu::KB_A
-      @p1.move_left @playingCards
-      puts "p1: #{@p1.currentCardIndex}"
-    elsif button_up? Gosu::KB_D
-      @p1.move_right @playingCards
-      puts "p1: #{@p1.currentCardIndex}"
-    elsif button_up? Gosu::KB_W
-      @p1.move_up @playingCards
-      puts "p1: #{@p1.currentCardIndex}"
-    elsif button_up? Gosu::KB_S
-      @p1.move_down @playingCards
-      puts "p1: #{@p1.currentCardIndex}"
-    elsif button_up? Gosu::KB_SPACE
-      @p1.selection @playingCards
 
+    movementIndex = 0 # used to track switch cases
+    if @game_settings.p1Init
+      @p1.playerControls.each do |control|
+        unless button_up? control
+          movementIndex += 1
+        else
+          break
+        end
+      end
+
+      # Determines movement
+      case movementIndex
+      when 0
+        @p1.move_left @playingCards
+        puts "p1 index: #{@p1.currentCardIndex}"
+      when 1
+        @p1.move_right @playingCards
+        puts "p1 index: #{@p1.currentCardIndex}"
+      when 2
+        @p1.move_up @playingCards
+        puts "p1 index: #{@p1.currentCardIndex}"
+      when 3
+        @p1.move_down @playingCards
+        puts "p1 index: #{@p1.currentCardIndex}"
+      when 4
+        @p1.selection @playingCards
+      else
+        nil
+      end
+
+      # Checks the validity of a set.
       if @p1.chosenCardsIndexes.length == 3
         # TODO: In the future, implement check for score adjustments with hint usage
-        if @deck.isASet?(@p1.chosenCards)
+        if @p1.chosenSetValidity @playingCards
+
           puts "Set found"
-          @playingCards -= @p1.chosenCards
-          @p1.chosenCards.clear #clears it so if selected cards were ones already chosen/found, it doesn't cause conflicts
-          # TODO: Change score, make a trigger for updating the window
+          @p2.cleanSlate if @game_settings.p2Init
+
+          # TODO: Make a trigger for updating the window
+          @p1.setTimer.updateTime
+          @p1.setTimes.push @p1.setTimer.current
+          @p1.score += 1
+          @p1.setTimes.sort!
+          puts "Fastest time to find a set: #{@p1.setTimes.at 0}"
+          puts "Slowest time to find a set: #{@p1.setTimes.at -1}"
+          avgTime = 0
+          @p1.setTimes.each {|time| avgTime += time}
+          avgTime = avgTime / @p1.setTimes.length
+          puts "Average time to find a set: #{avgTime}"
+          #puts "Hints used so far: #{@p1.hintsUsed}"
+          @p1.setTimer.reset
+
         else
           puts "Set not found"
-          # TODO: Change score, make a trigger for updating the window
+	        @p1.score -= 1
+          # TODO: Make a trigger for updating the window
         end
-        @p1.chosenCards.clear
-        @p1.chosenCardsIndexes.clear
       end
-
-      puts "p1: #{@p1.currentCardIndex}"
-    elsif button_up? Gosu::KB_H
-      @p1.hint
     end
 
-    if button_up? Gosu::KB_LEFT
-      @p2.move_left @playingCards
-      puts "p2: #{@p2.currentCardIndex} "
-    elsif button_up? Gosu::KB_RIGHT
-      @p2.move_right @playingCards
-      puts "p2: #{@p2.currentCardIndex} "
-    elsif button_up? Gosu::KB_UP
-      @p2.move_up @playingCards
-      puts "p2: #{@p2.currentCardIndex} "
-    elsif button_up? Gosu::KB_DOWN
-      @p2.move_down @playingCards
-      puts "p2: #{@p2.currentCardIndex} "
-    elsif button_up? Gosu::KB_RETURN
-      @p2.selection @playingCards
+    movementIndex = 0
+    if @game_settings.p2Init
+      @p2.playerControls.each do |control|
+        unless button_up? control
+          movementIndex += 1
+        else
+          break
+        end
+      end
 
+      # Determines movement
+      case movementIndex
+      when 0
+        @p2.move_left @playingCards
+        puts "p2 index: #{@p2.currentCardIndex}"
+      when 1
+        @p2.move_right @playingCards
+        puts "p2 index: #{@p2.currentCardIndex}"
+      when 2
+        @p2.move_up @playingCards
+        puts "p2 index: #{@p2.currentCardIndex}"
+      when 3
+        @p2.move_down @playingCards
+        puts "p2 index: #{@p2.currentCardIndex}"
+      when 4
+        @p2.selection @playingCards
+      else
+        nil
+      end
+
+      # Checks the validity of a set.
       if @p2.chosenCardsIndexes.length == 3
         # TODO: In the future, implement check for score adjustments with hint usage
-        if @deck.isASet?(@p2.chosenCards)
+        if @p2.chosenSetValidity @playingCards
           puts "Set found"
-          @playingCards -= @p2.chosenCards
-          @p1.chosenCards.clear #clears it so if selected cards were ones already chosen/found, it doesn't cause conflicts
-          # TODO: Change score, make a trigger for updating the window
+          @p1.cleanSlate if @game_settings.p1Init
+
+          # TODO: make a trigger for updating the window
+          @p2.setTimer.updateTime
+          @p2.setTimes.push @p2.setTimer.current
+          @p2.score += 1
+          @p2.setTimes.sort!
+          puts "Fastest time to find a set: #{@p2.setTimes.at 0}"
+          puts "Slowest time to find a set: #{@p2.setTimes.at -1}"
+          avgTime = 0
+          @p2.setTimes.each {|time| avgTime += time}
+          avgTime = avgTime / @p2.setTimes.length
+          puts "Average time to find a set: #{avgTime}"
+          #puts "Hints used so far: #{@p2.hintsUsed}"
+          @p2.setTimer.reset
+
         else
           puts "Set not found"
-          # TODO: Change score, make a trigger for updating the window
+          @p2.score -=1
+          # TODO: Make a trigger for updating the window
         end
-        @p2.chosenCards.clear
-        @p2.chosenCardsIndexes.clear
       end
-      puts "p2: #{@p2.currentCardIndex} "
     end
+
+    if @game_settings.areHintsEnabled and button_up? Gosu::KB_H
+      @hint = @p1.get_hint @playingCards
+    end
+
   end
 end
 
+<<<<<<< HEAD:Inputs.rb
 # Created 9/18/19 David Wing
 # Checks inputs when player hits gameover screen
 def gameOverScreenInputs
@@ -177,13 +240,16 @@ def gameOverScreenInputs
   end
 end
 
+=======
+>>>>>>> gosu:Utilities/Inputs.rb
 # Created 09/08/2019 by Sri Ramya Dandu
 # Edited 09/09/2019 by Sri Ramya Dandu: Update and display deck and scores
 # Edited 09/09/2019 by Sri Ramya Dandu: Modifed so that the computer can guess wrong sets too
 # Edited 09/15/2019 by Sri Ramya Dandu: Added levels of difficulty
 # Edited 09/15/2019 by Sri Ramya Dandu: changed arrays back to local variables
 # Edited 09/17/2019 by Sri Ramya Dandu: removed threading features and modified for GUI output
-def computerMove(p1)
+# Edited 09/19/2019 by Sharon Qiu: replaced p1 card clearing with method clean slate.
+def computerMove p1
   indexSet = Array.new
 
   found = false
@@ -206,14 +272,13 @@ def computerMove(p1)
   puts "--------------------Computer Took A Turn------------------"
   puts "Computer Player: I chose Card #{card1.id}, Card #{card2.id}, and Card #{card3.id}"
 
-  if(@deck.isASet?([card1,card2,card3]))
+  if(isASet?([card1,card2,card3]))
     puts("That is a set!")
     found = true
     @playingCards.delete(card1)
     @playingCards.delete(card2)
     @playingCards.delete(card3)
-    p1.chosenCards.clear
-    p1.chosenCardsIndexes.clear
+    p1.cleanSlate
 
   else
     puts("That is not a set.")
@@ -224,5 +289,5 @@ def computerMove(p1)
   puts
 
   return found
-
 end
+

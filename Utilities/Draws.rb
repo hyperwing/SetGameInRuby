@@ -5,7 +5,7 @@
 module Draws
   # Created 09/15/2019 by Sri Ramya Dandu
   # Edited 09/15/2019 by Neel Mansukhani: Moved to Draw File
-  # Edited 09/19/2019 by Sharon Qiu: Edited offset of drawn
+  # Edited 09/19/2019 by Sharon Qiu: Edited offset of drawn rectangles.
   # Draws images, shapes, and text on start screen.
   def startScreen
     @title_font.draw_text("The Game of Set", 250, 50, ZOrder::TEXT, 1.0, 1.0, Gosu::Color::BLACK)

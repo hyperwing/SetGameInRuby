@@ -58,12 +58,12 @@ class Deck
     # Does nothing if deck of unplayed cards is empty.
     # @updates cardsShowing
     def dealCards! cardsShowing
-        return if cards.length == 0
+        return if @cards.length == 0
     
         #initializing deck.
         if cardsShowing.length == 0
-            15.times do
-                card = cards.delete_at(rand(cards.length))
+            12.times do
+                card = @cards.delete_at(rand(cards.length))
                 cardsShowing.push(card)
                 self.deckCount-=1
             end
@@ -74,7 +74,7 @@ class Deck
             while (valid_table(cardsShowing).length == 0) && cards.length > 0
                 #print("\n Empty: #{(valid_table(playingCards)).length == 0} \n")
                 3.times do
-                    card = cards.delete_at(rand(cards.length))
+                    card = @cards.delete_at(rand(cards.length))
                     cardsShowing.push(card)
                     self.deckCount-=1
                 end
@@ -82,7 +82,7 @@ class Deck
         elsif cardsShowing.length < 12
             # Adds cards if there is a set but less than 12 playing cards.
             3.times do
-                card = cards.delete_at(rand(cards.length))
+                card = @cards.delete_at(rand(cards.length))
                 cardsShowing.push(card)
                 self.deckCount-=1
             end

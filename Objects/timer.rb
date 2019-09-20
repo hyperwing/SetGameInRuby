@@ -5,7 +5,6 @@
 =end
 
 # Created 09/12/2019 by Leah Gillespie
-# TODO: Add documentation for each function
 class AllTimers
     attr_reader :current
 
@@ -16,11 +15,14 @@ class AllTimers
     end
 
     # Created 09/12/2019 by Leah Gillespie
+    # Edited 09/19/2019 by Leah Gillespie: rounds current time to two decimal places
+    # updates @current to reflect the difference between when the timer started and the time the method is called
     def updateTime
-      @current = Time.now - @initial
+      @current = (Time.now - @initial).round 2
     end
 
     # Created 09/12/2019 by Leah Gillespie
+    # restarts the timer at the time the method is called
     def reset
       @initial = Time.now
     end

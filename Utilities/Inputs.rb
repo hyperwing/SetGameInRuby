@@ -77,8 +77,8 @@ module Inputs
   # Edited 09/17/2019 by Neel Mansukhani: Moved to Inputs Module
   # Edited 09/18/2019 by Neel Mansukhani: Removed isASet? from deck.
   # Edited 09/18/2019 by Leah Gillespie: adding statistics and score calculations
+  # Edited 09/19/2019 by Sharon Qiu: Cleaned up movement checks.
   # Checks in game user input for one and two players
-  # Edited 09/19/2019 by Sharon Qiu: Edited code
   def gameScreenInputs
 
     movementIndex = 0 # used to track switch cases
@@ -115,28 +115,18 @@ module Inputs
       if @p1.chosenCardsIndexes.length == 3
         # TODO: In the future, implement check for score adjustments with hint usage
         if @p1.chosenSetValidity @playingCards
-
           puts "Set found"
           @p2.cleanSlate if @game_settings.p2Init
-
-          # TODO: Make a trigger for updating the window
-          @p1.setTimer.updateTime
+	  @p1.setTimer.updateTime
           @p1.setTimes.push @p1.setTimer.current
           @p1.score += 1
           @p1.setTimes.sort!
-          puts "Fastest time to find a set: #{@p1.setTimes.at 0}"
-          puts "Slowest time to find a set: #{@p1.setTimes.at -1}"
-          avgTime = 0
-          @p1.setTimes.each {|time| avgTime += time}
-          avgTime = avgTime / @p1.setTimes.length
-          puts "Average time to find a set: #{avgTime}"
-          #puts "Hints used so far: #{@p1.hintsUsed}"
+	  @p1.timeSum += @p1.setTimer.current
           @p1.setTimer.reset
-
         else
           puts "Set not found"
+          @p1.cleanSlate
 	        @p1.score -= 1
-          # TODO: Make a trigger for updating the window
         end
       end
     end
@@ -174,26 +164,18 @@ module Inputs
       # Checks the validity of a set.
       if @p2.chosenCardsIndexes.length == 3
         # TODO: In the future, implement check for score adjustments with hint usage
-        if @p2.chosenSetValidity @playingCards
+        if @p2.chosenSetValidity! @playingCards
           puts "Set found"
           @p1.cleanSlate if @game_settings.p1Init
-
-          # TODO: make a trigger for updating the window
-          @p2.setTimer.updateTime
+	  @p2.setTimer.updateTime
           @p2.setTimes.push @p2.setTimer.current
           @p2.score += 1
           @p2.setTimes.sort!
-          puts "Fastest time to find a set: #{@p2.setTimes.at 0}"
-          puts "Slowest time to find a set: #{@p2.setTimes.at -1}"
-          avgTime = 0
-          @p2.setTimes.each {|time| avgTime += time}
-          avgTime = avgTime / @p2.setTimes.length
-          puts "Average time to find a set: #{avgTime}"
-          #puts "Hints used so far: #{@p2.hintsUsed}"
+	  @p2.timeSum += @p2.setTimer.current
           @p2.setTimer.reset
-
         else
           puts "Set not found"
+          @p2.cleanSlate
           @p2.score -=1
           # TODO: Make a trigger for updating the window
         end
@@ -207,7 +189,6 @@ module Inputs
   end
 end
 
-<<<<<<< HEAD:Inputs.rb
 # Created 9/18/19 David Wing
 # Checks inputs when player hits gameover screen
 def gameOverScreenInputs
@@ -240,8 +221,6 @@ def gameOverScreenInputs
   end
 end
 
-=======
->>>>>>> gosu:Utilities/Inputs.rb
 # Created 09/08/2019 by Sri Ramya Dandu
 # Edited 09/09/2019 by Sri Ramya Dandu: Update and display deck and scores
 # Edited 09/09/2019 by Sri Ramya Dandu: Modifed so that the computer can guess wrong sets too

@@ -16,25 +16,23 @@
 # Edited 09/12/2019 by David Wing
 # Edited 09/14/2019 by Neel Mansukhani
 # Edited 09/15/2019 by Sri Ramya Dandu
-# eDited 09/15/2019 by David Wing
-
+# Edited 09/15/2019 by David Wing
+# Edited 09/16/2019 by Sri Ramya Dandu
+# Edited 09/18/2019 by Neel Mansukhani
 # TODO: Add file description for every file.
 # TODO: Multi line comments for function descriptions.
 
+require 'gosu'
+require_relative 'StartScreen'
+require_relative 'GameSettings'
 require_relative 'card'
 require_relative 'deck'
+require_relative 'Draws'
+require_relative 'Player'
+require_relative 'Inputs'
+require_relative 'Set'
+require_relative 'ComputerTimer'
 require_relative 'timer'
-
-# Created 09/06/2019 by Neel Mansukhani
-# Edited 09/15/2019 by Sri Ramya Dandu: added function back to the file
-#
-# Returns card from an array with the given id
-# Returns card from the total deck with the given id
-def getCardById(deck,id)
-  deck.each do |card|
-    return card if card.id == id
-  end
-end
 
 # Created 09/04/2019 by Sri Ramya Dandu
 # Edited 09/07/2019 by Sri Ramya Dandu: Optimized the checking method - made function concise
@@ -58,9 +56,11 @@ end
 # Edited 09/08/2019 by David Wing
 # Edited 09/09/2019 by Sri Ramya Dandu: changed cardsShowing to a global variable
 # Edited 09/12/2019 by David Wing: Optimized table searching
-# Given an Array of the displayed cards, checks if there is a set
-# Returns an empty Array if there is not a set. If there is  set, it returns
-# an array holding the 3 cards that form the set
+# Edited 09/16/2019 by Sri Ramya Dandu: replaced for loops with ruby convention
+
+#  Given an Array of the displayed cards, checks if there is a set
+#  Returns an empty Array if there is not a set. If there is  set, it returns
+#  an array holding the 3 cards that form the set
 def valid_table(cardsShowing)
 
   # make hash of all table cards
@@ -70,13 +70,11 @@ def valid_table(cardsShowing)
     return []
   end
 
-  for i in 0...cardsShowing.length
-    tableHash[cardsShowing[i].id] = i
-  end
+  (0...cardsShowing.length).each {|i| tableHash[cardsShowing[i].id] = i}
 
-  for card1 in 0...cardsShowing.length
-    for card2 in 1...cardsShowing.length
-      if(card1 == card2) #skip if same card
+  (0...cardsShowing.length).each do |card1|
+    (1...cardsShowing.length).each do |card2|
+      if card1 == card2 #skip if same card
         next
       end
 
@@ -89,7 +87,7 @@ def valid_table(cardsShowing)
       cardToFind += (6-cardsShowing[card1].shade - cardsShowing[card2].shade) %3
 
       # cardToFind is now the card ID for the last card
-      if tableHash.include?(cardToFind)
+      if tableHash.include?cardToFind
         return [card1, card2, tableHash[cardToFind]]
       end
 
@@ -105,13 +103,13 @@ end
 # Given a valid set from the table, outputs two cards that make up a set
 # Returns array of two card objects that are the hint
 def get_hint(cardsShowing)
-  valid_set = valid_table(cardsShowing)
+  valid_set = valid_table cardsShowing
   puts("look for a pair with these cards: ")
   puts("card " + cardsShowing[valid_set[0]].id.to_s + " and card " + cardsShowing[valid_set[1]].id.to_s)
   # TODO: Remove before submitting.
   # puts("card 3:" + cardsShowing[valid_set[2]].id.to_s) #DEBUG message
   # TODO: Terse code?
-  return( [cardsShowing[valid_set[0]], cardsShowing[valid_set[1]] ])
+  return [cardsShowing[valid_set[0]], cardsShowing[valid_set[1]]]
   # Decrease score because you cheated
   $playerScore -= 0.5
 end
@@ -130,14 +128,14 @@ def computerPlayer(deck, cardsShowing)
   while true
 
     #ensure that the player thread is not printing the cards
-    if($signal)
+    if $signal
       indexSet = Array.new
 
       #generates 3 card index values
       winOrLose = rand(0..$range)
       if winOrLose % 3 == 0
         #will always return 3 values that form a set
-        indexSet = valid_table(cardsShowing);
+        indexSet = valid_table cardsShowing
       else
         indexSet = (0...cardsShowing.length).to_a.sample(3)
       end
@@ -153,12 +151,12 @@ def computerPlayer(deck, cardsShowing)
       puts "--------------------Computer Took A Turn------------------"
       puts "Computer Player: I chose Card #{card1.id}, Card #{card2.id}, and Card #{card3.id}"
 
-      if(isASet?([card1,card2,card3]))
+      if isASet? [card1,card2,card3]
         puts("That is a set!")
         $computerScore += 1
-        cardsShowing.delete(card1)
-        cardsShowing.delete(card2)
-        cardsShowing.delete(card3)
+        cardsShowing.delete card1
+        cardsShowing.delete card2
+        cardsShowing.delete card3
       else
         puts("That is not a set.")
         $computerScore  -= 1
@@ -172,7 +170,7 @@ def computerPlayer(deck, cardsShowing)
 
       #changes signal to false to prevent player thread from printing it's cards
       $signal = false
-      deck.dealCards(cardsShowing)
+      deck.dealCards! cardsShowing
       cardsShowing.each{ |card| card.display }
       $signal = true
     end
@@ -185,21 +183,21 @@ end
 #Created 09/08/2019 by Sri Ramya Dandu
 #Edited 09/12/2019 by Leah Gillespie: Adding player statistics
 # Edited 09/15/2019 by Sri Ramya Dandu: changed arrays back to local variables
-def playerThrd(deck,cardsShowing)
+def player deck,cardsShowing
 
-  deck.dealCards(cardsShowing)
+  deck.dealCards! cardsShowing
   sets = Array.new
   while true
 
     #changes signal to false to prevent computer thread from printing its cards
     $signal = false
-    deck.dealCards(cardsShowing)
+    deck.dealCards! cardsShowing
 
     #Displays cards
     cardsShowing.each { |card| card.display }
     $signal = true
 
-    valid_set = valid_table(cardsShowing)
+    valid_set = valid_table cardsShowing
 
     # no valid sets
     break if valid_set.length == 0 && deck.cards.length == 0
@@ -211,7 +209,7 @@ def playerThrd(deck,cardsShowing)
     input = gets.chomp
     if input.eql? "y"
       $p1Hints += 1
-      get_hint(cardsShowing)
+      get_hint cardsShowing
     end
 
     print("Enter your 3 card numbers, separated by a comma: ")
@@ -223,16 +221,16 @@ def playerThrd(deck,cardsShowing)
     card2 = strInput[0,comma].to_i
     strInput = strInput[comma+1,strInput.length]
     card3 = strInput[0,strInput.length].to_i
-    set = [getCardById(cardsShowing,card1),getCardById(cardsShowing,card2),getCardById(cardsShowing,card3)]
+    set = [deck.getCardById(cardsShowing,card1),deck.getCardById(cardsShowing,card2),deck.getCardById(cardsShowing,card3)]
 
-    if(isASet?(set))
+    if isASet? set
       $p1SetTimer.updateTime
       $p1SetTimes.push $p1SetTimer.current
       puts "That is a set!"
       #TODO: Score should increment/decrement here
       $playerScore += 1
       #TODO: set up hash or something to clean sets up.
-      sets.push(set)
+      sets.push set
       $p1SetTimes.sort!
       puts "Fastest time to find a set: #{$p1SetTimes.at(0)}"
       puts "Slowest time to find a set: #{$p1SetTimes.at($p1SetTimes.length-1)}"
@@ -299,7 +297,7 @@ cardsShowing = Array.new
 puts "Enter 1 to play solo, or 2 to play vs Computer"
 choice = gets.to_i
 if choice == 1
-  playerThrd(deck, cardsShowing)
+  player deck, cardsShowing
 elsif choice == 2
 
   print "Choose a mode of difficulty (e/m/h): "
@@ -313,11 +311,11 @@ elsif choice == 2
   else
     $range = 100
   end
-  # Creating thread for the player execution
-  playerThread = Thread.new{playerThrd(deck, cardsShowing)}
+
+  playerThread = Thread.new{player deck, cardsShowing}
 
   # Creating thread for the computer execution
-  computerThread = Thread.new{computerPlayer(deck, cardsShowing)}
+  computerThread = Thread.new{computerPlayer deck, cardsShowing}
 
     playerThread.join
     computerThread.join

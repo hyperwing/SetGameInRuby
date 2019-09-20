@@ -2,22 +2,28 @@
 # This file contains all of the
 
 # Edited by Neel Mansukhani 09/18/2019 by Neel Mansukhani: Created Draws Module
+# Edited 09/20/2019 by Leah Gillespie
 module Draws
   # Created 09/15/2019 by Sri Ramya Dandu
   # Edited 09/15/2019 by Neel Mansukhani: Moved to Draw File
   # Edited 09/19/2019 by Sharon Qiu: Edited offset of drawn rectangles.
+  # Edited 09/20/2019 by Leah Gillespie: Adjusted text, button, and highlight positions for new window size
+
   # Draws images, shapes, and text on start screen.
   def startScreen
-    @title_font.draw_text("The Game of Set", 250, 50, ZOrder::TEXT, 1.0, 1.0, Gosu::Color::BLACK)
-    @subtitle_font.draw_text("Instructions: Select a mode of play below. The objective of the game", 160, 115, ZOrder::TEXT, 1.0, 1.0, Gosu::Color::BLACK)
-    @subtitle_font.draw_text("is to identify as many sets as possible. 3 cards form a set when they", 160, 145, ZOrder::TEXT, 1.0, 1.0, Gosu::Color::BLACK)
-    @subtitle_font.draw_text("all have the same or all different numbers, shapes, shadings, and colors.", 160, 175, ZOrder::TEXT, 1.0, 1.0, Gosu::Color::BLACK)
-    @buttonOption.draw(190,220, ZOrder::BUTTON,0.15,0.15)
-    @buttonOption.draw(360,220, ZOrder::BUTTON,0.15,0.15)
-    @buttonOption.draw(530,220, ZOrder::BUTTON,0.15,0.15)
-    @subtitle_font.draw_text(Options::START_SCREEN[0], 240, 282, ZOrder::TEXT, 1.0, 1.0, Gosu::Color::BLACK)
-    @subtitle_font.draw_text(Options::START_SCREEN[1], 395, 282, ZOrder::TEXT, 1.0, 1.0, Gosu::Color::BLACK)
-    @subtitle_font.draw_text(Options::START_SCREEN[2], 573, 282, ZOrder::TEXT, 1.0, 1.0, Gosu::Color::BLACK)
+    @title_font.draw_text("The Game of Set", 300, 50, ZOrder::TEXT, 1.0, 1.0, Gosu::Color::BLACK)
+    @subtitle_font.draw_text("Instructions: Select a mode of play below. The objective of the game is to identify as many", 100, 115, ZOrder::TEXT, 1.0, 1.0, Gosu::Color::BLACK)
+    @subtitle_font.draw_text("sets as possible. 3 cards form a set when they all have the same or all different numbers,", 100, 145, ZOrder::TEXT, 1.0, 1.0, Gosu::Color::BLACK)
+    @subtitle_font.draw_text("shapes, shadings, and colors. Player 1 will use the w, a, s, and d keys to move and the space", 100, 175, ZOrder::TEXT, 1.0, 1.0, Gosu::Color::BLACK)
+    @subtitle_font.draw_text("bar to select. If there is a second player, they will used the arrow keys to move and the", 100, 205, ZOrder::TEXT, 1.0, 1.0, Gosu::Color::BLACK)
+    @subtitle_font.draw_text("enter key to select. A colored box will appear on the card you are currently on, and will", 100, 235, ZOrder::TEXT, 1.0, 1.0, Gosu::Color::BLACK)
+    @subtitle_font.draw_text("remain there when you have selected it. Player 1 is blue and player 2 is pink. Good luck!", 100, 265, ZOrder::TEXT, 1.0, 1.0, Gosu::Color::BLACK)
+    @buttonOption.draw(210,310, ZOrder::BUTTON,0.15,0.15)
+    @buttonOption.draw(380,310, ZOrder::BUTTON,0.15,0.15)
+    @buttonOption.draw(550,310, ZOrder::BUTTON,0.15,0.15)
+    @subtitle_font.draw_text(Options::START_SCREEN[0], 260, 372, ZOrder::TEXT, 1.0, 1.0, Gosu::Color::BLACK)
+    @subtitle_font.draw_text(Options::START_SCREEN[1], 415, 372, ZOrder::TEXT, 1.0, 1.0, Gosu::Color::BLACK)
+    @subtitle_font.draw_text(Options::START_SCREEN[2], 593, 372, ZOrder::TEXT, 1.0, 1.0, Gosu::Color::BLACK)
 
     #to get the index of the button hovered over
     hover_index = 0
@@ -30,7 +36,7 @@ module Draws
     end
 
     # draw player movement
-    left_x ,right_x, top_y, bottom_y, button_distance = 200, 305, 255, 305, 170
+    left_x ,right_x, top_y, bottom_y, button_distance = 220, 325, 350, 400, 170
 
     # reflects each corner
     draw_rect(left_x + (button_distance * hover_index),top_y,20,20,Gosu::Color::GRAY,ZOrder::TEXT)
@@ -44,7 +50,7 @@ module Draws
   # Edited 09/19/2019 by Sharon Qiu: Edited offset of drawn rectangles.
   # Draws images, shapes, and text on level select screen.
   def levelsScreen
-    @title_font.draw_text("Choose a level of difficulty", 170, 50, ZOrder::TEXT, 1.0, 1.0, Gosu::Color::BLACK)
+    @title_font.draw_text("Choose a level of difficulty", 180, 50, ZOrder::TEXT, 1.0, 1.0, Gosu::Color::BLACK)
     @buttonOption.draw(360,90, ZOrder::BUTTON,0.15,0.15)
     @buttonOption.draw(360,170, ZOrder::BUTTON,0.15,0.15)
     @buttonOption.draw(360,250, ZOrder::BUTTON,0.15,0.15)

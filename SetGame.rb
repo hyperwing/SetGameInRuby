@@ -14,6 +14,7 @@
 
 # Edited 09/18/2019 by Neel Mansukhani: Change directory location of files.
 # Edited 09/19/2019 by Leah Gillespie: Implemented player statistics and score visibility
+# Edited 09/20/2019 by Leah Gillespie: Adjusted window size and text/button spacing, updated hint statistics, added game timer
 require 'gosu'
 require_relative 'Utilities/SetFunctions'
 require_relative 'Objects/GameSettings'
@@ -73,6 +74,7 @@ class SetGame < Gosu::Window
     @hint = []
     #players
     @p1, @p2 = nil, nil
+    @gameTimer = AllTimers.new
   end
 
   # Created 09/10/2019 by Neel Mansukhani
@@ -184,8 +186,9 @@ class SetGame < Gosu::Window
       else
       	@subtitle_font.draw_text("No sets found yet", 645, 30, ZOrder::TEXT, 1.0, 1.0, Gosu::Color::BLACK)
       end
-      @subtitle_font.draw_text("Hints used: #{@p1.hintsUsed}", 645, 120, ZOrder::TEXT, 1.0, 1.0, Gosu::Color::BLACK)
+      @subtitle_font.draw_text("Hints used: #{@p1.hintsUsed}", 645, 120, ZOrder::TEXT, 1.0, 1.0, Gosu::Color::BLACK) if @game_settings.areHintsEnabled
       @subtitle_font.draw_text("Score: #{@p1.score}", 645, 150, ZOrder::TEXT, 1.0, 1.0, Gosu::Color::BLACK)
+      @subtitle_font.draw_text("Total Game Time: #{@gameTimer.current}", 645, 490, ZOrder::TEXT, 1.0, 1.0, Gosu::Color::BLACK)
       
       if @game_settings.p2Init
         @subtitle_font.draw_text("Player 2 Statistics:", 645, 280, ZOrder::TEXT, 1.0, 1.0, Gosu::Color::BLACK)
@@ -199,7 +202,6 @@ class SetGame < Gosu::Window
       	else
       		@subtitle_font.draw_text("No sets found yet", 645, 310, ZOrder::TEXT, 1.0, 1.0, Gosu::Color::BLACK)
       	end
-     	  @subtitle_font.draw_text("Hints used: #{@p2.hintsUsed}", 645, 400, ZOrder::TEXT, 1.0, 1.0, Gosu::Color::BLACK)
       	@subtitle_font.draw_text("Score: #{@p2.score}", 645, 430, ZOrder::TEXT, 1.0, 1.0, Gosu::Color::BLACK)
       end
       # need booleans here to check if something's been pressed

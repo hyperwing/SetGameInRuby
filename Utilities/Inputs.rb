@@ -184,6 +184,13 @@ module Inputs
       end
     end
 
+    # Check if table valid
+    if @deck.deckCount < 9 and valid_table(@playingCards).length == 0
+      # puts("no more sets")
+      @game_settings.currentScreen = "gameover"
+      return
+    end
+
     if @game_settings.areHintsEnabled and button_up? Gosu::KB_H
       @hint = @p1.get_hint @playingCards
     end

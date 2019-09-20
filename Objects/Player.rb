@@ -114,8 +114,12 @@ class Player
   def get_hint cardsShowing
     valid_set = valid_table cardsShowing
     puts("look for a pair with these cards: ")
-    puts("card " + cardsShowing[valid_set[0]].id.to_s + " and card " + cardsShowing[valid_set[1]].id.to_s)
+    # puts("card " + cardsShowing[valid_set[0]].id.to_s + " and card " + cardsShowing[valid_set[1]].id.to_s)
+
+    end
+
     # TODO: Remove before submitting.
+    
     # puts("card 3:" + cardsShowing[valid_set[2]].id.to_s) #DEBUG message
 
     @hint_open = true
@@ -124,4 +128,5 @@ class Player
     return [cardsShowing[valid_set[0]], cardsShowing[valid_set[1]]]
 
   end
+
 end

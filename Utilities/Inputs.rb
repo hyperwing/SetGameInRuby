@@ -1,6 +1,7 @@
 # File Created 09/17/2019 by Neel Mansukhani
-# File Edited 09/18/2019 by Neel Mansukhani
-# File edited 09/18/2019 by David Wing
+# Edited 09/18/2019 by Neel Mansukhani
+# Edited 09/18/2019 by Leah Gillespie
+# Edited 09/19/2019 by Sri Ramya Dandu
 =begin
   This file contains functions for most input checks in the game.
   The input module is included in the Set class.
@@ -33,6 +34,7 @@ module Inputs
     end
   end
   # Created 09/17/2019 by Neel Mansukhani
+  # Edited 09/19/2019 by Sri Ramya Dandu: Changed level attribute
   # Checks the user input and allows users to select CPU difficulty
   def levelsScreenInputs
     index = Options::LEVELS_SCREEN.find_index @settings_hovered
@@ -52,11 +54,11 @@ module Inputs
       end
     elsif button_up? Gosu::KB_SPACE
       if @settings_hovered == "Easy"
-        @game_settings.cpuDifficulty = "Easy"
+        @game_settings.cpuDifficulty = 4
       elsif @settings_hovered == "Medium"
-        @game_settings.cpuDifficulty = "Medium"
+        @game_settings.cpuDifficulty = 2
       elsif @settings_hovered == "Hard"
-        @game_settings.cpuDifficulty = "Hard"
+        @game_settings.cpuDifficulty = 5
       end
       @game_settings.currentScreen = "game"
       # TODO: Move cursor
@@ -224,49 +226,53 @@ end
 # Created 09/08/2019 by Sri Ramya Dandu
 # Edited 09/09/2019 by Sri Ramya Dandu: Update and display deck and scores
 # Edited 09/09/2019 by Sri Ramya Dandu: Modifed so that the computer can guess wrong sets too
-# Edited 09/15/2019 by Sri Ramya Dandu: Added levels of difficulty
 # Edited 09/15/2019 by Sri Ramya Dandu: changed arrays back to local variables
 # Edited 09/17/2019 by Sri Ramya Dandu: removed threading features and modified for GUI output
 # Edited 09/19/2019 by Sharon Qiu: replaced p1 card clearing with method clean slate.
+# Edited 09/19/2019 by Sri Ramya Dandu: Added levels of difficulty and message options
 def computerMove p1
   indexSet = Array.new
 
-  found = false
-  #generates 3 card index values
-  winOrLose = rand(0..10)
-  if winOrLose % 3 == 0
+  #found = 0 for wrong output, 1 for right output, 2 for still trying
+  found = 0
+
+  if @playingCards.length > 3
+    #generates 3 card index values
+    winOrLose = rand(0..9)
+    # Easy mode: 30% chance of correct answer
+    # Medium mode: 50% chance of correct answer
+    # Hard mode: 70% chance of correct answer
     #will always return 3 values that form a set
-    indexSet = valid_table(@playingCards)
-  else
-    indexSet = (0...@playingCards.length).to_a.sample(3)
+    if @game_settings.cpuDifficulty < 5 && winOrLose % @game_settings.cpuDifficulty == 0
+      indexSet = valid_table(@playingCards)
+    elsif @game_settings.cpuDifficulty == 5 && (winOrLose % 2 == 0 || winOrLose % 3 == 0)
+      indexSet = valid_table(@playingCards)
+    else
+      indexSet = (0...@playingCards.length).to_a.sample(3)
+    end
+
+    card1 = @playingCards[indexSet[0]]
+    card2 = @playingCards[indexSet[1]]
+    card3 = @playingCards[indexSet[2]]
+
+
+    if(isASet?([card1,card2,card3]))
+      found = 1
+      @playingCards.delete(card1)
+      @playingCards.delete(card2)
+      @playingCards.delete(card3)
+      p1.cleanSlate
+      @computer_signal.score += 1
+    else
+      found = 0
+      @computer_signal.score -= 1
+    end
+    #determines if false or still trying should print
+    if found == 0 && rand(0..2) == 0
+      found = 2
+      @computer_signal.score += 1
+    end
   end
-
-  card1 = @playingCards[indexSet[0]]
-  card2 = @playingCards[indexSet[1]]
-  card3 = @playingCards[indexSet[2]]
-
-# Output for Computer Player
-# TODO: Output to UI instead of terminal
-#
-  puts "--------------------Computer Took A Turn------------------"
-  puts "Computer Player: I chose Card #{card1.id}, Card #{card2.id}, and Card #{card3.id}"
-
-  if(isASet?([card1,card2,card3]))
-    puts("That is a set!")
-    found = true
-    @playingCards.delete(card1)
-    @playingCards.delete(card2)
-    @playingCards.delete(card3)
-    p1.cleanSlate
-
-  else
-    puts("That is not a set.")
-    found = false
-  end
-
-  puts "--------------------Computer Finished Turn------------------"
-  puts
-
   return found
 end
 

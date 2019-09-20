@@ -8,6 +8,8 @@
 # Edited 09/17/2019 by Sri Ramya Dandu
 # Edited 09/18/2019 by Neel Mansukhani
 # Edited 09/18/2019 by Sri Ramya Dandu
+# Edited 09/19/2019 by Sri Ramya Dandu
+
 # Edited 09/18/2019 by Neel Mansukhani: Change directory location of files.
 # Edited 09/19/2019 by Leah Gillespie: Implemented player statistics and score visibility
 require 'gosu'
@@ -64,8 +66,8 @@ class SetGame < Gosu::Window
     @deck = Deck.new
     @playingCards = Array.new
     @playersCreated = false
-    @computer_signal = ComputerTimer.new(20)
-    @mes,@false_mes,@true_mes = false,false,false
+    @computer_signal = ComputerTimer.new
+    @mes, @false_mes, @true_mes, @trying_mes = false,false,false,false
     @hint = nil
     #players
     @p1, @p2 = nil, nil
@@ -76,6 +78,7 @@ class SetGame < Gosu::Window
   # Edited 09/17/2019 by Sharon Qiu: Edited game screen checks. Split commands into p1 and p2.
   # Edited 09/17/2019 by Sri Ramya Dandu: Added computer functionality
   # Edited 09/19/2019 by David Wing: added gameover screen functionality
+  # Edited 09/19/2019 by Sri Ramya Dandu: Added another computer message option
   def update
     if @game_settings.currentScreen == "start"
       startScreenInputs
@@ -91,8 +94,9 @@ class SetGame < Gosu::Window
         if @computer_signal.update
           @mes = computerMove(@p1)
         end
-        @true_mes = @mes && @computer_signal.display_message?
-        @false_mes = !@mes && @computer_signal.display_message?
+        @true_mes = (@mes == 1) && @computer_signal.display_message?
+        @false_mes = (@mes == 0) && @computer_signal.display_message?
+        @trying_mes = (@mes == 2) && @computer_signal.display_message?
       end
       gameScreenInputs
     elsif @game_settings.currentScreen == "gameover"
@@ -124,6 +128,7 @@ class SetGame < Gosu::Window
   # Edited 09/17/2019 by Sharon Qiu: Added check for player type.
   # Edited 09/18/2019 by Sri Ramya Dandu: Added output for computer to GUI
   # Edited 09/19/2019 by Leah Gillespie: Added player statistics and score
+  # Edited 09/19/2019 by Sri Ramya Dandu: Added more computer output to GUI
   def draw
     @background_image.draw(0, 0, ZOrder::BACKGROUND)
     if @game_settings.currentScreen == "start"
@@ -141,18 +146,20 @@ class SetGame < Gosu::Window
 
 
       if @game_settings.isCPUPlayerEnabled
-        @computer_signal.level = 100
+        @subtitle_font.draw_text("Computer:", 645, 215, ZOrder::TEXT, 1.0, 1.0, Gosu::Color::BLACK)
+        @subtitle_font.draw_text("Score : #{@computer_signal.score}", 645, 245, ZOrder::TEXT, 1.0, 1.0, Gosu::Color::BLACK)
       end
 
       if @true_mes
-        @subtitle_font.draw_text("Computer:", 645, 215, ZOrder::TEXT, 1.0, 1.0, Gosu::Color::BLACK)
-        @subtitle_font.draw_text("I found a set!", 645, 245, ZOrder::TEXT, 1.0, 1.0, Gosu::Color::BLACK)
+        @subtitle_font.draw_text("I found a set!", 645, 275, ZOrder::TEXT, 1.0, 1.0, Gosu::Color::BLACK)
+        if @computer_signal.score > 3 && @computer_signal.score - @p1.score > 3
+          @subtitle_font.draw_text("#{@computer_signal.mean_msg}", 645, 305, ZOrder::TEXT, 1.0, 1.0, Gosu::Color::BLACK)
+        end
       end
 
-      if @false_mes
-        @subtitle_font.draw_text("Computer:", 645, 215, ZOrder::TEXT, 1.0, 1.0, Gosu::Color::BLACK)
-        @subtitle_font.draw_text("Oops not a set!", 645, 245, ZOrder::TEXT, 1.0, 1.0, Gosu::Color::BLACK)
-      end
+      @subtitle_font.draw_text("Still trying!", 645, 275, ZOrder::TEXT, 1.0, 1.0, Gosu::Color::BLACK) if @trying_mes
+
+      @subtitle_font.draw_text("Oops not a set!", 645, 275, ZOrder::TEXT, 1.0, 1.0, Gosu::Color::BLACK) if @false_mes
 
       # Creates players if need be.
       if !@playersCreated

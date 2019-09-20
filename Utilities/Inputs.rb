@@ -87,16 +87,16 @@ module Inputs
       case movementIndex
       when 0
         @p1.move_left @playingCards
-        puts "p1 index: #{@p1.currentCardIndex}"
+        # puts "p1 index: #{@p1.currentCardIndex}"
       when 1
         @p1.move_right @playingCards
-        puts "p1 index: #{@p1.currentCardIndex}"
+        # puts "p1 index: #{@p1.currentCardIndex}"
       when 2
         @p1.move_up @playingCards
-        puts "p1 index: #{@p1.currentCardIndex}"
+        # puts "p1 index: #{@p1.currentCardIndex}"
       when 3
         @p1.move_down @playingCards
-        puts "p1 index: #{@p1.currentCardIndex}"
+        # puts "p1 index: #{@p1.currentCardIndex}"
       when 4
         @p1.selection @playingCards
       else
@@ -177,6 +177,7 @@ module Inputs
     # Check if table valid
     if @deck.deckCount < 9 and valid_table(@playingCards).length == 0
       # puts("no more sets")
+
       @game_settings.currentScreen = "gameover"
       @settings_hovered = Options::GAMEOVER_SCREEN[0]
       return
@@ -210,6 +211,7 @@ def gameOverScreenInputs
 
     if  index == 0
       # Choose home
+      @game_settings.changeGameMode "gameover"
       @game_settings.currentScreen = "start"
       @settings_hovered = Options::START_SCREEN[0]
       SetGame.new.show

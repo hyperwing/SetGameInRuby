@@ -88,7 +88,7 @@ class SetGame < Gosu::Window
       levelsScreenInputs
     elsif  @game_settings.currentScreen == "game"
       if @deck.deckCount == 0 or valid_table(@playingCards).length == 0
-        @game_settings.currentScreen == "gameover"
+        @game_settings.currentScreen = "gameover"
       end
 
       if @game_settings.isCPUPlayerEnabled
@@ -217,7 +217,6 @@ class SetGame < Gosu::Window
       # Prints out hints
       @hint.each do |card_index|
 
-        card_index % numCols
         # initial card corner values.
         left_x ,right_x, top_y, bottom_y = 10, 80, 40, 160
 

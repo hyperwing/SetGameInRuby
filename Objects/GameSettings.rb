@@ -29,6 +29,12 @@ class GameSettings
       @computerInit = true
       @currentScreen = "levels"
       @areHintsEnabled = true
+    elsif gameMode == "gameover"
+      @isCPUPlayerEnabled = false
+      @p1Init = true
+      @computerInit = false
+      @currentScreen = "gameover"
+      @areHintsEnabled = false
     else
       @isTwoPlayerEnabled = true
       @p1Init = true

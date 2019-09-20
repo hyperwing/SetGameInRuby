@@ -74,7 +74,7 @@ module Draws
   end
 
   def gameOverScreen
-    @subtitle_font.draw_text("Final Score: ", 170, 130, ZOrder::TEXT, 1.0, 1.0, Gosu::Color::WHITE)
+    @subtitle_font.draw_text("Final Score for player 1: #{@p1.score}", 170, 130, ZOrder::TEXT, 1.0, 1.0, Gosu::Color::WHITE)
     @buttonOption.draw(190,220, ZOrder::BUTTON,0.15,0.15)
     @buttonOption.draw(360,220, ZOrder::BUTTON,0.15,0.15)
     @subtitle_font.draw_text(Options::GAMEOVER_SCREEN[0], 240, 282, ZOrder::TEXT, 1.0, 1.0, Gosu::Color::BLACK)

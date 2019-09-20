@@ -1,22 +1,20 @@
-# Created 09/15/2019 by David Wing
-# Defines the methods and structures for a deck of cards
+# File Created 09/15/2019 by David Wing
 # Edited 09/16/2019 by Sri Ramya Dandu
 # Edited 09/17/2019 by Sharon Qiu
-
-# File created 9/05/2019 by David Wing
-# Edited 09/16/2019 by Sri Ramya Dandu
 # Defines the methods and structures for a deck of cards
+
 class Deck
-    # TODO: Temporary Fix
+    # TODO: fix this
     include SetFunctions
-    # cards is an array of Card Objects in the deck
-    # count is how many cards are in the deck
+    # Cards is an array of Card Objects in the deck
+    # Count is how many cards are in the deck
     attr_accessor :cards, :deckCount
 
-    # Created 9/05/2019 by David Wing
+    # Created 09/15/2019 by David Wing
     # Creates a new instance of Card with the given attributes
     def initialize
         @cards = createDeck
+        # TODO: refractor deckCount to deck_count
         @deckCount = 81
     end
 
@@ -28,8 +26,8 @@ class Deck
     # Edited 09/14/2019 by Neel Mansukhani: Made deck a local variable.
     # Edited 09/15/2019 by David Wing: Deck is now object, cards is new structure
     # Edited 09/16/2019 by Sri Ramya Dandu: Replaced for loops with .each
-    #
     # Creates an array to be the deck and initializes 81 unique cards into it
+    # TODO: refractor createDeck to create_deck
     def createDeck
         deck = Array.new
         id = 0
@@ -43,7 +41,7 @@ class Deck
                 end
             end
         end
-        return deck
+        deck
     end
     
     # Created 09/06/2019 by Neel Mansukhani
@@ -53,38 +51,37 @@ class Deck
     # Edited 9/09/2019 by David Wing: changed to conform to deck object & added deckCount updates
     # Edited 09/15/2019 by Sri Ramya Dandu: changed arrays to local variables
     # Edited 09/16/2019 by Sri Ramya Dandu: changed for loops .times  do
-
     # Updates the passed in array of playingCards to a playable status for the player.
     # Does nothing if deck of unplayed cards is empty.
     # @updates cardsShowing
-    def dealCards! cardsShowing
+    # TODO: refractor dealCards! to deal_cards
+    def dealCards! cards_showing
         return if @cards.length == 0
     
         #initializing deck.
-        if cardsShowing.length == 0
+        if cards_showing.length == 0
             12.times do
                 card = @cards.delete_at(rand(cards.length))
-                cardsShowing.push(card)
+                cards_showing.push(card)
                 self.deckCount-=1
             end
         end
     
-        if valid_table(cardsShowing).length == 0
+        if valid_table(cards_showing).length == 0
             #continually adds cards until there is a set or there are no more cards.
-            while (valid_table(cardsShowing).length == 0) && cards.length > 0
-                #print("\n Empty: #{(valid_table(playingCards)).length == 0} \n")
+            while valid_table(cards_showing).length == 0 && cards.length > 0
                 3.times do
-                    card = @cards.delete_at(rand(cards.length))
-                    cardsShowing.push(card)
-                    self.deckCount-=1
+                    card = @cards.delete_at rand cards.length
+                    cards_showing.push card
+                    self.deckCount -= 1
                 end
             end
-        elsif cardsShowing.length < 12
+        elsif cards_showing.length < 12
             # Adds cards if there is a set but less than 12 playing cards.
             3.times do
-                card = @cards.delete_at(rand(cards.length))
-                cardsShowing.push(card)
-                self.deckCount-=1
+                card = @cards.delete_at rand cards.length
+                cards_showing.push card
+                self.deckCount -= 1
             end
         end
     end

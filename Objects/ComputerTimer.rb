@@ -1,10 +1,11 @@
-# File created 09/17/2019 by Sri Ramya Dandu
+# File Created 09/17/2019 by Sri Ramya Dandu
 # Edited 09/18/2019 by Sri Ramya Dandu
 # Edited 09/19/2019 by Sri Ramya Dandu
 
 # Created 09/17/2019 by Sri Ramya Dandu
 # Edited 09/18/2019 by Sri Ramya Dandu: Added function display_message?
 # Provides a signal to determine whether the computer gets a turn or not
+# TODO: rename file
 class ComputerTimer
 
   attr_writer :level
@@ -16,9 +17,8 @@ class ComputerTimer
   # Initializes the time to signal for computer's turns and score
   def initialize
     @start_time = Time.now
-    @last_time_value = 0
+    @last_time_value, @score = 0, 0
     @level_num = rand(20...35)
-    @score = 0
     @insults = ["Oh man, you SUCK", "GIT GUD", "Pick it up", "Woohoo I'm winning", "I'm the BEST", "You call this a game?", "B U R N", "Git better", "Git checkout skills", "You can't compete", "L O S E R", "Who needs a hint? Clearly you!"]
     @mean_msg = @insults[rand(0...@insults.length)]
   end
@@ -51,7 +51,7 @@ class ComputerTimer
   # Created 09/18/2019 by Sri Ramya Dandu
   # Signals true to keep the computer message up for 6 seconds after computer takes a turn, false otherwise
   def display_message?
-    if play? || (seconds-@last_time_value) < 6 && @last_time_value >= @level_num
+    if play? || seconds - @last_time_value < 6 && @last_time_value >= @level_num
       true
     else
       false

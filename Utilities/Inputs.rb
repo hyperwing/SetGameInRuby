@@ -3,6 +3,7 @@
 # Edited 09/18/2019 by Leah Gillespie
 # Edited 09/19/2019 by Sri Ramya Dandu
 # Edited 09/19/2019 by Sharon Qiu
+# Edited 09/20/2019 by Sharon Qiu
 =begin
   This file contains functions for most input checks in the game.
   The input module is included in the Set class.
@@ -70,106 +71,52 @@ module Inputs
   # Edited 09/18/2019 by Neel Mansukhani: Removed isASet? from deck.
   # Edited 09/18/2019 by Leah Gillespie: adding statistics and score calculations
   # Edited 09/19/2019 by Sharon Qiu: Cleaned up movement checks.
+  # Edited 09/20/2019 by Sharon Qiu: Condensed player inputs by passing in player.
   # Checks in game user input for one and two players
-  def gameScreenInputs
+  def gameScreenInputs player
 
-    movementIndex = 0 # used to track switch cases
+    movement_index = 0 # used to track switch cases
     if @game_settings.p1Init
-      @p1.playerControls.each do |control|
+      player.playerControls.each do |control|
         unless button_up? control
-          movementIndex += 1
+          movement_index += 1
         else
           break
         end
       end
 
       # Determines movement
-      case movementIndex
+      case movement_index
       when 0
-        @p1.move_left @playingCards
-        # puts "p1 index: #{@p1.currentCardIndex}"
+        player.move_left @playingCards
       when 1
-        @p1.move_right @playingCards
-        # puts "p1 index: #{@p1.currentCardIndex}"
+        player.move_right @playingCards
       when 2
-        @p1.move_up @playingCards
-        # puts "p1 index: #{@p1.currentCardIndex}"
+        player.move_up @playingCards
       when 3
-        @p1.move_down @playingCards
-        # puts "p1 index: #{@p1.currentCardIndex}"
+        player.move_down @playingCards
       when 4
-        @p1.selection @playingCards
+        player.selection @playingCards
       else
         nil
       end
 
       # Checks the validity of a set.
-      if @p1.chosenCardsIndexes.length == 3
-        @p1.chosenSetValidity! @playingCards
-        if @p1.setFound
+      if player.chosenCardsIndexes.length == 3
+        player.chosenSetValidity! @playingCards
+        if player.setFound
           @hint.clear
           puts "Set found"
-          @p2.cleanSlate if @game_settings.p2Init
-	        @p1.setTimer.updateTime
-          @p1.setTimes.push @p1.setTimer.current
-          @p1.score += 1
-          @p1.setTimes.sort!
-	        @p1.timeSum += @p1.setTimer.current
-          @p1.setTimer.reset
+	        player.setTimer.updateTime
+          player.setTimes.push player.setTimer.current
+          player.score += 1
+          player.setTimes.sort!
+	        player.timeSum += player.setTimer.current
+          player.setTimer.reset
         else
           puts "Set not found"
-          @p1.cleanSlate
-	        @p1.score -= 1
-        end
-      end
-    end
-
-    movementIndex = 0
-    if @game_settings.p2Init
-      @p2.playerControls.each do |control|
-        unless button_up? control
-          movementIndex += 1
-        else
-          break
-        end
-      end
-
-      # Determines movement
-      case movementIndex
-      when 0
-        @p2.move_left @playingCards
-        puts "p2 index: #{@p2.currentCardIndex}"
-      when 1
-        @p2.move_right @playingCards
-        puts "p2 index: #{@p2.currentCardIndex}"
-      when 2
-        @p2.move_up @playingCards
-        puts "p2 index: #{@p2.currentCardIndex}"
-      when 3
-        @p2.move_down @playingCards
-        puts "p2 index: #{@p2.currentCardIndex}"
-      when 4
-        @p2.selection @playingCards
-      else
-        nil
-      end
-
-      # Checks the validity of a set.
-      if @p2.chosenCardsIndexes.length == 3
-        @p2.chosenSetValidity! @playingCards
-        if @p2.setFound
-          puts "Set found"
-          @p1.cleanSlate if @game_settings.p1Init
-	        @p2.setTimer.updateTime
-          @p2.setTimes.push @p2.setTimer.current
-          @p2.score += 1
-          @p2.setTimes.sort!
-	        @p2.timeSum += @p2.setTimer.current
-          @p2.setTimer.reset
-        else
-          puts "Set not found"
-          @p2.cleanSlate
-          @p2.score -=1
+          player.cleanSlate
+	        player.score -= 1
         end
       end
     end
@@ -184,7 +131,7 @@ module Inputs
     end
 
     if @game_settings.areHintsEnabled and button_up? Gosu::KB_H
-      @hint = @p1.get_hint @playingCards
+      @hint = player.get_hint @playingCards
     end
   end
 end

@@ -118,19 +118,19 @@ module Draws
     @subtitle_font.draw_text(Options::GAMEOVER_SCREEN[1], 395, 282, ZOrder::TEXT, 1.0, 1.0, Gosu::Color::BLACK)
 
     # draw player movement
-    left_x ,right_x, top_y, bottom_y, button_distance = 200, 300, 250, 300, 170
+    left_x ,right_x, top_y, bottom_y, button_distance = 200, 310, 260, 310, 170
 
     # reflects each corner  
     if @settings_hovered == Options::GAMEOVER_SCREEN[0]
-      draw_rect(left_x + (button_distance * 0),top_y,20,20,Gosu::Color::GRAY,ZOrder::TEXT)
-      draw_rect(right_x + (button_distance * 0),top_y,20,20,Gosu::Color::GRAY,ZOrder::TEXT)
-      draw_rect(left_x + (button_distance * 0),bottom_y,20,20,Gosu::Color::GRAY,ZOrder::TEXT)
-      draw_rect(right_x + (button_distance * 0),bottom_y,20,20,Gosu::Color::GRAY,ZOrder::TEXT)
+      draw_rect(left_x,top_y,120,10,Gosu::Color::GRAY,ZOrder::TEXT)
+      draw_rect(left_x,top_y,10,50,Gosu::Color::GRAY,ZOrder::TEXT)
+      draw_rect(left_x ,bottom_y,120,10,Gosu::Color::GRAY,ZOrder::TEXT)
+      draw_rect(right_x,top_y,10,50,Gosu::Color::GRAY,ZOrder::TEXT)
     else
-      draw_rect(left_x + (button_distance * 1),top_y,20,20,Gosu::Color::GRAY,ZOrder::TEXT)
-      draw_rect(right_x + (button_distance * 1),top_y,20,20,Gosu::Color::GRAY,ZOrder::TEXT)
-      draw_rect(left_x + (button_distance * 1),bottom_y,20,20,Gosu::Color::GRAY,ZOrder::TEXT)
-      draw_rect(right_x + (button_distance * 1),bottom_y,20,20,Gosu::Color::GRAY,ZOrder::TEXT)
+      draw_rect(left_x + button_distance,top_y,120,10,Gosu::Color::GRAY,ZOrder::TEXT)
+      draw_rect(left_x + button_distance,top_y,10,50,Gosu::Color::GRAY,ZOrder::TEXT)
+      draw_rect(left_x + button_distance,bottom_y,120,10,Gosu::Color::GRAY,ZOrder::TEXT)
+      draw_rect(right_x + button_distance,top_y,10,50,Gosu::Color::GRAY,ZOrder::TEXT)
     end
 
     # draw_rect(230,250,20,20,Gosu::Color::GRAY,ZOrder::UI) if @settings_hovered == Options::GAMEOVER_SCREEN[0]

@@ -108,7 +108,6 @@ class SetGame < Gosu::Window
       gameScreenInputs
     elsif @game_settings.currentScreen == "gameover"
       gameOverScreenInputs
-
     end
   end
 
@@ -143,9 +142,6 @@ class SetGame < Gosu::Window
       startScreen
     elsif @game_settings.currentScreen == "levels"
       levelsScreen
-    elsif @game_settings.currentScreen == "test"
-      x = Card.new(0,2,0,2,2)
-      x.image.draw(0,0,ZOrder::CARDS, 0.15, 0.15)
     elsif @game_settings.currentScreen == "gameover"
       gameOverScreen
     elsif  @game_settings.currentScreen == "game"
@@ -225,7 +221,7 @@ class SetGame < Gosu::Window
         # initial card corner values.
         left_x ,right_x, top_y, bottom_y = 5, 85, 40, 160
 
-        # One rectangle for each corner, position based on offset.
+        # Highlight for hints
         draw_rect(left_x + x_between*(card_index % numCols),top_y + y_between*(card_index / numCols),80,10,Gosu::Color::BLACK,ZOrder::CARDS)
         draw_rect(left_x + x_between*(card_index % numCols),top_y + y_between*(card_index / numCols),10,130,Gosu::Color::BLACK,ZOrder::CARDS)
         draw_rect(left_x + x_between*(card_index % numCols),bottom_y + y_between*(card_index / numCols),80,10,Gosu::Color::BLACK,ZOrder::CARDS)

@@ -9,8 +9,10 @@
 # Edited 09/18/2019 by Neel Mansukhani
 # Edited 09/18/2019 by Sri Ramya Dandu
 # Edited 09/18/2019 by Sharon Qiu
+# Edited 09/18/2019 by David Wing
 # Edited 09/19/2019 by Sri Ramya Dandu
 # Edited 09/19/2019 by Sharon Qiu
+# Edited 09/19/2019 by David Wing
 
 # Edited 09/18/2019 by Neel Mansukhani: Change directory location of files.
 # Edited 09/19/2019 by Leah Gillespie: Implemented player statistics and score visibility
@@ -31,6 +33,7 @@ module ZOrder
 end
 
 # Edited 09/15/2019 by Sharon Qiu: Added PLAYER_COLOR, where Gray is computer, red is player1, blue is player2.
+# Edited 09/18/2019 by David Wing: added gameover menu options
 module Options
   START_SCREEN = ["SOLO", "Computer", "2 Player"]
   LEVELS_SCREEN = ["Easy", "Medium", "Hard"]

@@ -190,12 +190,14 @@ module Inputs
 end
 
 # Created 9/18/19 David Wing
+# Edited 9/19/19 David Wing: fixed bug causing crash on index nil
 # Checks inputs when player hits gameover screen
 def gameOverScreenInputs
   index = Options::GAMEOVER_SCREEN.find_index @settings_hovered
-  if index.class == nil
+  if index.nil?
     index = 0
   end
+  
   if button_up? Gosu::KB_D
     index += 1
     if index == 2

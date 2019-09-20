@@ -79,24 +79,64 @@ module Draws
 
   end
 
+  # Created 9/18/2019 by David Wing
+  # Edited 9/19/2019 by David Wing added different images for modes
+  # Edited 9/20/2019 by David Wing added rectangle select
   def gameOverScreen
     @subtitle_font.draw_text("Final Score for player 1: #{@p1.score}", 170, 130, ZOrder::TEXT, 1.0, 1.0, Gosu::Color::WHITE)
     
-    if @game_settings.p2Init
+    if @game_settings.p2Init # 2Player mode
       @subtitle_font.draw_text("Final Score for player 2: #{@p2.score}", 170, 150, ZOrder::TEXT, 1.0, 1.0, Gosu::Color::WHITE)
-    elsif @game_settings.isCPUPlayerEnabled
+      @background_image = Gosu::Image.new("media/gob.png", :tileable => true)
+
+      if @p1.score> @p2.score #P1 win
+        @image = (Gosu::Image.new("media/p1win.png"))
+      elsif @p2.score > @p1.score #P2 win
+        @image = (Gosu::Image.new("media/p2win.png"))
+      else #TIE
+        @image = (Gosu::Image.new("media/tie.png"))
+      end
+
+    elsif @game_settings.isCPUPlayerEnabled #CPU mode
       @subtitle_font.draw_text("Final Score for CPU: #{@computer_signal.score}", 170, 150, ZOrder::TEXT, 1.0, 1.0, Gosu::Color::WHITE)
+      if @computer_signal.score < @p1.score
+        @background_image = Gosu::Image.new("media/youwin.png", :tileable => true)
+        @image = (Gosu::Image.new("media/youwinText.png"))
+      else
+        @image = (Gosu::Image.new("media/Gameover.png"))
+        @background_image = Gosu::Image.new("media/gob.png", :tileable => true)
+
+      end
+    else #Single Player mode
+      @image = (Gosu::Image.new("media/Gameover.png"))
+      @background_image = Gosu::Image.new("media/gob.png", :tileable => true)
     end
 
     @buttonOption.draw(190,220, ZOrder::BUTTON,0.15,0.15)
     @buttonOption.draw(360,220, ZOrder::BUTTON,0.15,0.15)
     @subtitle_font.draw_text(Options::GAMEOVER_SCREEN[0], 240, 282, ZOrder::TEXT, 1.0, 1.0, Gosu::Color::BLACK)
     @subtitle_font.draw_text(Options::GAMEOVER_SCREEN[1], 395, 282, ZOrder::TEXT, 1.0, 1.0, Gosu::Color::BLACK)
-    draw_rect(190,220,20,20,Gosu::Color::GRAY,ZOrder::UI) if @settings_hovered == Options::GAMEOVER_SCREEN[0]
-    draw_rect(360,220,20,20,Gosu::Color::GRAY,ZOrder::UI) if @settings_hovered == Options::GAMEOVER_SCREEN[1]
-    @image = (Gosu::Image.new("media/Gameover.png"))
-    @image.draw(190,50,20)
-    @background_image = Gosu::Image.new("media/gob.png", :tileable => true)
+
+    # draw player movement
+    left_x ,right_x, top_y, bottom_y, button_distance = 200, 300, 250, 300, 170
+
+    # reflects each corner  
+    if @settings_hovered == Options::GAMEOVER_SCREEN[0]
+      draw_rect(left_x + (button_distance * 0),top_y,20,20,Gosu::Color::GRAY,ZOrder::TEXT)
+      draw_rect(right_x + (button_distance * 0),top_y,20,20,Gosu::Color::GRAY,ZOrder::TEXT)
+      draw_rect(left_x + (button_distance * 0),bottom_y,20,20,Gosu::Color::GRAY,ZOrder::TEXT)
+      draw_rect(right_x + (button_distance * 0),bottom_y,20,20,Gosu::Color::GRAY,ZOrder::TEXT)
+    else
+      draw_rect(left_x + (button_distance * 1),top_y,20,20,Gosu::Color::GRAY,ZOrder::TEXT)
+      draw_rect(right_x + (button_distance * 1),top_y,20,20,Gosu::Color::GRAY,ZOrder::TEXT)
+      draw_rect(left_x + (button_distance * 1),bottom_y,20,20,Gosu::Color::GRAY,ZOrder::TEXT)
+      draw_rect(right_x + (button_distance * 1),bottom_y,20,20,Gosu::Color::GRAY,ZOrder::TEXT)
+    end
+
+    # draw_rect(230,250,20,20,Gosu::Color::GRAY,ZOrder::UI) if @settings_hovered == Options::GAMEOVER_SCREEN[0]
+    # draw_rect(385,250,20,20,Gosu::Color::GRAY,ZOrder::UI) if @settings_hovered == Options::GAMEOVER_SCREEN[1]
+    # @image = (Gosu::Image.new("media/Gameover.png"))
+    @image.draw(190,30,20)
 
     
   end

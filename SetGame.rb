@@ -146,7 +146,6 @@ class SetGame < Gosu::Window
         @p1 = Player.new 1 if @game_settings.p1Init == true
         @p2 = Player.new 2 if @game_settings.p2Init == true
         @playersCreated = true
-
       end
 
       Gosu.draw_rect(640,0,200,480,Gosu::Color::GRAY,ZOrder::UI)

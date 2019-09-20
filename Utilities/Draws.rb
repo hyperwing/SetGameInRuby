@@ -18,13 +18,30 @@ module Draws
     @subtitle_font.draw_text(Options::START_SCREEN[0], 240, 282, ZOrder::TEXT, 1.0, 1.0, Gosu::Color::BLACK)
     @subtitle_font.draw_text(Options::START_SCREEN[1], 395, 282, ZOrder::TEXT, 1.0, 1.0, Gosu::Color::BLACK)
     @subtitle_font.draw_text(Options::START_SCREEN[2], 573, 282, ZOrder::TEXT, 1.0, 1.0, Gosu::Color::BLACK)
-    draw_rect(250,250,20,20,Gosu::Color::GRAY,ZOrder::TEXT) if @settings_hovered == Options::START_SCREEN[0]
-    draw_rect(420,250,20,20,Gosu::Color::GRAY,ZOrder::TEXT) if @settings_hovered == Options::START_SCREEN[1]
-    draw_rect(590,250,20,20,Gosu::Color::GRAY,ZOrder::TEXT) if @settings_hovered == Options::START_SCREEN[2]
+
+    #to get the index of the button hovered over
+    hover_index = 0
+    Options::START_SCREEN.each_index do |option|
+      unless @settings_hovered == Options::START_SCREEN[option]
+        hover_index += 1
+      else
+        break
+      end
+    end
+
+    # draw player movement
+    left_x ,right_x, top_y, bottom_y, button_distance = 200, 305, 255, 305, 170
+
+    # reflects each corner
+    draw_rect(left_x + (button_distance * hover_index),top_y,20,20,Gosu::Color::GRAY,ZOrder::TEXT)
+    draw_rect(right_x + (button_distance * hover_index),top_y,20,20,Gosu::Color::GRAY,ZOrder::TEXT)
+    draw_rect(left_x + (button_distance * hover_index),bottom_y,20,20,Gosu::Color::GRAY,ZOrder::TEXT)
+    draw_rect(right_x + (button_distance * hover_index),bottom_y,20,20,Gosu::Color::GRAY,ZOrder::TEXT)
   end
 
   # Created 09/15/2019 by Sri Ramya Dandu
   # Edited 09/15/2019 by Neel Mansukhani: Moved to Draw File
+  # Edited 09/19/2019 by Sharon Qiu: Edited offset of drawn rectangles.
   # Draws images, shapes, and text on level select screen.
   def levelsScreen
     @title_font.draw_text("Choose a level of difficulty", 170, 50, ZOrder::TEXT, 1.0, 1.0, Gosu::Color::BLACK)
@@ -34,8 +51,25 @@ module Draws
     @subtitle_font.draw_text(Options::LEVELS_SCREEN[0], 410, 151, ZOrder::TEXT, 1.0, 1.0, Gosu::Color::BLACK)
     @subtitle_font.draw_text(Options::LEVELS_SCREEN[1], 400, 230, ZOrder::TEXT, 1.0, 1.0, Gosu::Color::BLACK)
     @subtitle_font.draw_text(Options::LEVELS_SCREEN[2], 410, 310, ZOrder::TEXT, 1.0, 1.0, Gosu::Color::BLACK)
-    draw_rect(360,90,20,20,Gosu::Color::GRAY,ZOrder::UI) if @settings_hovered == Options::LEVELS_SCREEN[0]
-    draw_rect(360,170,20,20,Gosu::Color::GRAY,ZOrder::UI) if @settings_hovered == Options::LEVELS_SCREEN[1]
-    draw_rect(360,250,20,20,Gosu::Color::GRAY,ZOrder::UI) if @settings_hovered == Options::LEVELS_SCREEN[2]
+
+    #to get the index of the button hovered over
+    hover_index = 0
+    Options::START_SCREEN.each_index do |option|
+      unless @settings_hovered == Options::LEVELS_SCREEN[option]
+        hover_index += 1
+      else
+        break
+      end
+    end
+
+    # draw player movement
+    left_x ,right_x, top_y, bottom_y, button_distance = 370, 475, 125, 175, 80
+
+    # reflects each corner
+    draw_rect(left_x,top_y + (button_distance * hover_index),20,20,Gosu::Color::GRAY,ZOrder::TEXT)
+    draw_rect(right_x,top_y + (button_distance * hover_index),20,20,Gosu::Color::GRAY,ZOrder::TEXT)
+    draw_rect(left_x, bottom_y + (button_distance * hover_index),20,20,Gosu::Color::GRAY,ZOrder::TEXT)
+    draw_rect(right_x,bottom_y + (button_distance * hover_index),20,20,Gosu::Color::GRAY,ZOrder::TEXT)
+
   end
 end

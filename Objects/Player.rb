@@ -12,7 +12,7 @@ class Player
   attr_accessor :currentCardIndex, :chosenCards, :chosenCardsIndexes, :playerControls, :playerMovement, :setTimer, :setTimes, :hintsUsed, :score, :hint_open
 
   @@p1Controls = [Gosu::KB_A, Gosu::KB_D, Gosu::KB_W, Gosu::KB_S, Gosu::KB_SPACE]
-  @@p2Controls = [Gosu::KB_LEFT, Gosu::KB_RIGHT, Gosu::KB_UP, Gosu::KB_DOWN, Gosu::KB_RETURN]
+  @@p2Controls = [Gosu::KB_LEFT, Gosu::KB_RIGHT, Gosu::KB_UP, Gosu::KB_DOWN, Gosu::KB_LEFT_SHIFT]
 
   def initialize playerNum
 
@@ -106,21 +106,16 @@ class Player
 
   # Created 09/13/2019 by David Wing: Moved functionality to its own method.
   # Edited 09/15/2019 by Sri Ramya Dandu: Removed a parameter
-  # Edited 09/19/2019 by Sharon Qiu: edited so it triggers hint_open.
+  # Edited 09/19/2019 by Sharon Qiu: edited so it triggers hint_open. Also returns indices of the cards in cardsShowing.
   #
   # Given a valid set from the table, outputs two cards that make up a set
   # Returns array of two card objects that are the hint
   def get_hint cardsShowing
     valid_set = valid_table cardsShowing
-    puts("look for a pair with these cards: ")
-    puts("card " + cardsShowing[valid_set[0]].id.to_s + " and card " + cardsShowing[valid_set[1]].id.to_s)
-    # TODO: Remove before submitting.
-    # puts("card 3:" + cardsShowing[valid_set[2]].id.to_s) #DEBUG message
 
     @hint_open = true
     @score -= 0.5
 
-    return [cardsShowing[valid_set[0]], cardsShowing[valid_set[1]]]
-
+    return [cardsShowing.find_index valid_set[0], cardsShowing.find_index valid_set[0]]
   end
 end

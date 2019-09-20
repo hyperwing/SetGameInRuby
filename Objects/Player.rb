@@ -6,6 +6,7 @@
 # Edited 09/18/2019 by Sharon Qiu: Introduced parallel mapping keys.
 # Edited 09/18/2019 by Leah Gillespie: Added player stats and score as instance variables
 # Edited 09/18/2019 by Sharon Qiu: Included setFunctions module. Also moved get_hint into player class. Also created 2 new functions, chosen set validity and clean slate.
+# Edited 09/19/2019 by Sharon Qiu: Modified get_hint to change setFound and hint trigger. Also returns indices of the
 class Player
 
   include SetFunctions
@@ -117,6 +118,6 @@ class Player
     @hint_open = true
     @score -= 0.5
 
-    return [cardsShowing.find_index valid_set[0], cardsShowing.find_index valid_set[0]]
+    return [cardsShowing.find_index(valid_set[0]), cardsShowing.find_index(valid_set[1])]
   end
 end

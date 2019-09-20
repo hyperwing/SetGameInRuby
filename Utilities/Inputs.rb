@@ -116,7 +116,7 @@ module Inputs
       # Checks the validity of a set.
       if @p1.chosenCardsIndexes.length == 3
         # TODO: In the future, implement check for score adjustments with hint usage
-        if @p1.chosenSetValidity @playingCards
+        if @p1.chosenSetValidity! @playingCards
           puts "Set found"
           @p2.cleanSlate if @game_settings.p2Init
 	  @p1.setTimer.updateTime
@@ -209,11 +209,11 @@ def computerMove p1
     winOrLose = rand(0..9)
     # Easy mode: 30% chance of correct answer
     # Medium mode: 50% chance of correct answer
-    # Hard mode: 70% chance of correct answer
+    # Hard mode: 80% chance of correct answer
     #will always return 3 values that form a set
-    if @game_settings.cpuDifficulty < 5 && winOrLose % @game_settings.cpuDifficulty == 0
+    if winOrLose % @game_settings.cpuDifficulty == 0
       indexSet = valid_table(@playingCards)
-    elsif @game_settings.cpuDifficulty == 5 && (winOrLose % 2 == 0 || winOrLose % 3 == 0)
+    elsif @game_settings.cpuDifficulty == 5 && winOrLose % 3 == 0
       indexSet = valid_table(@playingCards)
     else
       indexSet = (0...@playingCards.length).to_a.sample(3)

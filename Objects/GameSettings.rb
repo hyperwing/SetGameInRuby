@@ -3,7 +3,7 @@
 # Edited 09/19/2019 by Sharon Qiu: Added access to areHintsEnabled
 # Edited 09/19/2019 by Sri Ramya Dandu: Changed CPU Difficulty attribute
 class GameSettings
-  attr_accessor :currentScreen,:isTwoPlayerEnabled,:isCPUPlayerEnabled,:cpuDifficulty,:p1Init,:p2Init,:computerInit, :areHintsEnabled
+  attr_accessor :currentScreen,:isTwoPlayerEnabled, :areHintsEnabled, :isCPUPlayerEnabled,:cpuDifficulty,:p1Init,:p2Init,:computerInit
   def initialize
     @currentScreen = "start"
     @areHintsEnabled = true

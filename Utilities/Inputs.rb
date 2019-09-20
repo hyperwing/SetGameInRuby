@@ -2,6 +2,7 @@
 # Edited 09/18/2019 by Neel Mansukhani
 # Edited 09/18/2019 by Leah Gillespie
 # Edited 09/19/2019 by Sri Ramya Dandu
+# Edited 09/19/2019 by Sharon Qiu
 =begin
   This file contains functions for most input checks in the game.
   The input module is included in the Set class.
@@ -9,6 +10,7 @@
 
 # Edited 09/18/2019 by Neel Mansukhani: Put functions in the module
 # Edited 09/18/2019 by Leah Gillespie: Added statistics and scores
+# Edited 09/19/2019 by Sharon Qiu: moved computer into inputs module. Also added hint clearing when computer chooses a set.
 module Inputs
   # Created 09/17/2019 by Neel Mansukhani
   # Checks the user inputs and allows user to select game mode
@@ -115,15 +117,16 @@ module Inputs
 
       # Checks the validity of a set.
       if @p1.chosenCardsIndexes.length == 3
-        # TODO: In the future, implement check for score adjustments with hint usage
-        if @p1.chosenSetValidity! @playingCards
+        @p1.chosenSetValidity! @playingCards
+        if @p1.setFound
+          @hint.clear
           puts "Set found"
           @p2.cleanSlate if @game_settings.p2Init
-	  @p1.setTimer.updateTime
+	        @p1.setTimer.updateTime
           @p1.setTimes.push @p1.setTimer.current
           @p1.score += 1
           @p1.setTimes.sort!
-	  @p1.timeSum += @p1.setTimer.current
+	        @p1.timeSum += @p1.setTimer.current
           @p1.setTimer.reset
         else
           puts "Set not found"
@@ -165,21 +168,20 @@ module Inputs
 
       # Checks the validity of a set.
       if @p2.chosenCardsIndexes.length == 3
-        # TODO: In the future, implement check for score adjustments with hint usage
-        if @p2.chosenSetValidity! @playingCards
+        @p2.chosenSetValidity! @playingCards
+        if @p2.setFound
           puts "Set found"
           @p1.cleanSlate if @game_settings.p1Init
-	  @p2.setTimer.updateTime
+	        @p2.setTimer.updateTime
           @p2.setTimes.push @p2.setTimer.current
           @p2.score += 1
           @p2.setTimes.sort!
-	  @p2.timeSum += @p2.setTimer.current
+	        @p2.timeSum += @p2.setTimer.current
           @p2.setTimer.reset
         else
           puts "Set not found"
           @p2.cleanSlate
           @p2.score -=1
-          # TODO: Make a trigger for updating the window
         end
       end
     end
@@ -194,7 +196,6 @@ module Inputs
     if @game_settings.areHintsEnabled and button_up? Gosu::KB_H
       @hint = @p1.get_hint @playingCards
     end
-
   end
 end
 
@@ -240,46 +241,57 @@ end
 def computerMove p1
   indexSet = Array.new
 
-  #found = 0 for wrong output, 1 for right output, 2 for still trying
-  found = 0
+  # Created 09/08/2019 by Sri Ramya Dandu
+  # Edited 09/09/2019 by Sri Ramya Dandu: Update and display deck and scores
+  # Edited 09/09/2019 by Sri Ramya Dandu: Modifed so that the computer can guess wrong sets too
+  # Edited 09/15/2019 by Sri Ramya Dandu: changed arrays back to local variables
+  # Edited 09/17/2019 by Sri Ramya Dandu: removed threading features and modified for GUI output
+  # Edited 09/19/2019 by Sharon Qiu: replaced p1 card clearing with method clean slate.
+  # Edited 09/19/2019 by Sri Ramya Dandu: Added levels of difficulty and message options
+  def computerMove p1
+    indexSet = Array.new
 
-  if @playingCards.length > 3
-    #generates 3 card index values
-    winOrLose = rand(0..9)
-    # Easy mode: 30% chance of correct answer
-    # Medium mode: 50% chance of correct answer
-    # Hard mode: 80% chance of correct answer
-    #will always return 3 values that form a set
-    if winOrLose % @game_settings.cpuDifficulty == 0
-      indexSet = valid_table(@playingCards)
-    elsif @game_settings.cpuDifficulty == 5 && winOrLose % 3 == 0
-      indexSet = valid_table(@playingCards)
-    else
-      indexSet = (0...@playingCards.length).to_a.sample(3)
+    #found = 0 for wrong output, 1 for right output, 2 for still trying
+    found = 0
+
+    if @playingCards.length > 3
+      #generates 3 card index values
+      winOrLose = rand(0..9)
+      # Easy mode: 30% chance of correct answer
+      # Medium mode: 50% chance of correct answer
+      # Hard mode: 80% chance of correct answer
+      #will always return 3 values that form a set
+      if winOrLose % @game_settings.cpuDifficulty == 0
+        indexSet = valid_table(@playingCards)
+      elsif @game_settings.cpuDifficulty == 5 && winOrLose % 3 == 0
+        indexSet = valid_table(@playingCards)
+      else
+        indexSet = (0...@playingCards.length).to_a.sample(3)
+      end
+
+      card1 = @playingCards[indexSet[0]]
+      card2 = @playingCards[indexSet[1]]
+      card3 = @playingCards[indexSet[2]]
+
+
+      if(isASet?([card1,card2,card3]))
+        @hint.clear
+        found = 1
+        @playingCards.delete(card1)
+        @playingCards.delete(card2)
+        @playingCards.delete(card3)
+        p1.cleanSlate
+        @computer_signal.score += 1
+      else
+        found = 0
+        @computer_signal.score -= 1
+      end
+      #determines if false or still trying should print
+      if found == 0 && rand(0..2) == 0
+        found = 2
+        @computer_signal.score += 1
+      end
     end
-
-    card1 = @playingCards[indexSet[0]]
-    card2 = @playingCards[indexSet[1]]
-    card3 = @playingCards[indexSet[2]]
-
-
-    if(isASet?([card1,card2,card3]))
-      found = 1
-      @playingCards.delete(card1)
-      @playingCards.delete(card2)
-      @playingCards.delete(card3)
-      p1.cleanSlate
-      @computer_signal.score += 1
-    else
-      found = 0
-      @computer_signal.score -= 1
-    end
-    #determines if false or still trying should print
-    if found == 0 && rand(0..2) == 0
-      found = 2
-      @computer_signal.score += 1
-    end
+    return found
   end
-  return found
 end
-

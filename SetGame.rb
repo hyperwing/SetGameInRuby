@@ -8,7 +8,9 @@
 # Edited 09/17/2019 by Sri Ramya Dandu
 # Edited 09/18/2019 by Neel Mansukhani
 # Edited 09/18/2019 by Sri Ramya Dandu
+# Edited 09/18/2019 by Sharon Qiu
 # Edited 09/19/2019 by Sri Ramya Dandu
+# Edited 09/19/2019 by Sharon Qiu
 
 # Edited 09/18/2019 by Neel Mansukhani: Change directory location of files.
 # Edited 09/19/2019 by Leah Gillespie: Implemented player statistics and score visibility
@@ -68,7 +70,7 @@ class SetGame < Gosu::Window
     @playersCreated = false
     @computer_signal = ComputerTimer.new
     @mes, @false_mes, @true_mes, @trying_mes = false,false,false,false
-    @hint = nil
+    @hint = []
     #players
     @p1, @p2 = nil, nil
   end
@@ -129,6 +131,7 @@ class SetGame < Gosu::Window
   # Edited 09/18/2019 by Sri Ramya Dandu: Added output for computer to GUI
   # Edited 09/19/2019 by Leah Gillespie: Added player statistics and score
   # Edited 09/19/2019 by Sri Ramya Dandu: Added more computer output to GUI
+  # Edited 09/19/2019 by Sharon Qiu: refined player movement for 1 & 2 player. Also added hint printout.
   def draw
     @background_image.draw(0, 0, ZOrder::BACKGROUND)
     if @game_settings.currentScreen == "start"
@@ -166,7 +169,6 @@ class SetGame < Gosu::Window
         @p1 = Player.new 1 if @game_settings.p1Init
         @p2 = Player.new 2 if @game_settings.p2Init
         @playersCreated = true
-
       end
 
       Gosu.draw_rect(640,0,280,480,Gosu::Color::GRAY,ZOrder::UI)
@@ -186,7 +188,7 @@ class SetGame < Gosu::Window
       @subtitle_font.draw_text("Score: #{@p1.score}", 645, 150, ZOrder::TEXT, 1.0, 1.0, Gosu::Color::BLACK)
       
       if @game_settings.p2Init
-	@subtitle_font.draw_text("Player 2 Statistics:", 645, 280, ZOrder::TEXT, 1.0, 1.0, Gosu::Color::BLACK)
+        @subtitle_font.draw_text("Player 2 Statistics:", 645, 280, ZOrder::TEXT, 1.0, 1.0, Gosu::Color::BLACK)
       	if @p2.setTimes.length > 0 
       		@subtitle_font.draw_text("Fastest time to find a set: #{@p2.setTimes.at 0}", 645, 310, ZOrder::TEXT, 1.0, 1.0,
 			Gosu::Color::BLACK)
@@ -197,10 +199,9 @@ class SetGame < Gosu::Window
       	else
       		@subtitle_font.draw_text("No sets found yet", 645, 310, ZOrder::TEXT, 1.0, 1.0, Gosu::Color::BLACK)
       	end
-     	@subtitle_font.draw_text("Hints used: #{@p2.hintsUsed}", 645, 400, ZOrder::TEXT, 1.0, 1.0, Gosu::Color::BLACK)
+     	  @subtitle_font.draw_text("Hints used: #{@p2.hintsUsed}", 645, 400, ZOrder::TEXT, 1.0, 1.0, Gosu::Color::BLACK)
       	@subtitle_font.draw_text("Score: #{@p2.score}", 645, 430, ZOrder::TEXT, 1.0, 1.0, Gosu::Color::BLACK)
       end
-      # todo: conditions like hint conditions etc that tell you when to pop up
       # need booleans here to check if something's been pressed
 
       c = 0
@@ -212,6 +213,20 @@ class SetGame < Gosu::Window
           c += 1
         end
       end
+
+      # Prints out hints
+      @hint.each do |card_index|
+        card_index % numCols
+        # initial card corner values.
+        left_x ,right_x, top_y, bottom_y = 10, 80, 40, 160
+
+        # One rectangle for each corner, position based on offset.
+        draw_rect(left_x + x_between*(card_index % numCols),top_y + y_between*(card_index / numCols),10,10,Gosu::Color::BLACK,ZOrder::CARDS)
+        draw_rect(right_x + x_between*(card_index % numCols),top_y + y_between*(card_index / numCols),10,10,Gosu::Color::BLACK,ZOrder::CARDS)
+        draw_rect(left_x + x_between*(card_index % numCols),bottom_y + y_between*(card_index / numCols),10,10,Gosu::Color::BLACK,ZOrder::CARDS)
+        draw_rect(right_x + x_between*(card_index % numCols),bottom_y + y_between*(card_index / numCols),10,10,Gosu::Color::BLACK,ZOrder::CARDS)
+      end
+
       #TO MOVE RECTANGLE:
       # X POSITION = @currentCardIndex % numCols
       # Y POSITION = @currentCardIndex / numCols

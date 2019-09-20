@@ -193,20 +193,23 @@ end
 # Checks inputs when player hits gameover screen
 def gameOverScreenInputs
   index = Options::GAMEOVER_SCREEN.find_index @settings_hovered
+  if index.class == nil
+    index = 0
+  end
   if button_up? Gosu::KB_D
-    if index == 1
-      @settings_hovered = Options::GAMEOVER_SCREEN[0]
-    else
-      index += 1
-      @settings_hovered = Options::GAMEOVER_SCREEN[index]
+    index += 1
+    if index == 2
+      index = 0
     end
+    @settings_hovered = Options::GAMEOVER_SCREEN[index]
+    
   elsif button_up? Gosu::KB_A
-    if index == 0
-      @settings_hovered = Options::GAMEOVER_SCREEN[2]
-    else
-      index -= 1
-      @settings_hovered = Options::GAMEOVER_SCREEN[index]
+    index-=1
+    if index == -1
+      index = 1
     end
+    @settings_hovered = Options::GAMEOVER_SCREEN[index]
+
   elsif button_up? Gosu::KB_SPACE
 
     if  index == 0
@@ -218,6 +221,7 @@ def gameOverScreenInputs
 
     else 
       close
+      exit(0)
     end
 
   end

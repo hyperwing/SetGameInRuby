@@ -81,6 +81,13 @@ module Draws
 
   def gameOverScreen
     @subtitle_font.draw_text("Final Score for player 1: #{@p1.score}", 170, 130, ZOrder::TEXT, 1.0, 1.0, Gosu::Color::WHITE)
+    
+    if @game_settings.p2Init
+      @subtitle_font.draw_text("Final Score for player 2: #{@p2.score}", 170, 150, ZOrder::TEXT, 1.0, 1.0, Gosu::Color::WHITE)
+    elsif @game_settings.isCPUPlayerEnabled
+      @subtitle_font.draw_text("Final Score for CPU: #{@computer_signal.score}", 170, 150, ZOrder::TEXT, 1.0, 1.0, Gosu::Color::WHITE)
+    end
+
     @buttonOption.draw(190,220, ZOrder::BUTTON,0.15,0.15)
     @buttonOption.draw(360,220, ZOrder::BUTTON,0.15,0.15)
     @subtitle_font.draw_text(Options::GAMEOVER_SCREEN[0], 240, 282, ZOrder::TEXT, 1.0, 1.0, Gosu::Color::BLACK)

@@ -190,7 +190,8 @@ module Inputs
     if @deck.deckCount < 9 and valid_table(@playingCards).length == 0
       # puts("no more sets")
       @game_settings.currentScreen = "gameover"
-      return
+      @settings_hovered = Options::GAMEOVER_SCREEN[0]
+
     end
 
     if @game_settings.areHintsEnabled and button_up? Gosu::KB_H
@@ -220,9 +221,10 @@ def gameOverScreenInputs
   elsif button_up? Gosu::KB_SPACE
 
     if  index == 0
-    # Choose home
-      # @game_settings.currentScreen = StartScreen
-      StartScreen.new.show
+      # Choose home
+      @game_settings.currentScreen = "start"
+      @settings_hovered = Options::START_SCREEN[0]
+      SetGame.new.show
 
     else 
       close

@@ -20,7 +20,7 @@ class ComputerTimer
     @level_num = 1#rand(20...35)
     # @level_num = 2 #TODO REMOVE
     @score = 0
-    @insults = ["Oh man, you SUCK", "GIT GUD", "Pick it up", "Woohoo I'm winning", "I'm the BEST", "You call this a game?", "B U R N", "Git better", "Git checkout skills", "You can't compete"]
+    @insults = ["Oh man, you SUCK", "GIT GUD", "Pick it up", "Woohoo I'm winning", "I'm the BEST", "You call this a game?", "B U R N", "Git better", "Git checkout skills", "You can't compete", "L O S E R", "Who needs a hint? Clearly you!"]
     @mean_msg = @insults[rand(0...@insults.length)]
   end
 

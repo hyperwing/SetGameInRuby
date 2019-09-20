@@ -1,5 +1,5 @@
 # File Created 09/10/2019 by Neel Mansukhani
-# File Renamed 09/19/2019 by Neel Mansukhani to Set.rb
+# File Renamed 09/19/2019 by Neel Mansukhani to SetGame.rb
 # Edited 09/12/2019 by Neel Mansukhani
 # Edited 09/15/2019 by Sharon Qiu
 # Edited 09/15/2019 by Neel Mansukhani
@@ -118,7 +118,6 @@ class SetGame < Gosu::Window
 
     elsif @game_settings.currentScreen == "gameover"
       gameOverScreenInputs
-
     end
   end
 
@@ -153,9 +152,6 @@ class SetGame < Gosu::Window
       startScreen
     elsif @game_settings.currentScreen == "levels"
       levelsScreen
-    elsif @game_settings.currentScreen == "test"
-      x = Card.new(0,2,0,2,2)
-      x.image.draw(0,0,ZOrder::CARDS, 0.15, 0.15)
     elsif @game_settings.currentScreen == "gameover"
       gameOverScreen
     elsif  @game_settings.currentScreen == "game"
@@ -233,13 +229,13 @@ class SetGame < Gosu::Window
       @hint.each do |card_index|
 
         # initial card corner values.
-        left_x ,right_x, top_y, bottom_y = 10, 80, 40, 160
+        left_x ,right_x, top_y, bottom_y = 5, 85, 40, 160
 
-        # One rectangle for each corner, position based on offset.
-        draw_rect(left_x + x_between*(card_index % numCols),top_y + y_between*(card_index / numCols),10,10,Gosu::Color::BLACK,ZOrder::CARDS)
-        draw_rect(right_x + x_between*(card_index % numCols),top_y + y_between*(card_index / numCols),10,10,Gosu::Color::BLACK,ZOrder::CARDS)
-        draw_rect(left_x + x_between*(card_index % numCols),bottom_y + y_between*(card_index / numCols),10,10,Gosu::Color::BLACK,ZOrder::CARDS)
-        draw_rect(right_x + x_between*(card_index % numCols),bottom_y + y_between*(card_index / numCols),10,10,Gosu::Color::BLACK,ZOrder::CARDS)
+        # Highlight for hints
+        draw_rect(left_x + x_between*(card_index % numCols),top_y + y_between*(card_index / numCols),80,10,Gosu::Color::BLACK,ZOrder::CARDS)
+        draw_rect(left_x + x_between*(card_index % numCols),top_y + y_between*(card_index / numCols),10,130,Gosu::Color::BLACK,ZOrder::CARDS)
+        draw_rect(left_x + x_between*(card_index % numCols),bottom_y + y_between*(card_index / numCols),80,10,Gosu::Color::BLACK,ZOrder::CARDS)
+        draw_rect(right_x + x_between*(card_index % numCols),top_y + y_between*(card_index / numCols),10,130,Gosu::Color::BLACK,ZOrder::CARDS)
       end
 
       #TO MOVE RECTANGLE:

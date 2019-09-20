@@ -9,7 +9,7 @@ class GameSettings
     @areHintsEnabled = true
     @isTwoPlayerEnabled = false
     @isCPUPlayerEnabled = false
-    @cpuDifficulty = 4
+    @cpuDifficulty = 1
     @isTimerEnabled = false
     @p1Init = false
     @p2Init = false

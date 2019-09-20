@@ -56,25 +56,13 @@ module Inputs
       end
     elsif button_up? Gosu::KB_SPACE
       if @settings_hovered == "Easy"
-        @game_settings.cpuDifficulty = 4
+        @game_settings.cpuDifficulty = 1
       elsif @settings_hovered == "Medium"
-        @game_settings.cpuDifficulty = 2
+        @game_settings.cpuDifficulty = 4
       elsif @settings_hovered == "Hard"
-        @game_settings.cpuDifficulty = 5
+        @game_settings.cpuDifficulty = 10
       end
       @game_settings.currentScreen = "game"
-      # TODO: Move cursor
-    elsif button_up? Gosu::KB_SPACE
-      if @settings_hovered == "Easy"
-        @game_settings.cpuDifficulty = "Easy"
-        @computer_signal.level = 10
-      elsif @settings_hovered == "Medium"
-        @game_settings.cpuDifficulty = "Medium"
-        @computer_signal.level = 50
-      elsif @settings_hovered == "Hard"
-        @game_settings.cpuDifficulty = "Hard"
-        @computer_signal.level = 100
-      end
     end
   end
   # Created 09/17/2019 by Sharon Qiu
@@ -206,17 +194,17 @@ module Inputs
 
     if @playingCards.length > 3
       #generates 3 card index values
-      winOrLose = rand(0..9)
-      # Easy mode: 30% chance of correct answer
-      # Medium mode: 50% chance of correct answer
-      # Hard mode: 80% chance of correct answer
+      winOrLose = rand(0..@game_settings.cpuDifficulty)
+      # Easy mode: 50% chance of correct answer
+      # Medium mode: 80% chance of correct answer
+      # Hard mode: 100% chance of correct answer
       #will always return 3 values that form a set
-      if winOrLose % @game_settings.cpuDifficulty == 0
+      if @game_settings.cpuDifficulty == 10
         indexSet = valid_table(@playingCards)
-      elsif @game_settings.cpuDifficulty == 5 && winOrLose % 3 == 0
-        indexSet = valid_table(@playingCards)
-      else
+      elsif  winOrLose == 0
         indexSet = (0...@playingCards.length).to_a.sample(3)
+      else
+        indexSet = valid_table(@playingCards)
       end
 
       card1 = @playingCards[indexSet[0]]

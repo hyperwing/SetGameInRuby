@@ -11,6 +11,7 @@
 # Edited 09/18/2019 by Leah Gillespie: Added player stats and score as instance variables
 # Edited 09/18/2019 by Sharon Qiu: Included setFunctions module. Also moved get_hint into player class. Also created 2 new functions, chosen set validity and clean slate.
 # Edited 09/19/2019 by Sharon Qiu: Modified get_hint to return indices of a found set.
+# Edited 09/20/2019 by Leah Gillespie: Ensured hints used is being tracked
 class Player
 
   include SetFunctions
@@ -111,12 +112,14 @@ class Player
   # Created 09/13/2019 by David Wing: Moved functionality to its own method.
   # Edited 09/15/2019 by Sri Ramya Dandu: Removed a parameter
   # Edited 09/19/2019 by Sharon Qiu: edited so it triggers hint_open.
+  # Edited 09/20/2019 by Leah Gillespie: Update hintsUsed
   #
   # Given a valid set from the table, outputs two cards that make up a set
   # Returns array of two card objects that are the hint
   def get_hint cardsShowing
     valid_set = valid_table cardsShowing
     @score -= 0.5
+    @hintsUsed += 1
     return [valid_set[0],valid_set[1]]
   end
 

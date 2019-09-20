@@ -2,7 +2,10 @@
 # Edited 09/15/2019 by Sharon Qiu
 # Edited 09/17/2019 by Sharon Qiu
 # Edited 09/18/2019 by Sharon Qiu
+# Edited 09/18/2019 by Leah Gillespie
 # Edited 09/19/2019 by Sharon Qiu
+# Edited 09/20/2019 by Leah Gillespie
+# Edited 09/20/2019 by Sharon Qiu
 
 # Created 09/12/2019 by Sharon Qiu: Skeleton code for player movement only within the game.
 # Edited 09/15/2019 by Sharon Qiu: merged in player class into StartScreen file.
@@ -90,6 +93,7 @@ class Player
 
   # Created 09/12/2019 by Sharon Qiu
   # Edited 09/17/2019 by Sharon Qiu: Created conditions for card selection. This updates the player instance variables and makes sure same cards not selected twice.
+  # Edited 09/20/2019 by Sharon Qiu: Added functionality to unselect.
   def selection playingCards
     unless @chosenCardsIndexes.include? @currentCardIndex
       @chosenCardsIndexes.push @currentCardIndex

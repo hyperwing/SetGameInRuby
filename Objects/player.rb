@@ -56,7 +56,7 @@ class Player
   # Moves the player's cursor right.
   def move_right playing_cards
     num_cols = playing_cards.length / 3
-    if @current_card_index % num_cols == num_cols - 1 && @current_card_index - num_cols - 1 >= 0
+    if @current_card_index % num_cols == (num_cols - 1) && @current_card_index - (num_cols - 1) >= 0
       @current_card_index -= num_cols - 1
     else
       @current_card_index += 1

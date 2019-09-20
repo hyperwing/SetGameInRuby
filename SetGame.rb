@@ -1,4 +1,5 @@
 # File Created 09/10/2019 by Neel Mansukhani
+# File Renamed 09/19/2019 by Neel Mansukhani to Set.rb
 # Edited 09/12/2019 by Neel Mansukhani
 # Edited 09/15/2019 by Sharon Qiu
 # Edited 09/15/2019 by Neel Mansukhani
@@ -8,18 +9,21 @@
 # Edited 09/18/2019 by Neel Mansukhani
 # Edited 09/18/2019 by Sri Ramya Dandu
 
+# Edited 09/18/2019 by Neel Mansukhani: Change directory location of files.
 require 'gosu'
-require_relative 'GameSettings'
-require_relative 'card'
-require_relative 'deck'
-require_relative 'Draws'
-require_relative 'Player'
-require_relative 'Inputs'
-require_relative 'Set'
-require_relative 'ComputerTimer'
+require_relative 'Utilities/SetFunctions'
+require_relative 'Objects/GameSettings'
+require_relative 'Objects/card'
+require_relative 'Objects/deck'
+require_relative 'Objects/timer'
+require_relative 'Utilities/Draws'
+require_relative 'Objects/Player'
+require_relative 'Utilities/Inputs'
+require_relative 'Objects/ComputerTimer'
 
 module ZOrder
-  BACKGROUND, UI, BUTTON, TEXT, CARDS= *0..4
+
+  BACKGROUND, UI, BUTTON, TEXT, CARDS = *0..4
 end
 
 # Edited 09/15/2019 by Sharon Qiu: Added PLAYER_COLOR, where Gray is computer, red is player1, blue is player2.
@@ -36,15 +40,16 @@ GAME_TITLE = "The Game of Set"
   this program loops through input calls, draw, update on frequent intervals
   while the game is running.
 =end
-class StartScreen < Gosu::Window
+class SetGame < Gosu::Window
   # Edited 09/18/2019 by Neel Mansukhani: Moved methods to modules.
-  include Inputs, Draws
+  include Inputs, Draws, SetFunctions
 
   #Created 09/10/2019 by Neel Mansukhani
   # Edited 09/14/2019 by Sri Ramya Dandu: changed background and added buttons
   # Edited 09/17/2019 by Sharon Qiu: added in deck, playingcards, and playersCreated, as well as p1,p2,comp.
   # Edited 09/17/2019 by Sri Ramya Dandu: added computer timer
   # Edited 09/18/2019 by Sri Ramya Dandu: Added booleans to track when message is printed
+  # Edited 09/19/2019 by Sharon Qiu: added hint variable in. Still needs GUI output.
   def initialize
     @game_settings = GameSettings.new
     super 840, 480
@@ -61,9 +66,9 @@ class StartScreen < Gosu::Window
     @playersCreated = false
     @computer_signal = ComputerTimer.new(20)
     @mes,@false_mes,@true_mes = false,false,false
-
+    @hint = nil
     #players
-    @p1, @p2, @comp = nil, nil, nil
+    @p1, @p2 = nil, nil
   end
 
   # Created 09/10/2019 by Neel Mansukhani
@@ -77,10 +82,6 @@ class StartScreen < Gosu::Window
     elsif @game_settings.currentScreen =="levels"
       levelsScreenInputs
     elsif  @game_settings.currentScreen == "game"
-      if @deck.deckCount == 0 or valid_table(@playingCards).length == 0
-        @game_settings.currentScreen == "gameover"
-      end
-
       if @game_settings.isCPUPlayerEnabled
         @computer_signal.level = 100
         if @computer_signal.update
@@ -113,8 +114,6 @@ class StartScreen < Gosu::Window
     return false
   end
 
-
-
   # Created 09/10/2019 by Neel Mansukhani
   # Edited 09/15/2019 by Sharon Qiu: Set up cards based on number of cards played.
   # Edited 09/16/2019 by Sharon Qiu: Draws rectangles based on selections and current position.
@@ -135,6 +134,9 @@ class StartScreen < Gosu::Window
 
       @deck.dealCards! @playingCards
 
+      if @deck.deckCount == 0
+        @game_settings.currentScreen == "gameover"
+      end
 
       if @game_settings.isCPUPlayerEnabled
         @computer_signal.level = 100
@@ -152,8 +154,8 @@ class StartScreen < Gosu::Window
 
       # Creates players if need be.
       if !@playersCreated
-        @p1 = Player.new if @game_settings.p1Init == true
-        @p2 = Player.new if @game_settings.p2Init == true
+        @p1 = Player.new 1 if @game_settings.p1Init == true
+        @p2 = Player.new 2 if @game_settings.p2Init == true
         @playersCreated = true
 
       end
@@ -172,40 +174,30 @@ class StartScreen < Gosu::Window
           c += 1
         end
       end
-
       #TO MOVE RECTANGLE:
       # X POSITION = @currentCardIndex % numCols
       # Y POSITION = @currentCardIndex / numCols
-
       if @game_settings.p1Init
+        x_movement = x_offset + (x_between/2.4) + x_between*(@p1.currentCardIndex % numCols)
+        y_movement = y_offset + (y_between/2) + y_between*(@p1.currentCardIndex  / numCols)
 
         # Draws current position
-        if @p1.currentCardIndex % numCols == 0 or (@p1.currentCardIndex % numCols == 1 and @p1.currentCardIndex >= numCols-1)
-          draw_rect((x_between/2)*((@p1.currentCardIndex % numCols)+1),(y_between/2)*((@p1.currentCardIndex  / numCols)+1),20,20,Gosu::Color::BLUE,ZOrder::CARDS)
-        else
-          draw_rect((x_between/1.85)*((@p1.currentCardIndex % numCols)+1),(y_between/2)*((@p1.currentCardIndex  / numCols)+1),20,20,Gosu::Color::BLUE,ZOrder::CARDS)
-        end
+        draw_rect(x_movement,y_movement,20,20,Gosu::Color::CYAN,ZOrder::CARDS)
 
         # Draws current selected values
-        @p1.chosenCardsIndexes.each {|index| draw_rect((x_between/1.85)*((index % numCols)+1),(y_between/2)*((index / numCols)+1),20,20,Gosu::Color::BLUE,ZOrder::CARDS)}
+        @p1.chosenCardsIndexes.each {|index| draw_rect(x_offset + (x_between/2.4) + (x_between)*(index % numCols),y_offset + (y_between/2) + y_between*(index  / numCols),20,20,Gosu::Color::CYAN,ZOrder::CARDS)}
       end
-
       if @game_settings.p2Init
+        x_movement = x_offset + (x_between/2.4) + x_between*(@p2.currentCardIndex % numCols)
+        y_movement = (y_between/2) + y_between*(@p2.currentCardIndex  / numCols)
 
         # Draws current position
-        if @p2.currentCardIndex % numCols == 0 or (@p2.currentCardIndex % numCols == 1 and @p2.currentCardIndex >= numCols-1)
-          draw_rect((x_between/2)*((@p2.currentCardIndex % numCols)+1),(y_between/2)*((@p2.currentCardIndex  / numCols)+1),20,20,Gosu::Color::RED,ZOrder::CARDS)
-        else
-          draw_rect((x_between/1.85)*((@p2.currentCardIndex % numCols)+1),(y_between/2)*((@p2.currentCardIndex  / numCols)+1),20,20,Gosu::Color::RED,ZOrder::CARDS)
-        end
+        draw_rect(x_movement,y_movement,20,20,Gosu::Color::FUCHSIA,ZOrder::CARDS)
 
         # Draws current selected values
-        @p2.chosenCardsIndexes.each {|index| draw_rect((x_between/1.85)*((index % numCols)+1),(y_between/2)*((index / numCols)+1),20,20,Gosu::Color::RED,ZOrder::CARDS)}
-
+        @p2.chosenCardsIndexes.each {|index| draw_rect(x_offset + (x_between/2.4) + (x_between)*(index % numCols),(y_between/2) + y_between*(index  / numCols),20,20,Gosu::Color::FUCHSIA,ZOrder::CARDS)}
       end
-
     end
   end
 end
-
-StartScreen.new.show
+SetGame.new.show

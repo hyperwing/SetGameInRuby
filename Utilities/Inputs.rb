@@ -3,6 +3,7 @@
 # Edited 09/18/2019 by Leah Gillespie
 # Edited 09/19/2019 by Sri Ramya Dandu
 # Edited 09/19/2019 by Sharon Qiu
+# Edited 09/20/2019 by Sharon Qiu
 =begin
   This file contains functions for most input checks in the game.
   The input module is included in the Set class.
@@ -70,33 +71,30 @@ module Inputs
   # Edited 09/18/2019 by Neel Mansukhani: Removed isASet? from deck.
   # Edited 09/18/2019 by Leah Gillespie: adding statistics and score calculations
   # Edited 09/19/2019 by Sharon Qiu: Cleaned up movement checks.
+  # Edited 09/20/2019 by Sharon Qiu: Condensed player inputs by passing in player.
   # Checks in game user input for one and two players
   def gameScreenInputs player
 
-    movementIndex = 0 # used to track switch cases
+    movement_index = 0 # used to track switch cases
     if @game_settings.p1Init
       player.playerControls.each do |control|
         unless button_up? control
-          movementIndex += 1
+          movement_index += 1
         else
           break
         end
       end
 
       # Determines movement
-      case movementIndex
+      case movement_index
       when 0
         player.move_left @playingCards
-        # puts "p1 index: #{player.currentCardIndex}"
       when 1
         player.move_right @playingCards
-        # puts "p1 index: #{player.currentCardIndex}"
       when 2
         player.move_up @playingCards
-        # puts "p1 index: #{player.currentCardIndex}"
       when 3
         player.move_down @playingCards
-        # puts "p1 index: #{player.currentCardIndex}"
       when 4
         player.selection @playingCards
       else

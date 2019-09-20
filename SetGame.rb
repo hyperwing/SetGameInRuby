@@ -13,6 +13,7 @@
 # Edited 09/19/2019 by Sri Ramya Dandu
 # Edited 09/19/2019 by Sharon Qiu
 # Edited 09/19/2019 by David Wing
+# Edited 09/20/2019 by Sharon Qiu
 
 # Edited 09/18/2019 by Neel Mansukhani: Change directory location of files.
 # Edited 09/19/2019 by Leah Gillespie: Implemented player statistics and score visibility
@@ -86,6 +87,7 @@ class SetGame < Gosu::Window
   # Edited 09/17/2019 by Sri Ramya Dandu: Added computer functionality
   # Edited 09/19/2019 by David Wing: added gameover screen functionality
   # Edited 09/19/2019 by Sri Ramya Dandu: Added another computer message option
+  # Edited 09/20/2019 by Sharon Qiu: passed in values for gameScreenInputs
   def update
     if @game_settings.currentScreen == "start"
       startScreenInputs

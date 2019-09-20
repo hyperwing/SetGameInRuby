@@ -88,11 +88,8 @@ class SetGame < Gosu::Window
   # Edited 09/17/2019 by Sri Ramya Dandu: Added computer functionality
   # Edited 09/19/2019 by David Wing: added gameover screen functionality
   # Edited 09/19/2019 by Sri Ramya Dandu: Added another computer message option
-<<<<<<< HEAD
-  # All inputs throughout the game are checked here.
-=======
   # Edited 09/20/2019 by Sharon Qiu: passed in values for gameScreenInputs
->>>>>>> 13943871bff3152c5c98a3b4f3e0bd5ebcf8da91
+  # All inputs throughout the game are checked here.
   def update
     if @game_settings.currentScreen == "start"
       startScreenInputs

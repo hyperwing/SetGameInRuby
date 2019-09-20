@@ -1,4 +1,8 @@
 # File Created 09/17/2019 by Neel Mansukhani
+# Edited 09/15/2019 by Sharon Qiu
+# Edited 09/17/2019 by Sharon Qiu
+# Edited 09/18/2019 by Sharon Qiu
+# Edited 09/19/2019 by Sharon Qiu
 
 # Created 09/12/2019 by Sharon Qiu: Skeleton code for player movement only within the game.
 # Edited 09/15/2019 by Sharon Qiu: merged in player class into StartScreen file.
@@ -6,11 +10,13 @@
 # Edited 09/18/2019 by Sharon Qiu: Introduced parallel mapping keys.
 # Edited 09/18/2019 by Leah Gillespie: Added player stats and score as instance variables
 # Edited 09/18/2019 by Sharon Qiu: Included setFunctions module. Also moved get_hint into player class. Also created 2 new functions, chosen set validity and clean slate.
-# Edited 09/19/2019 by Sharon Qiu: Modified get_hint to change setFound and hint trigger. Also returns indices of the
+# Edited 09/19/2019 by Sharon Qiu: Modified get_hint to return indices of a found set.
 class Player
 
   include SetFunctions
-  attr_accessor :currentCardIndex, :chosenCards, :chosenCardsIndexes, :playerControls, :playerMovement, :setTimer, :setTimes, :hintsUsed, :score, :hint_open, :timeSum
+  attr_accessor :currentCardIndex, :chosenCards, :chosenCardsIndexes,
+                :playerControls, :playerMovement, :setTimer, :setTimes,
+                :hintsUsed, :score, :timeSum, :setFound
 
   @@p1Controls = [Gosu::KB_A, Gosu::KB_D, Gosu::KB_W, Gosu::KB_S, Gosu::KB_SPACE]
   @@p2Controls = [Gosu::KB_LEFT, Gosu::KB_RIGHT, Gosu::KB_UP, Gosu::KB_DOWN, Gosu::KB_LEFT_SHIFT]
@@ -27,8 +33,9 @@ class Player
     @setTimes = Array.new
     @timeSum = 0
     @hintsUsed = 0
-    @hint_open = false
+    @setFound = false
     @score = 0
+
   end
 
   # Created 09/12/2019 by Sharon Qiu
@@ -94,30 +101,22 @@ class Player
   end
 
   # Created 09/18/2019 by Sharon Qiu: Checks for a valid set and adjusts playing cards and chosen cards.
-  # Edited 09/18/2019 by Sharon Qiu: Fixed mutator method to update playingCards.
+  # Edited 09/18/2019 by Sharon Qiu: Fixed mutator method to update playingCards. Also added/modifies setFound & hint_open and applied terse code.
   def chosenSetValidity! playingCards
-    valid = isASet? @chosenCards
-    if valid
-      playingCards.delete chosenCards[0]
-      playingCards.delete chosenCards[1]
-      playingCards.delete chosenCards[2]
-    end
+    @setFound = isASet? @chosenCards
+    @chosenCards.each {|card| playingCards.delete card} if @setFound
     cleanSlate #clears player picks
-    valid
   end
 
   # Created 09/13/2019 by David Wing: Moved functionality to its own method.
   # Edited 09/15/2019 by Sri Ramya Dandu: Removed a parameter
-  # Edited 09/19/2019 by Sharon Qiu: edited so it triggers hint_open. Also returns indices of the cards in cardsShowing.
+  # Edited 09/19/2019 by Sharon Qiu: edited so it triggers hint_open.
   #
   # Given a valid set from the table, outputs two cards that make up a set
   # Returns array of two card objects that are the hint
   def get_hint cardsShowing
     valid_set = valid_table cardsShowing
-
-    @hint_open = true
     @score -= 0.5
-
-    return [cardsShowing.find_index(valid_set[0]), cardsShowing.find_index(valid_set[1])]
+    [valid_set[0],valid_set[1]]
   end
 end

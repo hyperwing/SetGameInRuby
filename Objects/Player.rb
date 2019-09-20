@@ -9,7 +9,7 @@
 class Player
 
   include SetFunctions
-  attr_accessor :currentCardIndex, :chosenCards, :chosenCardsIndexes, :playerControls, :playerMovement, :setTimer, :setTimes, :hintsUsed, :score, :hint_open
+  attr_accessor :currentCardIndex, :chosenCards, :chosenCardsIndexes, :playerControls, :playerMovement, :setTimer, :setTimes, :hintsUsed, :score, :hint_open, :timeSum
 
   @@p1Controls = [Gosu::KB_A, Gosu::KB_D, Gosu::KB_W, Gosu::KB_S, Gosu::KB_SPACE]
   @@p2Controls = [Gosu::KB_LEFT, Gosu::KB_RIGHT, Gosu::KB_UP, Gosu::KB_DOWN, Gosu::KB_LEFT_SHIFT]
@@ -24,6 +24,7 @@ class Player
     @chosenCardsIndexes = Array.new
     @setTimer = AllTimers.new
     @setTimes = Array.new
+    @timeSum = 0
     @hintsUsed = 0
     @hint_open = false
     @score = 0

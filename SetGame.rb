@@ -8,8 +8,10 @@
 # Edited 09/17/2019 by Sri Ramya Dandu
 # Edited 09/18/2019 by Neel Mansukhani
 # Edited 09/18/2019 by Sri Ramya Dandu
+# Edited 09/19/2019 by Sri Ramya Dandu
 
 # Edited 09/18/2019 by Neel Mansukhani: Change directory location of files.
+# Edited 09/19/2019 by Leah Gillespie: Implemented player statistics and score visibility
 require 'gosu'
 require_relative 'Utilities/SetFunctions'
 require_relative 'Objects/GameSettings'
@@ -51,7 +53,7 @@ class SetGame < Gosu::Window
   # Edited 09/19/2019 by Sharon Qiu: added hint variable in. Still needs GUI output.
   def initialize
     @game_settings = GameSettings.new
-    super 840, 480
+    super 920, 480
     self.caption = GAME_TITLE
     @settings_hovered = Options::START_SCREEN[0]
     @pressed = nil
@@ -63,8 +65,8 @@ class SetGame < Gosu::Window
     @deck = Deck.new
     @playingCards = Array.new
     @playersCreated = false
-    @computer_signal = ComputerTimer.new(20)
-    @mes,@false_mes,@true_mes = false,false,false
+    @computer_signal = ComputerTimer.new
+    @mes, @false_mes, @true_mes, @trying_mes = false,false,false,false
     @hint = nil
     #players
     @p1, @p2 = nil, nil
@@ -74,6 +76,7 @@ class SetGame < Gosu::Window
   # Edited 09/15/2019 by Sharon Qiu: Edited game settings for gameplay selection, game settings for levels.
   # Edited 09/17/2019 by Sharon Qiu: Edited game screen checks. Split commands into p1 and p2.
   # Edited 09/17/2019 by Sri Ramya Dandu: Added computer functionality
+  # Edited 09/19/2019 by Sri Ramya Dandu: Added another computer message option
   def update
     if @game_settings.currentScreen == "start"
       startScreenInputs
@@ -85,8 +88,9 @@ class SetGame < Gosu::Window
         if @computer_signal.update
           @mes = computerMove(@p1)
         end
-        @true_mes = @mes && @computer_signal.display_message?
-        @false_mes = !@mes && @computer_signal.display_message?
+        @true_mes = (@mes == 1) && @computer_signal.display_message?
+        @false_mes = (@mes == 0) && @computer_signal.display_message?
+        @trying_mes = (@mes == 2) && @computer_signal.display_message?
       end
       gameScreenInputs
     end
@@ -114,6 +118,8 @@ class SetGame < Gosu::Window
   # Edited 09/16/2019 by Sharon Qiu: Draws rectangles based on selections and current position.
   # Edited 09/17/2019 by Sharon Qiu: Added check for player type.
   # Edited 09/18/2019 by Sri Ramya Dandu: Added output for computer to GUI
+  # Edited 09/19/2019 by Leah Gillespie: Added player statistics and score
+  # Edited 09/19/2019 by Sri Ramya Dandu: Added more computer output to GUI
   def draw
     @background_image.draw(0, 0, ZOrder::BACKGROUND)
     if @game_settings.currentScreen == "start"
@@ -128,28 +134,59 @@ class SetGame < Gosu::Window
       @deck.dealCards! @playingCards
 
       if @game_settings.isCPUPlayerEnabled
-        @computer_signal.level = 100
+        @subtitle_font.draw_text("Computer:", 645, 215, ZOrder::TEXT, 1.0, 1.0, Gosu::Color::BLACK)
+        @subtitle_font.draw_text("Score : #{@computer_signal.score}", 645, 245, ZOrder::TEXT, 1.0, 1.0, Gosu::Color::BLACK)
       end
 
       if @true_mes
-        @subtitle_font.draw_text("Computer:", 645, 215, ZOrder::TEXT, 1.0, 1.0, Gosu::Color::BLACK)
-        @subtitle_font.draw_text("I found a set!", 645, 245, ZOrder::TEXT, 1.0, 1.0, Gosu::Color::BLACK)
+        @subtitle_font.draw_text("I found a set!", 645, 275, ZOrder::TEXT, 1.0, 1.0, Gosu::Color::BLACK)
+        if @computer_signal.score > 3 && @computer_signal.score - @p1.score > 3
+          @subtitle_font.draw_text("#{@computer_signal.mean_msg}", 645, 305, ZOrder::TEXT, 1.0, 1.0, Gosu::Color::BLACK)
+        end
       end
 
-      if @false_mes
-        @subtitle_font.draw_text("Computer:", 645, 215, ZOrder::TEXT, 1.0, 1.0, Gosu::Color::BLACK)
-        @subtitle_font.draw_text("Oops not a set!", 645, 245, ZOrder::TEXT, 1.0, 1.0, Gosu::Color::BLACK)
-      end
+      @subtitle_font.draw_text("Still trying!", 645, 275, ZOrder::TEXT, 1.0, 1.0, Gosu::Color::BLACK) if @trying_mes
+
+      @subtitle_font.draw_text("Oops not a set!", 645, 275, ZOrder::TEXT, 1.0, 1.0, Gosu::Color::BLACK) if @false_mes
 
       # Creates players if need be.
       if !@playersCreated
-        @p1 = Player.new 1 if @game_settings.p1Init == true
-        @p2 = Player.new 2 if @game_settings.p2Init == true
+        @p1 = Player.new 1 if @game_settings.p1Init
+        @p2 = Player.new 2 if @game_settings.p2Init
         @playersCreated = true
       end
 
-      Gosu.draw_rect(640,0,200,480,Gosu::Color::GRAY,ZOrder::UI)
+      Gosu.draw_rect(640,0,280,480,Gosu::Color::GRAY,ZOrder::UI)
+
+      @subtitle_font.draw_text("Player 1 Statistics:", 645, 0, ZOrder::TEXT, 1.0, 1.0, Gosu::Color::BLACK)
+      if @p1.setTimes.length > 0 
+      	@subtitle_font.draw_text("Fastest time to find a set: #{@p1.setTimes.at 0}", 645, 30, ZOrder::TEXT, 1.0, 1.0,
+		Gosu::Color::BLACK)
+      	@subtitle_font.draw_text("Slowest time to find a set: #{@p1.setTimes.at -1}", 645, 60, ZOrder::TEXT, 1.0, 1.0,
+		Gosu::Color::BLACK)
+      	@subtitle_font.draw_text("Average time to find a set: #{@p1.timeSum / @p1.setTimes.length}", 645, 90, ZOrder::TEXT,
+		1.0, 1.0, Gosu::Color::BLACK)
+      else
+      	@subtitle_font.draw_text("No sets found yet", 645, 30, ZOrder::TEXT, 1.0, 1.0, Gosu::Color::BLACK)
+      end
+      @subtitle_font.draw_text("Hints used: #{@p1.hintsUsed}", 645, 120, ZOrder::TEXT, 1.0, 1.0, Gosu::Color::BLACK)
+      @subtitle_font.draw_text("Score: #{@p1.score}", 645, 150, ZOrder::TEXT, 1.0, 1.0, Gosu::Color::BLACK)
       
+      if @game_settings.p2Init
+	@subtitle_font.draw_text("Player 2 Statistics:", 645, 280, ZOrder::TEXT, 1.0, 1.0, Gosu::Color::BLACK)
+      	if @p2.setTimes.length > 0 
+      		@subtitle_font.draw_text("Fastest time to find a set: #{@p2.setTimes.at 0}", 645, 310, ZOrder::TEXT, 1.0, 1.0,
+			Gosu::Color::BLACK)
+      		@subtitle_font.draw_text("Slowest time to find a set: #{@p2.setTimes.at -1}", 645, 340, ZOrder::TEXT, 1.0,
+			1.0, Gosu::Color::BLACK)
+      		@subtitle_font.draw_text("Average time to find a set: #{@p2.timeSum / @p2.setTimes.length}", 645, 370,
+			ZOrder::TEXT, 1.0, 1.0, Gosu::Color::BLACK)
+      	else
+      		@subtitle_font.draw_text("No sets found yet", 645, 310, ZOrder::TEXT, 1.0, 1.0, Gosu::Color::BLACK)
+      	end
+     	@subtitle_font.draw_text("Hints used: #{@p2.hintsUsed}", 645, 400, ZOrder::TEXT, 1.0, 1.0, Gosu::Color::BLACK)
+      	@subtitle_font.draw_text("Score: #{@p2.score}", 645, 430, ZOrder::TEXT, 1.0, 1.0, Gosu::Color::BLACK)
+      end
       # todo: conditions like hint conditions etc that tell you when to pop up
       # need booleans here to check if something's been pressed
 

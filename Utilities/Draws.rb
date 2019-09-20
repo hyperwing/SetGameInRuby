@@ -36,13 +36,13 @@ module Draws
     end
 
     # draw player movement
-    left_x ,right_x, top_y, bottom_y, button_distance = 220, 325, 350, 400, 170
+    left_x ,right_x, top_y, bottom_y, button_distance = 220, 335, 355, 405, 170
 
-    # reflects each corner
-    draw_rect(left_x + (button_distance * hover_index),top_y,20,20,Gosu::Color::GRAY,ZOrder::TEXT)
-    draw_rect(right_x + (button_distance * hover_index),top_y,20,20,Gosu::Color::GRAY,ZOrder::TEXT)
-    draw_rect(left_x + (button_distance * hover_index),bottom_y,20,20,Gosu::Color::GRAY,ZOrder::TEXT)
-    draw_rect(right_x + (button_distance * hover_index),bottom_y,20,20,Gosu::Color::GRAY,ZOrder::TEXT)
+    # Start screen highlight
+    draw_rect(left_x + (button_distance * hover_index),top_y,125,10,Gosu::Color::GRAY,ZOrder::TEXT)
+    draw_rect(left_x + (button_distance * hover_index),top_y,10,50,Gosu::Color::GRAY,ZOrder::TEXT)
+    draw_rect(left_x + (button_distance * hover_index),bottom_y,125,10,Gosu::Color::GRAY,ZOrder::TEXT)
+    draw_rect(right_x + (button_distance * hover_index),top_y,10,50,Gosu::Color::GRAY,ZOrder::TEXT)
   end
 
   # Created 09/15/2019 by Sri Ramya Dandu
@@ -69,13 +69,13 @@ module Draws
     end
 
     # draw player movement
-    left_x ,right_x, top_y, bottom_y, button_distance = 370, 475, 125, 175, 80
+    left_x ,right_x, top_y, bottom_y, button_distance = 370, 485, 135, 185, 80
 
-    # reflects each corner
-    draw_rect(left_x,top_y + (button_distance * hover_index),20,20,Gosu::Color::GRAY,ZOrder::TEXT)
-    draw_rect(right_x,top_y + (button_distance * hover_index),20,20,Gosu::Color::GRAY,ZOrder::TEXT)
-    draw_rect(left_x, bottom_y + (button_distance * hover_index),20,20,Gosu::Color::GRAY,ZOrder::TEXT)
-    draw_rect(right_x,bottom_y + (button_distance * hover_index),20,20,Gosu::Color::GRAY,ZOrder::TEXT)
+    # Level screen highlight
+    draw_rect(left_x,top_y + (button_distance * hover_index),125,10,Gosu::Color::GRAY,ZOrder::TEXT)
+    draw_rect(left_x,top_y + (button_distance * hover_index),10,50,Gosu::Color::GRAY,ZOrder::TEXT)
+    draw_rect(left_x, bottom_y + (button_distance * hover_index),125,10,Gosu::Color::GRAY,ZOrder::TEXT)
+    draw_rect(right_x,top_y + (button_distance * hover_index),10,50,Gosu::Color::GRAY,ZOrder::TEXT)
 
   end
 

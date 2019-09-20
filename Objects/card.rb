@@ -1,6 +1,7 @@
 # File Created 9/15/019 David Wing
 # Edited 09/17/2019 by Neel Mansukhani
 # Edited 09/18/2019 by Neel Mansukhani
+# Edited 09/20/2019 by Neel Mansukhani
 # Defines methods and structures for Card object
 
 
@@ -43,6 +44,7 @@ class Card
     # Created 09/16/2019 by Neel Mansukhani
     # Edited 09/17/2019 by Neel Mansukhani: Accounted for shade
     # Edited 09/18/2019 by Neel Mansukhani: Fixed parallelogram shade.
+    # Edited 09/20/2019 by Neel Mansukhani: Changed for loop to times.
     # Renders card based on its number, color, shape, shade
     def createCard
       blank_card = Gosu::Image.new("media/card.png", :tileable => true)
@@ -56,7 +58,7 @@ class Card
       img = Gosu.render(587,940) {
         blank_card.draw(0,0,ZOrder::CARDS, 1.0, 1.0)
         x, y = 50, 100
-        for shapes in 0..@number
+        (@number + 1).times do
           if @shape == 0
             Gosu.draw_rect(x,y,487,200,color,ZOrder::CARDS)
             Gosu.draw_rect(x+20,y+20,487 - 40,200 - 40,Gosu::Color::WHITE,ZOrder::CARDS) if @shade != 0

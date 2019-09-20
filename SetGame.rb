@@ -13,6 +13,7 @@
 # Edited 09/19/2019 by Sri Ramya Dandu
 # Edited 09/19/2019 by Sharon Qiu
 # Edited 09/19/2019 by David Wing
+# Edited 09/20/2019 by Neel Mansukhani
 
 # Edited 09/18/2019 by Neel Mansukhani: Change directory location of files.
 # Edited 09/19/2019 by Leah Gillespie: Implemented player statistics and score visibility
@@ -86,6 +87,7 @@ class SetGame < Gosu::Window
   # Edited 09/17/2019 by Sri Ramya Dandu: Added computer functionality
   # Edited 09/19/2019 by David Wing: added gameover screen functionality
   # Edited 09/19/2019 by Sri Ramya Dandu: Added another computer message option
+  # All inputs throughout the game are checked here.
   def update
     if @game_settings.currentScreen == "start"
       startScreenInputs
@@ -112,8 +114,9 @@ class SetGame < Gosu::Window
   end
 
   # TODO: override button_down? instead
+  # TODO: Config for 2p?
   # Created 09/16/2019 by Neel Mansukhani
-  # Makes Gosu's button_down? function recieve one input per key input.
+  # Makes Gosu's button_down? function recieve one input per key press.
   def button_up? id
     button = button_down? id
     if @pressed != id and @pressed != nil
@@ -136,6 +139,8 @@ class SetGame < Gosu::Window
   # Edited 09/19/2019 by Leah Gillespie: Added player statistics and score
   # Edited 09/19/2019 by Sri Ramya Dandu: Added more computer output to GUI
   # Edited 09/19/2019 by Sharon Qiu: refined player movement for 1 & 2 player. Also added hint printout.
+  # Edited 09/20/2019 by Neel Mansukhani: Made highlight for hints better
+  # All front end images and shapes are drawn here throughout the game.
   def draw
     @background_image.draw(0, 0, ZOrder::BACKGROUND)
     if @game_settings.currentScreen == "start"

@@ -1,14 +1,16 @@
 # File Created 09/17/2019 by Neel Mansukhani
-# This file contains all of the
-
 # Edited by Neel Mansukhani 09/18/2019 by Neel Mansukhani: Created Draws Module
 # Edited 09/20/2019 by Leah Gillespie
+# Edited 09/20/2019 by Neel Mansukhani
+# This file contains image creation for the game.
+
+
 module Draws
   # Created 09/15/2019 by Sri Ramya Dandu
   # Edited 09/15/2019 by Neel Mansukhani: Moved to Draw File
   # Edited 09/19/2019 by Sharon Qiu: Edited offset of drawn rectangles.
   # Edited 09/20/2019 by Leah Gillespie: Adjusted text, button, and highlight positions for new window size
-
+  # Edited 09/20/2019 by Neel Mansukhani: Made highlight better
   # Draws images, shapes, and text on start screen.
   def startScreen
     @title_font.draw_text("The Game of Set", 300, 50, ZOrder::TEXT, 1.0, 1.0, Gosu::Color::BLACK)
@@ -48,6 +50,7 @@ module Draws
   # Created 09/15/2019 by Sri Ramya Dandu
   # Edited 09/15/2019 by Neel Mansukhani: Moved to Draw File
   # Edited 09/19/2019 by Sharon Qiu: Edited offset of drawn rectangles.
+  # Edited 09/20/2019 by Neel Mansukhani: Made highlight better
   # Draws images, shapes, and text on level select screen.
   def levelsScreen
     @title_font.draw_text("Choose a level of difficulty", 180, 50, ZOrder::TEXT, 1.0, 1.0, Gosu::Color::BLACK)
@@ -82,6 +85,7 @@ module Draws
   # Created 9/18/2019 by David Wing
   # Edited 9/19/2019 by David Wing added different images for modes
   # Edited 9/20/2019 by David Wing added rectangle select
+  # Edited 09/20/2019 by Neel Mansukhani: Made highlight better
   def gameOverScreen
     @subtitle_font.draw_text("Final Score for player 1: #{@p1.score}", 170, 130, ZOrder::TEXT, 1.0, 1.0, Gosu::Color::WHITE)
     
@@ -137,7 +141,5 @@ module Draws
     # draw_rect(385,250,20,20,Gosu::Color::GRAY,ZOrder::UI) if @settings_hovered == Options::GAMEOVER_SCREEN[1]
     # @image = (Gosu::Image.new("media/Gameover.png"))
     @image.draw(190,30,20)
-
-    
   end
 end

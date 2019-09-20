@@ -216,6 +216,7 @@ class SetGame < Gosu::Window
 
       # Prints out hints
       @hint.each do |card_index|
+
         card_index % numCols
         # initial card corner values.
         left_x ,right_x, top_y, bottom_y = 10, 80, 40, 160

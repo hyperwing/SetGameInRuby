@@ -179,7 +179,7 @@ module Inputs
       # puts("no more sets")
       @game_settings.currentScreen = "gameover"
       @settings_hovered = Options::GAMEOVER_SCREEN[0]
-
+      return
     end
 
     if @game_settings.areHintsEnabled and button_up? Gosu::KB_H

@@ -17,7 +17,8 @@ class ComputerTimer
   def initialize()
     @start_time = Time.now
     @last_time_value = 0
-    @level_num = rand(20...35)
+    # @level_num = rand(20...35)
+    @level_num = 2
     @score = 0
     @insults = ["Oh man, you SUCK", "GIT GUD", "Pick it up", "Woohoo I'm winning", "I'm the BEST", "You call this a game?", "B U R N", "Git better", "Git checkout skills", "You can't compete"]
     @mean_msg = @insults[rand(0...@insults.length)]

@@ -117,7 +117,7 @@ class Player
   def get_hint cardsShowing
     valid_set = valid_table cardsShowing
     @score -= 0.5
-    [valid_set[0],valid_set[1]]
+    return [valid_set[0],valid_set[1]]
   end
 
 end

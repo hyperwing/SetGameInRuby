@@ -119,4 +119,5 @@ class Player
     @score -= 0.5
     [valid_set[0],valid_set[1]]
   end
+
 end

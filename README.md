@@ -8,7 +8,7 @@ This project required the team to build the game of Set (https://en.wikipedia.or
 * Overall Project Manager: Sharon Qiu
 * Coding Manager: Sri Ramya Dandu
 * Testing Manager: Leah Gillespie
-* Documentation: David Wing 
+* Documentation Manager: David Wing 
 
 ### Contributions
 Checkpoint one:
@@ -22,7 +22,7 @@ Extra Implementations:
 * Sharon Qiu - 
 * Sri Ramya Dandu - Computer player and its interaction/display on GUI
 * Leah Gillespie - Stats and Timer and displaying it in GUI
-* David Wing - 
+* David Wing - Hint implementation, and gameover screen in GUI
 * Neel Mansukhani - 
 
 Any minor edits to main functionalities were implemented by whichever group member saw a need for said implementations.

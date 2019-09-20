@@ -12,8 +12,7 @@ module Draws
   # Edited 09/20/2019 by Neel Mansukhani: Made highlight better
   # Draws images, shapes, and text on start screen.
 
-  #TODO: refractor startScreen, levelScreen, buttonOption (??? initialized loc), gameOverScreen
-  def startScreen
+  def start_screen
     @title_font.draw_text "The Game of Set", 300, 50, ZOrder::TEXT, 1.0, 1.0, Gosu::Color::BLACK
     @subtitle_font.draw_text "Instructions: Select a mode of play below. The objective of the game is to identify as many", 100, 115, ZOrder::TEXT, 1.0, 1.0, Gosu::Color::BLACK
     @subtitle_font.draw_text "sets as possible. 3 cards form a set when they all have the same or all different numbers,", 100, 145, ZOrder::TEXT, 1.0, 1.0, Gosu::Color::BLACK
@@ -22,9 +21,9 @@ module Draws
     @subtitle_font.draw_text "the arrow keys to move and the enter key to select. A colored box will appear on the card", 100, 235, ZOrder::TEXT, 1.0, 1.0, Gosu::Color::BLACK
     @subtitle_font.draw_text "you are currently on and will remain there if you select it. Player 1 is blue and player 2 is pink. ", 100, 265, ZOrder::TEXT, 1.0, 1.0, Gosu::Color::BLACK
     @subtitle_font.draw_text "Good luck!", 440, 295, ZOrder::TEXT, 1.0, 1.0, Gosu::Color::BLACK
-    @buttonOption.draw 210,310, ZOrder::BUTTON,0.15,0.15
-    @buttonOption.draw 380,310, ZOrder::BUTTON,0.15,0.15
-    @buttonOption.draw 550,310, ZOrder::BUTTON,0.15,0.15
+    @button_option.draw 210, 310, ZOrder::BUTTON, 0.15, 0.15
+    @button_option.draw 380, 310, ZOrder::BUTTON, 0.15, 0.15
+    @button_option.draw 550, 310, ZOrder::BUTTON, 0.15, 0.15
     @subtitle_font.draw_text Options::START_SCREEN[0], 260, 372, ZOrder::TEXT, 1.0, 1.0, Gosu::Color::BLACK
     @subtitle_font.draw_text Options::START_SCREEN[1], 415, 372, ZOrder::TEXT, 1.0, 1.0, Gosu::Color::BLACK
     @subtitle_font.draw_text Options::START_SCREEN[2], 593, 372, ZOrder::TEXT, 1.0, 1.0, Gosu::Color::BLACK
@@ -54,11 +53,11 @@ module Draws
   # Edited 09/19/2019 by Sharon Qiu: Edited offset of drawn rectangles.
   # Edited 09/20/2019 by Neel Mansukhani: Made highlight better
   # Draws images, shapes, and text on level select screen.
-  def levelsScreen
+  def levels_screen
     @title_font.draw_text "Choose a level of difficulty", 180, 50, ZOrder::TEXT, 1.0, 1.0, Gosu::Color::BLACK
-    @buttonOption.draw 360,90, ZOrder::BUTTON,0.15,0.15
-    @buttonOption.draw 360,170, ZOrder::BUTTON,0.15,0.15
-    @buttonOption.draw 360,250, ZOrder::BUTTON,0.15,0.15
+    @button_option.draw 360, 90, ZOrder::BUTTON, 0.15, 0.15
+    @button_option.draw 360, 170, ZOrder::BUTTON, 0.15, 0.15
+    @button_option.draw 360, 250, ZOrder::BUTTON, 0.15, 0.15
     @subtitle_font.draw_text Options::LEVELS_SCREEN[0], 410, 151, ZOrder::TEXT, 1.0, 1.0, Gosu::Color::BLACK
     @subtitle_font.draw_text Options::LEVELS_SCREEN[1], 400, 230, ZOrder::TEXT, 1.0, 1.0, Gosu::Color::BLACK
     @subtitle_font.draw_text Options::LEVELS_SCREEN[2], 410, 310, ZOrder::TEXT, 1.0, 1.0, Gosu::Color::BLACK
@@ -88,10 +87,10 @@ module Draws
   # Edited 9/19/2019 by David Wing added different images for modes
   # Edited 9/20/2019 by David Wing added rectangle select
   # Edited 09/20/2019 by Neel Mansukhani: Made highlight better
-  def gameOverScreen
+  def game_over_screen
     @subtitle_font.draw_text "Final Score for player 1: #{@p1.score}", 170, 130, ZOrder::TEXT, 1.0, 1.0, Gosu::Color::WHITE
     
-    if @game_settings.p2Init # 2Player mode
+    if @game_settings.p2_init # 2Player mode
       @subtitle_font.draw_text "Final Score for player 2: #{@p2.score}", 170, 150, ZOrder::TEXT, 1.0, 1.0, Gosu::Color::WHITE
       @background_image = Gosu::Image.new "media/gob.png", :tileable => true
 
@@ -103,7 +102,7 @@ module Draws
         @image = Gosu::Image.new "media/tie.png"
       end
 
-    elsif @game_settings.isCPUPlayerEnabled #CPU mode
+    elsif @game_settings.is_cpu_player_enabled #CPU mode
       @subtitle_font.draw_text "Final Score for CPU: #{@computer_signal.score}", 170, 150, ZOrder::TEXT, 1.0, 1.0, Gosu::Color::WHITE
       if @computer_signal.score < @p1.score
         @background_image = Gosu::Image.new "media/youwin.png", :tileable => true
@@ -118,8 +117,8 @@ module Draws
       @background_image = Gosu::Image.new "media/gob.png", :tileable => true
     end
 
-    @buttonOption.draw 190,220, ZOrder::BUTTON,0.15,0.15
-    @buttonOption.draw 360,220, ZOrder::BUTTON,0.15,0.15
+    @button_option.draw 190, 220, ZOrder::BUTTON, 0.15, 0.15
+    @button_option.draw 360, 220, ZOrder::BUTTON, 0.15, 0.15
     @subtitle_font.draw_text Options::GAMEOVER_SCREEN[0], 240, 282, ZOrder::TEXT, 1.0, 1.0, Gosu::Color::BLACK
     @subtitle_font.draw_text Options::GAMEOVER_SCREEN[1], 395, 282, ZOrder::TEXT, 1.0, 1.0, Gosu::Color::BLACK
 

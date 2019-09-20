@@ -4,18 +4,17 @@
 # Defines the methods and structures for a deck of cards
 
 class Deck
-    # TODO: fix this
+
     include SetFunctions
     # Cards is an array of Card Objects in the deck
     # Count is how many cards are in the deck
-    attr_accessor :cards, :deckCount
+    attr_accessor :cards, :deck_count
 
     # Created 09/15/2019 by David Wing
     # Creates a new instance of Card with the given attributes
     def initialize
-        @cards = createDeck
-        # TODO: refractor deckCount to deck_count
-        @deckCount = 81
+        @cards = create_deck
+        @deck_count = 81
     end
 
     # Created 09/05/2019 by Leah Gillespie
@@ -27,8 +26,7 @@ class Deck
     # Edited 09/15/2019 by David Wing: Deck is now object, cards is new structure
     # Edited 09/16/2019 by Sri Ramya Dandu: Replaced for loops with .each
     # Creates an array to be the deck and initializes 81 unique cards into it
-    # TODO: refractor createDeck to create_deck
-    def createDeck
+    def create_deck
         deck = Array.new
         id = 0
         (0..2).each do |number|
@@ -54,8 +52,7 @@ class Deck
     # Updates the passed in array of playingCards to a playable status for the player.
     # Does nothing if deck of unplayed cards is empty.
     # @updates cardsShowing
-    # TODO: refractor dealCards! to deal_cards
-    def dealCards! cards_showing
+    def deal_cards! cards_showing
         return if @cards.length == 0
     
         #initializing deck.
@@ -63,7 +60,7 @@ class Deck
             12.times do
                 card = @cards.delete_at(rand(cards.length))
                 cards_showing.push(card)
-                self.deckCount-=1
+                self.deck_count-=1
             end
         end
     
@@ -73,7 +70,7 @@ class Deck
                 3.times do
                     card = @cards.delete_at rand cards.length
                     cards_showing.push card
-                    self.deckCount -= 1
+                    self.deck_count -= 1
                 end
             end
         elsif cards_showing.length < 12
@@ -81,7 +78,7 @@ class Deck
             3.times do
                 card = @cards.delete_at rand cards.length
                 cards_showing.push card
-                self.deckCount -= 1
+                self.deck_count -= 1
             end
         end
     end

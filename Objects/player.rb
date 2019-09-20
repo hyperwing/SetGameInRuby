@@ -6,9 +6,6 @@
 # Edited 09/19/2019 by Sharon Qiu
 # Edited 09/20/2019 by Leah Gillespie
 # Edited 09/20/2019 by Sharon Qiu
-
-# TODO: rename file
-
 # Created 09/12/2019 by Sharon Qiu: Skeleton code for player movement only within the game.
 # Edited 09/15/2019 by Sharon Qiu: merged in player class into StartScreen file.
 # Edited 09/17/2019 by Sharon Qiu: Edited all player movement functions.
@@ -20,24 +17,24 @@
 class Player
 
   include SetFunctions
-  attr_accessor :currentCardIndex, :chosenCards, :chosenCardsIndexes,
-                :playerControls, :playerMovement, :setTimer, :setTimes,
-                :hintsUsed, :score, :timeSum, :setFound
+  attr_accessor :current_card_index, :chosen_cards, :chosen_cards_indexes,
+                :player_controls, :playerMovement, :set_timer, :set_times,
+                :hints_used, :score, :time_sum, :set_found
 
-  @@p1Controls = [Gosu::KB_A, Gosu::KB_D, Gosu::KB_W, Gosu::KB_S, Gosu::KB_SPACE]
-  @@p2Controls = [Gosu::KB_LEFT, Gosu::KB_RIGHT, Gosu::KB_UP, Gosu::KB_DOWN, Gosu::KB_RETURN]
+  @@p1_controls = [Gosu::KB_A, Gosu::KB_D, Gosu::KB_W, Gosu::KB_S, Gosu::KB_SPACE]
+  @@p2_controls = [Gosu::KB_LEFT, Gosu::KB_RIGHT, Gosu::KB_UP, Gosu::KB_DOWN, Gosu::KB_RETURN]
   # TODO: Refractor everything
   # Created 09/12/2019 by Sharon Qiu
   def initialize player_num
 
-    @playerControls = @@p1Controls if player_num == 1
-    @playerControls = @@p2Controls if player_num == 2
-    @currentCardIndex, @timeSum, @hintsUsed, @score = 0, 0, 0, 0
-    @chosenCards = Array.new
-    @chosenCardsIndexes = Array.new
-    @setTimer = AllTimers.new
-    @setTimes = Array.new
-    @setFound = false
+    @player_controls = @@p1_controls if player_num == 1
+    @player_controls = @@p2_controls if player_num == 2
+    @current_card_index, @time_sum, @hints_used, @score = 0, 0, 0, 0
+    @chosen_cards = Array.new
+    @chosen_cards_indexes = Array.new
+    @set_timer = Timers.new
+    @set_times = Array.new
+    @set_found = false
 
   end
 
@@ -46,10 +43,10 @@ class Player
   # Moves the player's cursor left.
   def move_left playing_cards
     num_cols = playing_cards.length / 3
-    if @currentCardIndex % num_cols == 0 && @currentCardIndex < playing_cards.length
-      @currentCardIndex += num_cols - 1
+    if @current_card_index % num_cols == 0 && @current_card_index < playing_cards.length
+      @current_card_index += num_cols - 1
     else
-      @currentCardIndex -= 1
+      @current_card_index -= 1
     end
   end
 
@@ -59,10 +56,10 @@ class Player
   # Moves the player's cursor right.
   def move_right playing_cards
     num_cols = playing_cards.length / 3
-    if @currentCardIndex % num_cols == num_cols - 1 && @currentCardIndex - num_cols - 1 >= 0
-      @currentCardIndex -= num_cols - 1
+    if @current_card_index % num_cols == num_cols - 1 && @current_card_index - num_cols - 1 >= 0
+      @current_card_index -= num_cols - 1
     else
-      @currentCardIndex += 1
+      @current_card_index += 1
     end
   end
 
@@ -71,10 +68,10 @@ class Player
   # Moves the player's cursor up.
   def move_up playing_cards
     num_cols = playing_cards.length / 3
-    if @currentCardIndex - num_cols < 0
-      @currentCardIndex += 2 * num_cols
+    if @current_card_index - num_cols < 0
+      @current_card_index += 2 * num_cols
     else
-      @currentCardIndex -= num_cols
+      @current_card_index -= num_cols
     end
   end
 
@@ -82,11 +79,11 @@ class Player
   # Edited 09/17/2019 by Sharon Qiu: Created conditions for movement downwards.
   # Moves the player's cursor down.
   def move_down playing_cards
-    num_cols = playing_cards.length/3
-    if @currentCardIndex + num_cols >= playing_cards.length
-      @currentCardIndex -= 2 * num_cols
+    num_cols = playing_cards.length / 3
+    if @current_card_index + num_cols >= playing_cards.length
+      @current_card_index -= 2 * num_cols
     else
-      @currentCardIndex += num_cols
+      @current_card_index += num_cols
     end
   end
 
@@ -95,29 +92,29 @@ class Player
   # Edited 09/20/2019 by Sharon Qiu: Added functionality to unselect.
   # Selects the card a player's cursor is on.
   def selection playing_cards
-    unless @chosenCardsIndexes.include? @currentCardIndex
-      @chosenCardsIndexes.push @currentCardIndex
-      @chosenCards.push playing_cards[@currentCardIndex]
+    unless @chosen_cards_indexes.include? @current_card_index
+      @chosen_cards_indexes.push @current_card_index
+      @chosen_cards.push playing_cards[@current_card_index]
     else
-      @chosenCardsIndexes.delete @currentCardIndex
-      @chosenCards.delete playing_cards[@currentCardIndex]
+      @chosen_cards_indexes.delete @current_card_index
+      @chosen_cards.delete playing_cards[@current_card_index]
     end
   end
 
   # Created 09/18/2019 by Sharon Qiu
   # Clears chosen cards and chosen cards indices.
-  def cleanSlate
-    @chosenCards.clear
-    @chosenCardsIndexes.clear
+  def clean_slate
+    @chosen_cards.clear
+    @chosen_cards_indexes.clear
   end
 
   # Created 09/18/2019 by Sharon Qiu
   # Edited 09/18/2019 by Sharon Qiu: Fixed mutator method to update playingCards. Also added/modifies setFound & hint_open and applied terse code.
   # Checks for a valid set and adjusts playing cards and chosen cards.
   def chosenSetValidity! playing_cards
-    @setFound = isASet? @chosenCards
-    @chosenCards.each {|card| playing_cards.delete card} if @setFound
-    cleanSlate # Clears player picks
+    @set_found = is_a_set? @chosen_cards
+    @chosen_cards.each {|card| playing_cards.delete card} if @set_found
+    clean_slate # Clears player picks
   end
 
   # Created 09/13/2019 by David Wing: Moved functionality to its own method.
@@ -129,7 +126,7 @@ class Player
   def get_hint cards_showing
     valid_set = valid_table cards_showing
     @score -= 0.5
-    @hintsUsed += 1
+    @hints_used += 1
     [valid_set[0],valid_set[1]]
   end
 

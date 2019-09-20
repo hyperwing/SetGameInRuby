@@ -5,7 +5,6 @@
 # Created 09/17/2019 by Sri Ramya Dandu
 # Edited 09/18/2019 by Sri Ramya Dandu: Added function display_message?
 # Provides a signal to determine whether the computer gets a turn or not
-# TODO: rename file
 class ComputerTimer
 
   attr_writer :level
@@ -25,7 +24,7 @@ class ComputerTimer
 
   # Created 09/17/2019 by Sri Ramya Dandu
   # updates the signal for the computer
-  def update
+  def update?
     play?
   end
 

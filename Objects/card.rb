@@ -23,7 +23,7 @@ class Card
       @color = color
       @shape = shape
       @shade = shade
-      @image = createCard
+      @image = create_card
     end
 
     # Created 09/16/2019 by Neel Mansukhani
@@ -31,8 +31,7 @@ class Card
     # Edited 09/18/2019 by Neel Mansukhani: Fixed parallelogram shade.
     # Edited 09/20/2019 by Neel Mansukhani: Changed for loop to times.
     # Renders card based on its number, color, shape, shade
-    # TODO: refractor createCard to create_card
-    def createCard
+    def create_card
       blank_card = Gosu::Image.new("media/card.png", :tileable => true)
       case @color
       when 0

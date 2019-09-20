@@ -1,5 +1,5 @@
 # File created 09/04/2019 by Sri Ramya Dandu
-# File renamed 09/18/2019 by Neel Mansukhani to SetFunctions.rb
+# File renamed 09/18/2019 by Neel Mansukhani to set_functions.rb
 # Edited 09/05/2019 by Leah Gillespie
 # Edited 09/06/2019 David Wing
 # Edited 09/06/2019 by Neel Mansukhani
@@ -31,7 +31,7 @@ module SetFunctions
   # @param card1, card2, card3 to evaluate whether they form a set or not
   # @returns true if cards form a valid set, false otherwise
   # @updates $score
-  def isASet? cards
+  def is_a_set? cards
     # The sum when adding one number 3 times or adding 3 consecutive numbers is divisible by 3.
     # This represents having all the same attribute or all different attributes.
     # Adding any other 3 number combo of 1,2,3 will result in a value not divisible by 3, failing to be a set.
@@ -55,10 +55,10 @@ module SetFunctions
 
     # make hash of all table cards
     # id is the key, location is the value
-    tableHash =  Hash.new
+    table_hash =  Hash.new
     return [] if cards_showing.length < 1
 
-    (0...cards_showing.length).each {|i| tableHash[cards_showing[i].id] = i}
+    (0...cards_showing.length).each {|i| table_hash[cards_showing[i].id] = i}
 
     (0...cards_showing.length).each do |card1|
       (1...cards_showing.length).each do |card2|
@@ -75,7 +75,7 @@ module SetFunctions
         card_to_find += (6-cards_showing[card1].shade - cards_showing[card2].shade) %3
 
         # cardToFind is now the card ID for the last card
-        return [card1, card2, tableHash[card_to_find]] if tableHash.include? card_to_find
+        return [card1, card2, table_hash[card_to_find]] if table_hash.include? card_to_find
 
       end
     end

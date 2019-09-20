@@ -91,8 +91,13 @@ class Player
   # Created 09/12/2019 by Sharon Qiu
   # Edited 09/17/2019 by Sharon Qiu: Created conditions for card selection. This updates the player instance variables and makes sure same cards not selected twice.
   def selection playingCards
-    @chosenCardsIndexes.push @currentCardIndex if !(@chosenCardsIndexes.include? @currentCardIndex)
-    @chosenCards.push playingCards[@currentCardIndex] if !(@chosenCards.include? playingCards[@currentCardIndex])
+    unless @chosenCardsIndexes.include? @currentCardIndex
+      @chosenCardsIndexes.push @currentCardIndex
+      @chosenCards.push playingCards[@currentCardIndex]
+    else
+      @chosenCardsIndexes.delete @currentCardIndex
+      @chosenCards.delete playingCards[@currentCardIndex]
+    end
   end
 
   # Created 09/18/2019 by Sharon Qiu: Clears chosen cards and chosen cards indices.

@@ -105,7 +105,17 @@ class SetGame < Gosu::Window
         @false_mes = (@mes == 0) && @computer_signal.display_message?
         @trying_mes = (@mes == 2) && @computer_signal.display_message?
       end
-      gameScreenInputs
+
+      if @game_settings.p1Init
+        gameScreenInputs @p1
+        @p2.cleanSlate if @game_settings.p2Init && @p1.setFound
+      end
+
+      if @game_settings.p2Init
+        gameScreenInputs @p2
+        @p1.cleanSlate if @game_settings.p1Init && @p2.setFound
+      end
+
     elsif @game_settings.currentScreen == "gameover"
       gameOverScreenInputs
 
@@ -190,7 +200,7 @@ class SetGame < Gosu::Window
       	@subtitle_font.draw_text("No sets found yet", 645, 30, ZOrder::TEXT, 1.0, 1.0, Gosu::Color::BLACK)
       end
       @subtitle_font.draw_text("Hints used: #{@p1.hintsUsed}", 645, 120, ZOrder::TEXT, 1.0, 1.0, Gosu::Color::BLACK) if @game_settings.areHintsEnabled
-      @subtitle_font.draw_text("Score: #{@p1.score}", 645, 150, ZOrder::TEXT, 1.0, 1.0, Gosu::Color::BLACK)
+      @subtitle_font.draw_text("Score: #{@p1.score}", 645, 150, ZOrder::TEXT,  1.0, 1.0, Gosu::Color::BLACK)
       @subtitle_font.draw_text("Total Game Time: #{@gameTimer.current}", 645, 490, ZOrder::TEXT, 1.0, 1.0, Gosu::Color::BLACK)
       
       if @game_settings.p2Init

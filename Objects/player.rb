@@ -26,7 +26,7 @@ class Player
   @@p2_controls = [Gosu::KB_LEFT, Gosu::KB_RIGHT, Gosu::KB_UP, Gosu::KB_DOWN, Gosu::KB_RETURN]
 
   # Created 09/12/2019 by Sharon Qiu
-  def initialize player_num
+  def initialize(player_num)
 
     @player_controls = @@p1_controls if player_num == 1
     @player_controls = @@p2_controls if player_num == 2
@@ -42,7 +42,7 @@ class Player
   # Created 09/12/2019 by Sharon Qiu
   # Edited 09/17/2019 by Sharon Qiu: Created conditions for movement leftwards.
   # Moves the player's cursor left.
-  def move_left playing_cards
+  def move_left(playing_cards)
     num_cols = playing_cards.length / 3
     if @current_card_index % num_cols == 0 && @current_card_index < playing_cards.length
       @current_card_index += num_cols - 1
@@ -55,7 +55,7 @@ class Player
   # Edited 09/17/2019 by Sharon Qiu: Created conditions for movement rightwards.
   # Edited 09/19/2019 by Sharon Qiu: Edited movement so that it accounted for number of columns.
   # Moves the player's cursor right.
-  def move_right playing_cards
+  def move_right(playing_cards)
     num_cols = playing_cards.length / 3
     if @current_card_index % num_cols == (num_cols - 1) && @current_card_index - (num_cols - 1) >= 0
       @current_card_index -= num_cols - 1
@@ -67,7 +67,7 @@ class Player
   # Created 09/12/2019 by Sharon Qiu
   # Edited 09/17/2019 by Sharon Qiu: Created conditions for movement upwards.
   # Moves the player's cursor up.
-  def move_up playing_cards
+  def move_up(playing_cards)
     num_cols = playing_cards.length / 3
     if @current_card_index - num_cols < 0
       @current_card_index += 2 * num_cols
@@ -79,7 +79,7 @@ class Player
   # Created 09/12/2019 by Sharon Qiu
   # Edited 09/17/2019 by Sharon Qiu: Created conditions for movement downwards.
   # Moves the player's cursor down.
-  def move_down playing_cards
+  def move_down(playing_cards)
     num_cols = playing_cards.length / 3
     if @current_card_index + num_cols >= playing_cards.length
       @current_card_index -= 2 * num_cols
@@ -92,7 +92,7 @@ class Player
   # Edited 09/17/2019 by Sharon Qiu: Created conditions for card selection. This updates the player instance variables and makes sure same cards not selected twice.
   # Edited 09/20/2019 by Sharon Qiu: Added functionality to unselect.
   # Selects the card a player's cursor is on.
-  def selection playing_cards
+  def selection(playing_cards)
 
     if !@chosen_cards_indexes.include? @current_card_index
       @chosen_cards_indexes.push @current_card_index
@@ -113,7 +113,7 @@ class Player
   # Created 09/18/2019 by Sharon Qiu
   # Edited 09/18/2019 by Sharon Qiu: Fixed mutator method to update playingCards. Also added/modifies setFound & hint_open and applied terse code.
   # Checks for a valid set and adjusts playing cards and chosen cards.
-  def chosen_set_validity! playing_cards
+  def chosen_set_validity!(playing_cards)
     @set_found = is_a_set? @chosen_cards
     @chosen_cards.each {|card| playing_cards.delete card} if @set_found
     clean_slate # Clears player picks
@@ -125,7 +125,7 @@ class Player
   # Edited 09/20/2019 by Leah Gillespie: Update hintsUsed
   # Given a valid set from the table, outputs two cards that make up a set
   # Returns array of two card objects that are the hint
-  def get_hint cards_showing
+  def get_hint(cards_showing)
     valid_set = valid_table cards_showing
     @score -= 0.5
     @hints_used += 1

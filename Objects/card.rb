@@ -17,7 +17,7 @@ class Card
     # Edited 09/15/2019 by Sri Ramya Dandu: Added documentation
     # Edited 09/17/2019 by Neel Mansukhani: Card is rendered on initialization.
     # Creates a new instance of Card with the given attributes
-    def initialize id, number, color, shape, shade
+    def initialize(id, number, color, shape, shade)
       @id = id
       @number = number
       @color = color

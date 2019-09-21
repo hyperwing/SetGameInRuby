@@ -126,7 +126,7 @@ class SetGame < Gosu::Window
 
   # Created 09/16/2019 by Neel Mansukhani
   # Makes Gosu's button_down? function recieve one input per key press.
-  def button_up? id
+  def button_up?(id)
     button = button_down? id
     return false if @pressed != id && @pressed != nil
     if button && @pressed != id

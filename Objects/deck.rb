@@ -52,7 +52,7 @@ class Deck
     # Updates the passed in array of playingCards to a playable status for the player.
     # Does nothing if deck of unplayed cards is empty.
     # @updates cardsShowing
-    def deal_cards! cards_showing
+    def deal_cards!(cards_showing)
         return if @cards.length == 0
     
         #initializing deck.

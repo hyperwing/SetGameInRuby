@@ -72,7 +72,7 @@ module Inputs
   # Edited 09/19/2019 by Sharon Qiu: Cleaned up movement checks.
   # Edited 09/20/2019 by Sharon Qiu: Condensed player inputs by passing in player.
   # Checks in game user input for one and two players
-  def game_screen_inputs player
+  def game_screen_inputs(player)
 
     movement_index = 0 # used to track switch cases
     if @game_settings.p1_init
@@ -172,7 +172,7 @@ module Inputs
 		# Edited 09/17/2019 by Sri Ramya Dandu: removed threading features and modified for GUI output
 		# Edited 09/19/2019 by Sharon Qiu: replaced p1 card clearing with method clean slate.
 		# Edited 09/19/2019 by Sri Ramya Dandu: Added levels of difficulty and message options
-		def computer_move p1
+		def computer_move(p1)
 		  index_set = Array.new
 
 		  #found = 0 for wrong output, 1 for right output, 2 for still trying

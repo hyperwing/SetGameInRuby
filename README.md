@@ -19,11 +19,11 @@ Checkpoint one:
 * Neel Mansukhani - All I/O and dealling cards.
 
 Extra Implementations:
-* Sharon Qiu - Multiplayer and player movement, hint implementation(Gameplay display), player button highlight on other screens.
+* Sharon Qiu - Multiplayer and player movement, hint implementation(Gameplay display), player button highlight on other screens(pair programmed).
 * Sri Ramya Dandu - Computer player, levels, and its interaction/display on GUI
 * Leah Gillespie - Stats and Timer and displaying it in GUI(Gameplay Display)
 * David Wing - Hint implementation(backend functionality), and gameover screen in GUI
-* Neel Mansukhani - Displaying all cards in game screen, button mapping for start and level screen and resulting maps to changes in gamemode types.
+* Neel Mansukhani - Displaying all cards in game screen, button mapping for start and level screen, player button highlight on other screens(pair programmed).
 
 Any minor edits to functionalities were implemented by whichever group member saw a need for said implementations. View documentation to see specifics.
 ### How to run the project

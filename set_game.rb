@@ -87,7 +87,7 @@ class SetGame < Gosu::Window
   # Edited 09/17/2019 by Sri Ramya Dandu: Added computer functionality
   # Edited 09/19/2019 by David Wing: added gameover screen functionality
   # Edited 09/19/2019 by Sri Ramya Dandu: Added another computer message option
-  # Edited 09/20/2019 by Sharon Qiu: passed in values for gameScreenInputs
+  # Edited 09/20/2019 by Sharon Qiu: passed in values for gameScreenInputs. Added in a reset for player set_found.
   # All inputs throughout the game are checked here.
   def update
     case @game_settings.current_screen
@@ -110,11 +110,13 @@ class SetGame < Gosu::Window
       if @game_settings.p1_init
         game_screen_inputs @p1
         @p2.clean_slate if @game_settings.p2_init && @p1.set_found
+        @p1.set_found = false #reset
       end
 
       if @game_settings.p2_init
         game_screen_inputs @p2
         @p1.clean_slate if @game_settings.p1_init && @p2.set_found
+        @p2.set_found = false
       end
 
     when "gameover"
@@ -258,6 +260,5 @@ class SetGame < Gosu::Window
     end
   end
 end
-
 
 SetGame.new.show

@@ -16,17 +16,16 @@ Checkpoint one:
 * Sri Ramya Dandu - Checking tuples chosen by the player for set validity.
 * Leah Gillespie - Creating the overall deck.
 * David Wing - Checking if there is a set in each set of played cards.
-* Neel Mansukhani - All I/O.
+* Neel Mansukhani - All I/O and dealling cards.
 
 Extra Implementations:
-* Sharon Qiu - 
-* Sri Ramya Dandu - Computer player and its interaction/display on GUI
-* Leah Gillespie - Stats and Timer and displaying it in GUI
-* David Wing - Hint implementation, and gameover screen in GUI
-* Neel Mansukhani - 
+* Sharon Qiu - Multiplayer and player movement, hint implementation(Gameplay display), player button highlight on other screens.
+* Sri Ramya Dandu - Computer player, levels, and its interaction/display on GUI
+* Leah Gillespie - Stats and Timer and displaying it in GUI(Gameplay Display)
+* David Wing - Hint implementation(backend functionality), and gameover screen in GUI
+* Neel Mansukhani - Displaying all cards in game screen, button mapping for start and level screen and resulting maps to changes in gamemode types.
 
-Any minor edits to main functionalities were implemented by whichever group member saw a need for said implementations.
-
+Any minor edits to functionalities were implemented by whichever group member saw a need for said implementations. View documentation to see specifics.
 ### How to run the project
 
 Step 1. Install Gosu using the instructions below.
@@ -46,7 +45,4 @@ Step 1. Install Gosu using the instructions below.
     sugo apt-get install package-dev
     
 
-Step 2. Open the project and navigate to StartScreen.rb and run the file: bundler exec ruby StartScreen.rb 
-
-
-
+Step 2. Pull the project from git. In the selected directory, run the following command line: bundler exec ruby set_game.rb 

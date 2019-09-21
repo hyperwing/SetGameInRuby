@@ -102,18 +102,18 @@ module Inputs
 
       # Checks the validity of a set.
       if player.chosen_cards_indexes.length == 3
-        player.chosenSetValidity! @playing_cards
+        player.chosen_set_validity! @playing_cards
         if player.set_found
           @hint.clear
-	  player.set_timer.update_time
+          player.set_timer.update_time
           player.set_times.push player.set_timer.current
           player.score += 1
           player.set_times.sort!
-	  player.time_sum += player.set_timer.current
+	        player.time_sum += player.set_timer.current
           player.set_timer.reset
         else
           player.clean_slate
-	  player.score -= 1
+	        player.score -= 1
         end
       end
     end

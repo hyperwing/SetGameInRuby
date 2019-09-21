@@ -6,7 +6,8 @@
 # Edited 09/19/2019 by Sharon Qiu
 # Edited 09/20/2019 by Leah Gillespie
 # Edited 09/20/2019 by Sharon Qiu
-# Created 09/12/2019 by Sharon Qiu: Skeleton code for player movement only within the game.
+
+# Created 09/12/2019 by Sharon Qiu: Player movement only within the game.
 # Edited 09/15/2019 by Sharon Qiu: merged in player class into StartScreen file.
 # Edited 09/17/2019 by Sharon Qiu: Edited all player movement functions.
 # Edited 09/18/2019 by Sharon Qiu: Introduced parallel mapping keys.
@@ -23,7 +24,7 @@ class Player
 
   @@p1_controls = [Gosu::KB_A, Gosu::KB_D, Gosu::KB_W, Gosu::KB_S, Gosu::KB_SPACE]
   @@p2_controls = [Gosu::KB_LEFT, Gosu::KB_RIGHT, Gosu::KB_UP, Gosu::KB_DOWN, Gosu::KB_RETURN]
-  # TODO: Refractor everything
+
   # Created 09/12/2019 by Sharon Qiu
   def initialize player_num
 
@@ -92,7 +93,8 @@ class Player
   # Edited 09/20/2019 by Sharon Qiu: Added functionality to unselect.
   # Selects the card a player's cursor is on.
   def selection playing_cards
-    unless @chosen_cards_indexes.include? @current_card_index
+
+    if !@chosen_cards_indexes.include? @current_card_index
       @chosen_cards_indexes.push @current_card_index
       @chosen_cards.push playing_cards[@current_card_index]
     else
@@ -111,7 +113,7 @@ class Player
   # Created 09/18/2019 by Sharon Qiu
   # Edited 09/18/2019 by Sharon Qiu: Fixed mutator method to update playingCards. Also added/modifies setFound & hint_open and applied terse code.
   # Checks for a valid set and adjusts playing cards and chosen cards.
-  def chosenSetValidity! playing_cards
+  def chosen_set_validity! playing_cards
     @set_found = is_a_set? @chosen_cards
     @chosen_cards.each {|card| playing_cards.delete card} if @set_found
     clean_slate # Clears player picks

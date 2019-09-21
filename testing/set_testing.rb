@@ -7,11 +7,13 @@
 # Edited 09/07/2019 by Sri Ramya Dandu
 # Edited 09/08/2019 by Sharon Qiu
 # Edited 09/08/2019 by Neel Mansukhani
-#edited 9/9 david
+# Edited 90/09/2019 by David Wing
 # Edited 09/09/2019 by Sharon Qiu
 # Edited 09/09/2019 by David Wing
 # Edited 09/09/2019 by Sri Ramya Dandu
 
+# File used to test basic implementation of the game that GUI was built upon without the addition of GUI.
+# GUI updated functions are in their respective classes
 # Created 09/05/2019 by Leah Gillespie
 # Edited 09/06/2019 by Neel Mansukhani: Added id and set_id function to Card
 class Card

@@ -171,7 +171,7 @@ class SetGame < Gosu::Window
       # Computer messages
       if @true_mes
         @subtitle_font.draw_text "I found a set!", 645, 275, ZOrder::TEXT, 1.0, 1.0, Gosu::Color::BLACK
-        if @computer_signal.score > 3 && @computer_signal.score - @p1.score > 3
+        if @computer_signal.score > @p1.score
           @subtitle_font.draw_text "#{@computer_signal.mean_msg}", 645, 305, ZOrder::TEXT, 1.0, 1.0, Gosu::Color::BLACK
         end
       end

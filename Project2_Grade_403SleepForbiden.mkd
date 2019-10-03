@@ -1,0 +1,36 @@
+1. Check Point 1
+	- Grade: 3/3
+	- Comment: Checkpoint was fine. See Checkpoint Notes
+2. Check Point 2
+	- Grade: 5/5
+	- Comment: Checkpoint was fine. See Checkpoint Notes.
+3. Implementation
+    - Grade: 68/70
+    - Comment: 
+        * Correctness: Works as intended without any noticable bugs
+        * Functionality: Hint button can be pressed multiple times after the first with only a deduction in points (-1)
+        * Style: Ruby code looks good. Inteligent use of ruby features
+        * Design: Good layout of Ruby code.Classes and files are logically separated.
+        * Extra Features: GUI, Multiplayer, AI, Timer, Hints, and stats
+		Gui looks very good and the controls are very intuitive. Good work on arrowkey navigation for two players.
+		Multiplayer works very well.
+		AI works well with reasonable difficulty.
+		Timer works well with stats.
+		Hint functionality works very well.
+		
+4. Balanced work load
+    - Grade: 10/10
+    - Comment: Workload Appears to be balanced.
+5. Documentation
+    - Grade: 5/5
+    - Comment: Good Documentation throughout with method descriptions and a complete file history. In the future write a short description at the top of the page.
+6. Testing
+    - Grade: 4/5
+    - Comment: Good amount of tests however, they were all in the same file, no writeup describing how you tested your project, and no instructions on how to run tests. (-1)
+7. README file
+    - Grade: 2/2
+    - Comment: Readme includes Good useful info for someone who has never seen the project before including how to run the project.
+
+Total: 98/100  
+Comment: Extremely good project. Good work.  
+Graded By: Michael Hemmelgarn
